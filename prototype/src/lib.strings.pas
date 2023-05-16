@@ -92,6 +92,7 @@ begin
     Add('<Pesquisa_realizada>', '*Pesquisa confirmada com sucesso');
     Add('<salvar>',             'Salvar');
     Add('<descr_sprint>',       'Sprint '+ PegarVersaoSprint);
+    Add('<incPesquisa>',        'Incluir Pesquisa');
   end;
 end;
 
