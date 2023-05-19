@@ -13,14 +13,16 @@ uses
   lib.strings in 'src\lib.strings.pas',
   view.pesquisa in 'src\view.pesquisa.pas' {fPesquisa},
   frame.sprint in 'src\frame.sprint.pas' {fraSprint: TFrame},
-  view.pesquisa.gerente in 'src\view.pesquisa.gerente.pas' {fPesquisaGerente};
+  view.pesquisa.gerente in 'src\view.pesquisa.gerente.pas' {fPesquisaGerente},
+  frame.inc.pesquisa in 'src\frame.inc.pesquisa.pas' {fraIncPesquisa: TFrame},
+  frame.inc.item.pesquisa in 'src\frame.inc.item.pesquisa.pas' {fraItemPesquisa: TFrame};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Light');
+  TStyleManager.TrySetStyle('Emerald Light Slate');
   Application.CreateForm(TdataImages, dataImages);
   if TfLogin.Login then
     Application.CreateForm(TfMenu, fMenu);
