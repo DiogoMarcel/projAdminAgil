@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class SearchHappiness extends StatefulWidget {
-  const SearchHappiness({Key? key}) : super(key: key);
+class ConfiguracaoNotaFelicidade extends StatefulWidget {
+  const ConfiguracaoNotaFelicidade({Key? key}) : super(key: key);
 
   @override
-  State<SearchHappiness> createState() => _SearchHappinesState();
+  State<ConfiguracaoNotaFelicidade> createState() => _SearchHappinesState();
 }
 
-class _SearchHappinesState extends State<SearchHappiness> {
+class _SearchHappinesState extends State<ConfiguracaoNotaFelicidade> {
   double _userRating = 0;
 
   @override

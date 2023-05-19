@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:squad_scrum/Screen/main_menu.dart';
+import 'package:squad_scrum/Telas/menu_principal.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    onPressed: _mainMenu,
+                    onPressed: _menuPrincipal,
                     child: const Text('Acessar'),
                   ),
                 ),
@@ -64,10 +64,10 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void _mainMenu(){
+  void _menuPrincipal(){
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context){
-        return const MainMenu();
+        return const MenuPrincipal();
       }),
     );
   }

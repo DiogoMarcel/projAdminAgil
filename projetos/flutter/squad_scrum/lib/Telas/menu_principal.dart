@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:squad_scrum/Screen/search_happiness.dart';
+import 'package:squad_scrum/Telas/configuracao_nota_felicidade.dart';
 
-class MainMenu extends StatefulWidget {
-  const MainMenu({Key? key}) : super(key: key);
+class MenuPrincipal extends StatefulWidget {
+  const MenuPrincipal({Key? key}) : super(key: key);
 
   @override
-  State<MainMenu> createState() => _MainMenuState();
+  State<MenuPrincipal> createState() => _MainMenuState();
 }
 
-class _MainMenuState extends State<MainMenu> {
+class _MainMenuState extends State<MenuPrincipal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +54,7 @@ class _MainMenuState extends State<MainMenu> {
   void _searchHappiness(){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context){
-        return const SearchHappiness();
+        return const ConfiguracaoNotaFelicidade();
       }),
     );
   }
