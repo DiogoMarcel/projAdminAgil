@@ -16,10 +16,11 @@ type
     fraIncPesquisa1: TfraIncPesquisa;
     FlowPanel1: TFlowPanel;
     aDelPesquisa: TAction;
+    aEdtPesquisa: TAction;
     procedure FormShow(Sender: TObject);
     procedure aIncPesquisaExecute(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure aDelPesquisaExecute(Sender: TObject);
+    procedure aEdtPesquisaExecute(Sender: TObject);
   private
     FListItemFrame: TDictionary<integer, TfraItemPesquisa>;
 
@@ -49,6 +50,28 @@ begin
 
 end;
 
+procedure TfPesquisaGerente.aEdtPesquisaExecute(Sender: TObject);
+var
+  AFraItem: TfraItemPesquisa;
+begin
+  inherited;
+
+  FListItemFrame.TryGetValue(TSpeedButton(Sender).Owner.Tag, AFraItem);
+
+  fraIncPesquisa1.Memo1.Clear;
+  fraIncPesquisa1.Memo1.Lines.Add(AFraItem.Label1.Caption);
+  fraIncPesquisa1.ComboBox1.Text := AFraItem.Label2.Caption;
+
+  if AFraItem.pTexto.Visible then
+    fraIncPesquisa1.RadioGroup1.ItemIndex := 0
+  else if AFraItem.pNumerico.Visible then
+    fraIncPesquisa1.RadioGroup1.ItemIndex := 1
+  else if AFraItem.pVerdadeiro.Visible then
+    fraIncPesquisa1.RadioGroup1.ItemIndex := 2;
+
+  aDelPesquisaExecute(Sender);
+end;
+
 procedure TfPesquisaGerente.adicionarItemPesquisa;
 var
   AFraItem: TfraItemPesquisa;
@@ -59,10 +82,12 @@ begin
   AFraItem.parent := FlowPanel1;
   AFraItem.Align := alTop;
   AFraItem.Label1.Caption      := fraIncPesquisa1.Memo1.Text;
+  AFraItem.Label2.Caption      := fraIncPesquisa1.ComboBox1.Text;
   AFraItem.pTexto.Visible      := fraIncPesquisa1.RadioGroup1.ItemIndex = 0;
   AFraItem.pNumerico.Visible   := fraIncPesquisa1.RadioGroup1.ItemIndex = 1;
   AFraItem.pVerdadeiro.Visible := fraIncPesquisa1.RadioGroup1.ItemIndex = 2;
   AFraItem.SpeedButton2.OnClick := aDelPesquisaExecute;
+  AFraItem.SpeedButton1.OnClick := aEdtPesquisaExecute;
 
   FListItemFrame.Add(FListItemFrame.Count+1, AFraItem);
 end;
@@ -85,16 +110,6 @@ begin
 
   fraIncPesquisa1.Memo1.Clear;
   fraIncPesquisa1.RadioGroup1.ItemIndex := -1;
-end;
-
-procedure TfPesquisaGerente.FormDestroy(Sender: TObject);
-begin
-  if Assigned(FListItemFrame) then
-  begin
-
-  end;
-
-  inherited;
 end;
 
 procedure TfPesquisaGerente.FormShow(Sender: TObject);

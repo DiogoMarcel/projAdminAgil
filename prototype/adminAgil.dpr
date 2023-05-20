@@ -15,7 +15,8 @@ uses
   frame.sprint in 'src\frame.sprint.pas' {fraSprint: TFrame},
   view.pesquisa.gerente in 'src\view.pesquisa.gerente.pas' {fPesquisaGerente},
   frame.inc.pesquisa in 'src\frame.inc.pesquisa.pas' {fraIncPesquisa: TFrame},
-  frame.inc.item.pesquisa in 'src\frame.inc.item.pesquisa.pas' {fraItemPesquisa: TFrame};
+  frame.inc.item.pesquisa in 'src\frame.inc.item.pesquisa.pas' {fraItemPesquisa: TFrame},
+  view.cad.sprint in 'src\view.cad.sprint.pas' {fCadSprint};
 
 {$R *.res}
 

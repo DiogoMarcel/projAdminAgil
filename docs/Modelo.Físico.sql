@@ -1,4 +1,4 @@
-BEGIN;
+BEGIN; teste
 
 CREATE TABLE usuario 
 ( 
