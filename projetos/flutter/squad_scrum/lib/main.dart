@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:squad_scrum/Screen/login.dart';
+import 'package:squad_scrum/Cadastros/consulta_equipe.dart';
 
 void main() {
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: ConsultaEquipe(),
     ),
   );
 }
