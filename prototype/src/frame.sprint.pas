@@ -17,11 +17,16 @@ type
   private
     aDataAtual: TDateTime;
     function PegarVersaoSprint(aSomar: Boolean): string;
+    function CadastrarSprint: boolean;
+
   public
     constructor Create(AOwner: TComponent); Override;
   end;
 
 implementation
+
+uses
+  view.cad.sprint;
 
 {$R *.dfm}
 
@@ -48,7 +53,25 @@ end;
 
 procedure TfraSprint.SpeedButton2Click(Sender: TObject);
 begin
-  Label6.Caption := 'Sprint '+ PegarVersaoSprint(true);
+  if CadastrarSprint then
+    Label6.Caption := 'Sprint '+ PegarVersaoSprint(true);
+end;
+
+function TfraSprint.CadastrarSprint: boolean;
+var
+  fCadSprint: TfCadSprint;
+begin
+  Result := (MessageDlg('Deseja cadastrar sprint?', mtConfirmation, [mbyes, mbno], 0) = mrYes);
+
+  if Result then
+  begin
+    fCadSprint := TfCadSprint.Create(Application);
+    try
+      fCadSprint.ShowModal;
+    finally
+      FreeAndNil(fCadSprint);
+    end;
+  end;
 end;
 
 end.

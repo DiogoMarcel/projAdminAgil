@@ -93,6 +93,7 @@ begin
     Add('<salvar>',             'Salvar');
     Add('<descr_sprint>',       'Sprint '+ PegarVersaoSprint);
     Add('<incPesquisa>',        'Incluir Pesquisa');
+    Add('<cadastroSprint>',     'Cadastro de Sprint');
   end;
 end;
 

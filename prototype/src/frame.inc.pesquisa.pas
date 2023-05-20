@@ -18,6 +18,8 @@ type
     RadioGroup1: TRadioGroup;
     Panel4: TPanel;
     SpeedButton1: TSpeedButton;
+    ComboBox1: TComboBox;
+    Label3: TLabel;
   private
     { Private declarations }
   public

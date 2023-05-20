@@ -11,7 +11,6 @@ type
   TfraItemPesquisa = class(TFrame)
     Panel1: TPanel;
     Panel2: TPanel;
-    Label1: TLabel;
     SpeedButton2: TSpeedButton;
     pVerdadeiro: TPanel;
     pTexto: TPanel;
@@ -19,7 +18,10 @@ type
     pNumerico: TPanel;
     Edit3: TEdit;
     RadioGroup1: TRadioGroup;
-    procedure SpeedButton2Click(Sender: TObject);
+    Panel3: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    SpeedButton1: TSpeedButton;
   private
     { Private declarations }
   public
@@ -29,10 +31,5 @@ type
 implementation
 
 {$R *.dfm}
-
-procedure TfraItemPesquisa.SpeedButton2Click(Sender: TObject);
-begin
-  //
-end;
 
 end.

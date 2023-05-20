@@ -14,10 +14,6 @@ object fraIncPesquisa: TfraIncPesquisa
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 0
-    ExplicitLeft = 304
-    ExplicitTop = 136
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object Panel2: TPanel
       Left = 0
       Top = 0
@@ -28,7 +24,6 @@ object fraIncPesquisa: TfraIncPesquisa
       Caption = 'Panel2'
       ShowCaption = False
       TabOrder = 0
-      ExplicitWidth = 337
       object Label1: TLabel
         AlignWithMargins = True
         Left = 3
@@ -37,8 +32,6 @@ object fraIncPesquisa: TfraIncPesquisa
         Height = 13
         Align = alTop
         Caption = 'Digite sua pergunta aqui'
-        ExplicitLeft = 4
-        ExplicitTop = 4
         ExplicitWidth = 117
       end
       object Memo1: TMemo
@@ -49,10 +42,6 @@ object fraIncPesquisa: TfraIncPesquisa
         Height = 68
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = -32
-        ExplicitTop = 17
-        ExplicitWidth = 329
-        ExplicitHeight = 72
       end
     end
     object Panel3: TPanel
@@ -65,7 +54,6 @@ object fraIncPesquisa: TfraIncPesquisa
       Caption = 'Panel3'
       ShowCaption = False
       TabOrder = 1
-      ExplicitLeft = 337
       object Label2: TLabel
         AlignWithMargins = True
         Left = 3
@@ -74,8 +62,6 @@ object fraIncPesquisa: TfraIncPesquisa
         Height = 13
         Align = alTop
         Caption = 'Qual o tipo de resposta:'
-        ExplicitLeft = 4
-        ExplicitTop = 4
         ExplicitWidth = 116
       end
       object RadioGroup1: TRadioGroup
@@ -90,9 +76,6 @@ object fraIncPesquisa: TfraIncPesquisa
           'Num'#233'rico'
           'Verdadeiro/Falso')
         TabOrder = 0
-        ExplicitLeft = 32
-        ExplicitWidth = 185
-        ExplicitHeight = 105
       end
     end
     object Panel4: TPanel
@@ -105,9 +88,9 @@ object fraIncPesquisa: TfraIncPesquisa
       Caption = 'Panel4'
       ShowCaption = False
       TabOrder = 2
-      ExplicitLeft = 560
-      ExplicitTop = 24
-      ExplicitHeight = 41
+      DesignSize = (
+        185
+        93)
       object SpeedButton1: TSpeedButton
         AlignWithMargins = True
         Left = 3
@@ -118,6 +101,26 @@ object fraIncPesquisa: TfraIncPesquisa
         ExplicitLeft = 10
         ExplicitTop = 11
         ExplicitWidth = 175
+      end
+      object Label3: TLabel
+        Left = 20
+        Top = 3
+        Width = 32
+        Height = 13
+        Caption = 'Equipe'
+      end
+      object ComboBox1: TComboBox
+        Left = 20
+        Top = 22
+        Width = 145
+        Height = 21
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ItemIndex = 0
+        TabOrder = 0
+        Text = 'The Big Bang'
+        Items.Strings = (
+          'The Big Bang'
+          'Midas')
       end
     end
   end
