@@ -5,7 +5,6 @@ import (
 	conexaobd "imports/conexaoBD"
 	"imports/estruturas"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -19,7 +18,8 @@ func InserirCargo(w http.ResponseWriter, r *http.Request) {
 	if linha.Err() == nil {
 		w.Write([]byte("Registro Salvo Com Sucesso!!"))
 	} else {
-		w.Write([]byte("Fudeu Piá " + linha.Err().Error()))
+		w.WriteHeader(400)
+		w.Write([]byte(linha.Err().Error()))
 	}
 }
 
@@ -33,7 +33,8 @@ func AlterarCargo(w http.ResponseWriter, r *http.Request) {
 	if linha.Err() == nil {
 		w.Write([]byte("Registro Alterado com Sucesso!!"))
 	} else {
-		w.Write([]byte("Fudeu Piá " + linha.Err().Error()))
+		w.WriteHeader(400)
+		w.Write([]byte(linha.Err().Error()))
 	}
 }
 
@@ -47,21 +48,35 @@ func DeletarCargo(w http.ResponseWriter, r *http.Request) {
 	if linha.Err() == nil {
 		w.Write([]byte("Registro Removido com Sucesso!!"))
 	} else {
-		w.Write([]byte("Fudeu Piá " + linha.Err().Error()))
+		w.WriteHeader(400)
+		w.Write([]byte(linha.Err().Error()))
 	}
 }
 
 func PegarTodosCargos(w http.ResponseWriter, r *http.Request) {
-	rows, _ := conexaobd.Db.Query("SELECT ID_CARGO, DESCRICAO FROM CARGO ORDER BY ID_CARGO")
-	cargo := []estruturas.Cargo{}
-	for rows.Next() {
-		var e estruturas.Cargo
-		if err := rows.Scan(&e.Id_Cargo, &e.Descricao); err != nil {
-			log.Fatal(err.Error())
+	rows, err := conexaobd.Db.Query("SELECT ID_CARGO, DESCRICAO FROM CARGO ORDER BY ID_CARGO")
+	if err == nil {
+		cargo := []estruturas.Cargo{}
+		for rows.Next() {
+			var e estruturas.Cargo
+			err := rows.Scan(&e.Id_Cargo, &e.Descricao)
+			if err == nil {
+				cargo = append(cargo, e)
+			} else {
+				w.WriteHeader(400)
+				w.Write([]byte(err.Error()))
+			}
 		}
-		cargo = append(cargo, e)
-	}
 
-	response, _ := json.Marshal(cargo)
-	w.Write(response)
+		response, err := json.Marshal(cargo)
+		if err == nil {
+			w.Write(response)
+		} else {
+			w.WriteHeader(400)
+			w.Write([]byte(err.Error()))
+		}
+	} else {
+		w.WriteHeader(400)
+		w.Write([]byte(err.Error()))
+	}
 }

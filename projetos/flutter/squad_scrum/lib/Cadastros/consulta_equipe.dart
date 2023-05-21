@@ -4,7 +4,7 @@ import 'package:squad_scrum/Cadastros/inclusao_equipe.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/Enumeradores.dart';
 import 'package:squad_scrum/ObjetosPostgres/equipe_dao.dart';
-import 'package:http/http.dart' as http;
+import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class ConsultaEquipe extends StatefulWidget {
   const ConsultaEquipe({Key? key}) : super(key: key);
@@ -24,9 +24,7 @@ class _EquipeState extends State<ConsultaEquipe> {
 
   Future<void> carregarTodasEquipes() async {
     listaEquipe.clear();
-    var url = Uri.http(Ip_Server, Pegar_Todas_Equipes);
-    var response = await http.get(url);
-    var json = jsonDecode(response.body);
+    var json = await util_http.get(path: Pegar_Todas_Equipes, context: context);
 
     listaEquipe = List<EquipeDAO>.from(json.map((json) => EquipeDAO.fromJson(json)));
     setState(() {});
@@ -86,13 +84,9 @@ class _EquipeState extends State<ConsultaEquipe> {
               ),
               IconButton(
                 onPressed: () async {
-                  var url = Uri.http(Ip_Server, Rota_Deletar_Equipe);
-                  var response = await http.delete(url,
-                      body: jsonEncode(listaEquipe[index].toJson()));
-                  if (response.statusCode == 200) {
-                    listaEquipe.removeAt(index);
-                    setState(() {});
-                  }
+                  await util_http.delete(path: Rota_Deletar_Equipe, jsonDAO: jsonEncode(listaEquipe[index].toJson()), context: context);
+                  listaEquipe.removeAt(index);
+                  setState(() {});
                 },
                 icon: const Icon(
                   Icons.delete,

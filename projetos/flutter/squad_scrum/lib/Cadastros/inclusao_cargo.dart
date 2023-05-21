@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/Enumeradores.dart';
 import 'package:squad_scrum/ObjetosPostgres/cargo_dao.dart';
-import 'package:http/http.dart' as http;
+import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class InclusaoCargo extends StatefulWidget {
   final TipoCrud tipoCrud;
@@ -66,24 +66,12 @@ class _InclusaoCargoState extends State<InclusaoCargo> {
   }
 
   void salvarCargo() async {
-    http.Response response;
     var cargo = CargoDAO(idCargo: int.tryParse(controllerCodigo.text), descricao: controllerDescricao.text);
-    if (widget.tipoCrud == TipoCrud.Inserir) {
-      var url = Uri.http(Ip_Server, Rota_Inserir_Cargo);
-      response = await http.post(url, body: jsonEncode(cargo.toJson()));
+    if(widget.tipoCrud == TipoCrud.Inserir){
+      await util_http.post(path: Rota_Inserir_Cargo, jsonDAO: jsonEncode(cargo.toJson()), context: context);
     } else {
-      var url = Uri.http(Ip_Server, Rota_Alterar_Cargo);
-      response = await http.patch(url, body: jsonEncode(cargo.toJson())) ;
+      await util_http.patch(path: Rota_Alterar_Cargo, jsonDAO: jsonEncode(cargo.toJson()), context: context);
     }
-
-    if (response.statusCode == 200) {
-      Navigator.of(context).pop();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erro ao Gravar o Registro ${response.body}'),
-        ),
-      );
-    }
+    Navigator.of(context).pop();
   }
 }

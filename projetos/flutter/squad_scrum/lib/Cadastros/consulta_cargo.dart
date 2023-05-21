@@ -4,7 +4,7 @@ import 'package:squad_scrum/Cadastros/inclusao_cargo.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/Enumeradores.dart';
 import 'package:squad_scrum/ObjetosPostgres/cargo_dao.dart';
-import 'package:http/http.dart' as http;
+import 'package:squad_scrum/util/util_http.dart' as http_util;
 
 class ConsultaCargo extends StatefulWidget {
   const ConsultaCargo({Key? key}) : super(key: key);
@@ -24,9 +24,7 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
 
   Future<void> carregarTodasCargos() async {
     listaCargo.clear();
-    var url = Uri.http(Ip_Server, Pegar_Todos_Cargo);
-    var response = await http.get(url);
-    var json = jsonDecode(response.body);
+    var json = await http_util.get(path: Pegar_Todos_Cargo, context: context);
 
     listaCargo = List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
     setState(() {});
@@ -41,10 +39,10 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: rotaInclusaoCargo,
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: EdgeInsets.all(15),
         child: ListView.builder(
           itemCount: listaCargo.length,
           itemBuilder: itemCargo,
@@ -58,7 +56,7 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
       child: ListTile(
         leading: Text(listaCargo[index].idCargo.toString()),
         title: Text(listaCargo[index].descricao),
-        trailing: SizedBox(
+        trailing: Container(
           width: 150,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -86,13 +84,13 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
               ),
               IconButton(
                 onPressed: () async {
-                  var url = Uri.http(Ip_Server, Rota_Deletar_Cargo);
-                  var response = await http.delete(url,
-                      body: jsonEncode(listaCargo[index].toJson()));
-                  if (response.statusCode == 200) {
-                    listaCargo.removeAt(index);
-                    setState(() {});
-                  }
+                  await http_util.delete(
+                    path: Rota_Deletar_Cargo,
+                    jsonDAO: jsonEncode(listaCargo[index].toJson()),
+                    context: context,
+                  );
+                  listaCargo.removeAt(index);
+                  setState(() {});
                 },
                 icon: const Icon(
                   Icons.delete,
