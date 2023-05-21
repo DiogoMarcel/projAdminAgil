@@ -26,7 +26,9 @@ class _EquipeState extends State<ConsultaEquipe> {
     listaEquipe.clear();
     var json = await util_http.get(path: Pegar_Todas_Equipes, context: context);
 
-    listaEquipe = List<EquipeDAO>.from(json.map((json) => EquipeDAO.fromJson(json)));
+    listaEquipe = List<EquipeDAO>.from(json.map((json) {
+      return EquipeDAO.fromJson(json);
+    }));
     setState(() {});
   }
 
@@ -84,7 +86,10 @@ class _EquipeState extends State<ConsultaEquipe> {
               ),
               IconButton(
                 onPressed: () async {
-                  await util_http.delete(path: Rota_Deletar_Equipe, jsonDAO: jsonEncode(listaEquipe[index].toJson()), context: context);
+                  await util_http.delete(
+                      path: Rota_Deletar_Equipe,
+                      jsonDAO: jsonEncode(listaEquipe[index].toJson()),
+                      context: context);
                   listaEquipe.removeAt(index);
                   setState(() {});
                 },
