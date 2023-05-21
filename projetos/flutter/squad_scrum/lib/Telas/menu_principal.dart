@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:squad_scrum/Cadastros/consulta_cargo.dart';
+import 'package:squad_scrum/Cadastros/consulta_equipe.dart';
 import 'package:squad_scrum/Telas/configuracao_nota_felicidade.dart';
 
 class MenuPrincipal extends StatefulWidget {
@@ -18,7 +20,7 @@ class _MainMenuState extends State<MenuPrincipal> {
               onSelected: (context) {},
               itemBuilder: (context) {
                 return <PopupMenuEntry>[
-                  const PopupMenuItem(child: Text('Configurações')),
+                  const PopupMenuItem(child: Text('Configurações'),),
                 ];
               }),
         ],
@@ -36,11 +38,25 @@ class _MainMenuState extends State<MenuPrincipal> {
                 ),
                 ListTile(
                   title: const Text('Pesquisa Felicidade'),
-                  onTap: _searchHappiness,
+                  onTap: pesquisaFelicidade,
                 ),
                 ListTile(
                   title: const Text('Cerimonia'),
                   onTap: () {},
+                ),
+              ],
+            ),
+            ExpansionTile(
+              title: const Text('Cadastros'),
+              childrenPadding: const EdgeInsets.only(left: 40),
+              children: [
+                ListTile(
+                  title: const Text('Equipe'),
+                  onTap: consultaEquipe,
+                ),
+                ListTile(
+                  title: const Text('Cargo'),
+                  onTap: consultaCargo,
                 ),
               ],
             ),
@@ -51,10 +67,26 @@ class _MainMenuState extends State<MenuPrincipal> {
     );
   }
 
-  void _searchHappiness(){
+  void pesquisaFelicidade(){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context){
         return const ConfiguracaoNotaFelicidade();
+      }),
+    );
+  }
+
+  void consultaEquipe(){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context){
+        return const ConsultaEquipe();
+      }),
+    );
+  }
+
+  void consultaCargo(){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context){
+        return const ConsultaCargo();
       }),
     );
   }

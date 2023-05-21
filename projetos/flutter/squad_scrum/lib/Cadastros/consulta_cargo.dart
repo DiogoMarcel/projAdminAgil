@@ -1,34 +1,34 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:squad_scrum/Cadastros/inclusao_equipe.dart';
+import 'package:squad_scrum/Cadastros/inclusao_cargo.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/Enumeradores.dart';
-import 'package:squad_scrum/ObjetosPostgres/equipe_dao.dart';
+import 'package:squad_scrum/ObjetosPostgres/cargo_dao.dart';
 import 'package:http/http.dart' as http;
 
-class ConsultaEquipe extends StatefulWidget {
-  const ConsultaEquipe({Key? key}) : super(key: key);
+class ConsultaCargo extends StatefulWidget {
+  const ConsultaCargo({Key? key}) : super(key: key);
 
   @override
-  State<ConsultaEquipe> createState() => _EquipeState();
+  State<ConsultaCargo> createState() => _ConsultaCargoState();
 }
 
-class _EquipeState extends State<ConsultaEquipe> {
-  List<EquipeDAO> listaEquipe = [];
+class _ConsultaCargoState extends State<ConsultaCargo> {
+  List<CargoDAO> listaCargo = [];
 
   @override
   void initState() {
     super.initState();
-    carregarTodasEquipes();
+    carregarTodasCargos();
   }
 
-  Future<void> carregarTodasEquipes() async {
-    listaEquipe.clear();
-    var url = Uri.http(Ip_Server, Pegar_Todas_Equipes);
+  Future<void> carregarTodasCargos() async {
+    listaCargo.clear();
+    var url = Uri.http(Ip_Server, Pegar_Todos_Cargo);
     var response = await http.get(url);
     var json = jsonDecode(response.body);
 
-    listaEquipe = List<EquipeDAO>.from(json.map((json) => EquipeDAO.fromJson(json)));
+    listaCargo = List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
     setState(() {});
   }
 
@@ -36,29 +36,29 @@ class _EquipeState extends State<ConsultaEquipe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Consulta Equipe"),
+        title: const Text("Consulta Cargo"),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: rotaInclusaoEquipe,
-        child: Icon(Icons.add),
+        onPressed: rotaInclusaoCargo,
+        child: const Icon(Icons.add),
       ),
       body: Padding(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: ListView.builder(
-          itemCount: listaEquipe.length,
-          itemBuilder: itemEquipe,
+          itemCount: listaCargo.length,
+          itemBuilder: itemCargo,
         ),
       ),
     );
   }
 
-  Widget itemEquipe(context, index) {
+  Widget itemCargo(context, index) {
     return Card(
       child: ListTile(
-        leading: Text(listaEquipe[index].idEquipe.toString()),
-        title: Text(listaEquipe[index].nome),
-        trailing: Container(
+        leading: Text(listaCargo[index].idCargo.toString()),
+        title: Text(listaCargo[index].descricao),
+        trailing: SizedBox(
           width: 150,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -67,13 +67,13 @@ class _EquipeState extends State<ConsultaEquipe> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
-                      return InclusaoEquipe(
+                      return InclusaoCargo(
                         tipoCrud: TipoCrud.Alterar,
-                        equipeAlterar: listaEquipe[index],
+                        cargoAlterar: listaCargo[index],
                       );
                     }),
                   ).then((value) async {
-                    await carregarTodasEquipes();
+                    await carregarTodasCargos();
                   });
                 },
                 icon: const Icon(
@@ -86,11 +86,11 @@ class _EquipeState extends State<ConsultaEquipe> {
               ),
               IconButton(
                 onPressed: () async {
-                  var url = Uri.http(Ip_Server, Rota_Deletar_Equipe);
+                  var url = Uri.http(Ip_Server, Rota_Deletar_Cargo);
                   var response = await http.delete(url,
-                      body: jsonEncode(listaEquipe[index].toJson()));
+                      body: jsonEncode(listaCargo[index].toJson()));
                   if (response.statusCode == 200) {
-                    listaEquipe.removeAt(index);
+                    listaCargo.removeAt(index);
                     setState(() {});
                   }
                 },
@@ -106,15 +106,15 @@ class _EquipeState extends State<ConsultaEquipe> {
     );
   }
 
-  void rotaInclusaoEquipe() {
+  void rotaInclusaoCargo() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return InclusaoEquipe(
+        return InclusaoCargo(
           tipoCrud: TipoCrud.Inserir,
         );
       }),
     ).then((value) async {
-      await carregarTodasEquipes();
+      await carregarTodasCargos();
     });
   }
 }

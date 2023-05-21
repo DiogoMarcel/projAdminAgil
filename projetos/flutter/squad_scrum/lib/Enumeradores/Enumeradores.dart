@@ -1,0 +1,2 @@
+
+enum TipoCrud {Inserir, Alterar}

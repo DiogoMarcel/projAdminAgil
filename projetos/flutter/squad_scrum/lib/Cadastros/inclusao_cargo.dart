@@ -1,30 +1,30 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/Enumeradores.dart';
-import 'package:squad_scrum/ObjetosPostgres/equipe_dao.dart';
+import 'package:squad_scrum/ObjetosPostgres/cargo_dao.dart';
+import 'package:http/http.dart' as http;
 
-class InclusaoEquipe extends StatefulWidget {
+class InclusaoCargo extends StatefulWidget {
   final TipoCrud tipoCrud;
-  final EquipeDAO? equipeAlterar;
+  final CargoDAO? cargoAlterar;
 
-  const InclusaoEquipe({Key? key, this.tipoCrud = TipoCrud.Inserir, this.equipeAlterar}): super(key: key);
+  InclusaoCargo({Key? key, this.tipoCrud = TipoCrud.Inserir, this.cargoAlterar}) : super(key: key);
 
   @override
-  State<InclusaoEquipe> createState() => _InclusaoEquipeState();
+  State<InclusaoCargo> createState() => _InclusaoCargoState();
 }
 
-class _InclusaoEquipeState extends State<InclusaoEquipe> {
+class _InclusaoCargoState extends State<InclusaoCargo> {
   TextEditingController controllerCodigo = TextEditingController();
-  TextEditingController controllerNome = TextEditingController();
+  TextEditingController controllerDescricao = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (widget.tipoCrud == TipoCrud.Alterar) {
-      controllerCodigo.text = widget.equipeAlterar!.idEquipe.toString();
-      controllerNome.text = widget.equipeAlterar!.nome;
+      controllerCodigo.text = widget.cargoAlterar!.idCargo.toString();
+      controllerDescricao.text = widget.cargoAlterar!.descricao;
     }
   }
 
@@ -33,7 +33,7 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
     return Scaffold(
       appBar: AppBar(),
       floatingActionButton: FloatingActionButton(
-        onPressed: salvarEquipe,
+        onPressed: salvarCargo,
         child: const Icon(Icons.save),
       ),
       body: Padding(
@@ -44,7 +44,7 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
               enabled: false,
               controller: controllerCodigo,
               decoration: const InputDecoration(
-                labelText: "Código Equipe",
+                labelText: "Código Cargo",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -53,9 +53,9 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
             ),
             TextFormField(
               autofocus: true,
-              controller: controllerNome,
+              controller: controllerDescricao,
               decoration: const InputDecoration(
-                labelText: "Informe o Nome da Equipe",
+                labelText: "Informe o Nome do Cargo",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -65,25 +65,23 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
     );
   }
 
-  void salvarEquipe() async {
+  void salvarCargo() async {
     http.Response response;
-    var equipe = EquipeDAO(idEquipe: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
+    var cargo = CargoDAO(idCargo: int.tryParse(controllerCodigo.text), descricao: controllerDescricao.text);
     if (widget.tipoCrud == TipoCrud.Inserir) {
-      var url = Uri.http(Ip_Server, Rota_Inserir_Equipe);
-      response = await http.post(url, body: jsonEncode(equipe.toJson()));
+      var url = Uri.http(Ip_Server, Rota_Inserir_Cargo);
+      response = await http.post(url, body: jsonEncode(cargo.toJson()));
     } else {
-      var url = Uri.http(Ip_Server, Rota_Alterar_Equipe);
-      response = await http.patch(url, body: jsonEncode(equipe.toJson())) ;
+      var url = Uri.http(Ip_Server, Rota_Alterar_Cargo);
+      response = await http.patch(url, body: jsonEncode(cargo.toJson())) ;
     }
 
     if (response.statusCode == 200) {
-      if (!context.mounted) return;
       Navigator.of(context).pop();
     } else {
-      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Erro ao Gravar o Registro${response.body}'),
+          content: Text('Erro ao Gravar o Registro ${response.body}'),
         ),
       );
     }
