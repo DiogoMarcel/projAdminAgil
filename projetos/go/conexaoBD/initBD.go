@@ -20,3 +20,7 @@ func InitBD() {
 		log.Fatal(err.Error())
 	}
 }
+
+func CloseDB() {
+	Db.Close()
+}
