@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Cadastros/inclusao_equipe.dart';
 import 'package:squad_scrum/Consts/consts.dart';
-import 'package:squad_scrum/Enumeradores/Enumeradores.dart';
+import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/ObjetosPostgres/equipe_dao.dart';
+import 'package:squad_scrum/Widget/widget_consulta.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class ConsultaEquipe extends StatefulWidget {
@@ -24,32 +25,21 @@ class _EquipeState extends State<ConsultaEquipe> {
 
   Future<void> carregarTodasEquipes() async {
     listaEquipe.clear();
-    var json = await util_http.get(path: Pegar_Todas_Equipes, context: context);
+    var json = await util_http.get(path: pegarTodosEquipes, context: context);
 
-    listaEquipe = List<EquipeDAO>.from(json.map((json) {
-      return EquipeDAO.fromJson(json);
-    }));
+    listaEquipe = List<EquipeDAO>.from(json.map((json) => EquipeDAO.fromJson(json)));
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Consulta Equipe"),
-        centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: rotaInclusaoEquipe,
-        child: Icon(Icons.add),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(15),
-        child: ListView.builder(
+    return WidgetConsulta(
+        onInsert: rotaInclusaoEquipe,
+        body: ListView.builder(
           itemCount: listaEquipe.length,
           itemBuilder: itemEquipe,
         ),
-      ),
+        appBarTitle: "Consulta Equipe"
     );
   }
 
@@ -58,7 +48,7 @@ class _EquipeState extends State<ConsultaEquipe> {
       child: ListTile(
         leading: Text(listaEquipe[index].idEquipe.toString()),
         title: Text(listaEquipe[index].nome),
-        trailing: Container(
+        trailing: SizedBox(
           width: 150,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -68,7 +58,7 @@ class _EquipeState extends State<ConsultaEquipe> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return InclusaoEquipe(
-                        tipoCrud: TipoCrud.Alterar,
+                        tipoCrud: TipoCrud.alterar,
                         equipeAlterar: listaEquipe[index],
                       );
                     }),
@@ -87,7 +77,7 @@ class _EquipeState extends State<ConsultaEquipe> {
               IconButton(
                 onPressed: () async {
                   await util_http.delete(
-                      path: Rota_Deletar_Equipe,
+                      path: rotaDeletarEquipe,
                       jsonDAO: jsonEncode(listaEquipe[index].toJson()),
                       context: context);
                   listaEquipe.removeAt(index);
@@ -108,8 +98,8 @@ class _EquipeState extends State<ConsultaEquipe> {
   void rotaInclusaoEquipe() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return InclusaoEquipe(
-          tipoCrud: TipoCrud.Inserir,
+        return const InclusaoEquipe(
+          tipoCrud: TipoCrud.inserir,
         );
       }),
     ).then((value) async {

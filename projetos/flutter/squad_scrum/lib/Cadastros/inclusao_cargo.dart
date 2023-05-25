@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Consts/consts.dart';
-import 'package:squad_scrum/Enumeradores/Enumeradores.dart';
+import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/ObjetosPostgres/cargo_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
@@ -9,7 +9,7 @@ class InclusaoCargo extends StatefulWidget {
   final TipoCrud tipoCrud;
   final CargoDAO? cargoAlterar;
 
-  InclusaoCargo({Key? key, this.tipoCrud = TipoCrud.Inserir, this.cargoAlterar}) : super(key: key);
+  const InclusaoCargo({Key? key, this.tipoCrud = TipoCrud.inserir, this.cargoAlterar}) : super(key: key);
 
   @override
   State<InclusaoCargo> createState() => _InclusaoCargoState();
@@ -22,7 +22,7 @@ class _InclusaoCargoState extends State<InclusaoCargo> {
   @override
   void initState() {
     super.initState();
-    if (widget.tipoCrud == TipoCrud.Alterar) {
+    if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.cargoAlterar!.idCargo.toString();
       controllerDescricao.text = widget.cargoAlterar!.descricao;
     }
@@ -67,10 +67,10 @@ class _InclusaoCargoState extends State<InclusaoCargo> {
 
   void salvarCargo() async {
     var cargo = CargoDAO(idCargo: int.tryParse(controllerCodigo.text), descricao: controllerDescricao.text);
-    if(widget.tipoCrud == TipoCrud.Inserir){
-      await util_http.post(path: Rota_Inserir_Cargo, jsonDAO: jsonEncode(cargo.toJson()), context: context);
+    if(widget.tipoCrud == TipoCrud.inserir){
+      await util_http.post(path: rotaInserirCargo, jsonDAO: jsonEncode(cargo.toJson()), context: context);
     } else {
-      await util_http.patch(path: Rota_Alterar_Cargo, jsonDAO: jsonEncode(cargo.toJson()), context: context);
+      await util_http.patch(path: rotaAlterarCargo, jsonDAO: jsonEncode(cargo.toJson()), context: context);
     }
     Navigator.of(context).pop();
   }

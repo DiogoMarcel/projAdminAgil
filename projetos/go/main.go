@@ -17,16 +17,22 @@ func main() {
 	rotas := mux.NewRouter().StrictSlash(true)
 
 	var equipe = estruturas.Equipe{}
-	rotas.HandleFunc("/equipe/inserirEquipe", equipe.Inserir).Methods("POST")
-	rotas.HandleFunc("/equipe/alterarEquipe", equipe.Alterar).Methods("PATCH")
-	rotas.HandleFunc("/equipe/deletarEquipe", equipe.Deletar).Methods("DELETE")
-	rotas.HandleFunc("/equipe/pegarTodasEquipes", equipe.PegarTodos).Methods("GET")
+	rotas.HandleFunc("/equipe/inserirEquipe", equipe.Inserir).Methods(http.MethodPost)
+	rotas.HandleFunc("/equipe/alterarEquipe", equipe.Alterar).Methods(http.MethodPatch)
+	rotas.HandleFunc("/equipe/deletarEquipe", equipe.Deletar).Methods(http.MethodDelete)
+	rotas.HandleFunc("/equipe/pegarTodosEquipes", equipe.PegarTodos).Methods(http.MethodGet)
 
 	var cargo = estruturas.Cargo{}
-	rotas.HandleFunc("/cargo/inserirCargo", cargo.Inserir).Methods("POST")
-	rotas.HandleFunc("/cargo/alterarCargo", cargo.Alterar).Methods("PATCH")
-	rotas.HandleFunc("/cargo/deletarCargo", cargo.Deletar).Methods("DELETE")
-	rotas.HandleFunc("/cargo/pegarTodosCargos", cargo.PegarTodos).Methods("GET")
+	rotas.HandleFunc("/cargo/inserirCargo", cargo.Inserir).Methods(http.MethodPost)
+	rotas.HandleFunc("/cargo/alterarCargo", cargo.Alterar).Methods(http.MethodPatch)
+	rotas.HandleFunc("/cargo/deletarCargo", cargo.Deletar).Methods(http.MethodDelete)
+	rotas.HandleFunc("/cargo/pegarTodosCargos", cargo.PegarTodos).Methods(http.MethodGet)
+
+	var empresa = estruturas.Empresa{}
+	rotas.HandleFunc("/cargo/inserirEmpresa", empresa.Inserir).Methods(http.MethodPost)
+	rotas.HandleFunc("/cargo/alterarEmpresa", empresa.Alterar).Methods(http.MethodPatch)
+	rotas.HandleFunc("/cargo/deletarEmpresa", empresa.Deletar).Methods(http.MethodDelete)
+	rotas.HandleFunc("/cargo/pegarTodosEmpresas", empresa.PegarTodos).Methods(http.MethodGet)
 
 	var port = "127.0.0.1:3000"
 	fmt.Println("Server running in port:", port)

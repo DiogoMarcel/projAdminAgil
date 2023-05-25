@@ -2,29 +2,30 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
-import 'package:squad_scrum/ObjetosPostgres/equipe_dao.dart';
+import 'package:squad_scrum/ObjetosPostgres/empresa_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
-class InclusaoEquipe extends StatefulWidget {
+class InclusaoEmpresa extends StatefulWidget {
   final TipoCrud tipoCrud;
-  final EquipeDAO? equipeAlterar;
+  final EmpresaDAO? empresaAlterar;
 
-  const InclusaoEquipe({Key? key, this.tipoCrud = TipoCrud.inserir, this.equipeAlterar}): super(key: key);
+  const InclusaoEmpresa({Key? key, required this.tipoCrud, this.empresaAlterar}) : super(key: key);
 
   @override
-  State<InclusaoEquipe> createState() => _InclusaoEquipeState();
+  State<InclusaoEmpresa> createState() => _InclusaoEmpresaState();
 }
 
-class _InclusaoEquipeState extends State<InclusaoEquipe> {
+class _InclusaoEmpresaState extends State<InclusaoEmpresa> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerNome = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
     if (widget.tipoCrud == TipoCrud.alterar) {
-      controllerCodigo.text = widget.equipeAlterar!.idEquipe.toString();
-      controllerNome.text = widget.equipeAlterar!.nome;
+      controllerCodigo.text = widget.empresaAlterar!.idEmpresa.toString();
+      controllerNome.text = widget.empresaAlterar!.nome;
     }
   }
 
@@ -33,7 +34,7 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
     return Scaffold(
       appBar: AppBar(),
       floatingActionButton: FloatingActionButton(
-        onPressed: salvarEquipe,
+        onPressed: salvarEmpresa,
         child: const Icon(Icons.save),
       ),
       body: Padding(
@@ -44,7 +45,7 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
               enabled: false,
               controller: controllerCodigo,
               decoration: const InputDecoration(
-                labelText: "Código Equipe",
+                labelText: "Código Empresa",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -55,7 +56,7 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
               autofocus: true,
               controller: controllerNome,
               decoration: const InputDecoration(
-                labelText: "Informe o Nome da Equipe",
+                labelText: "Informe o Nome da Empresa",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -65,12 +66,12 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
     );
   }
 
-  void salvarEquipe() async {
-    var equipe = EquipeDAO(idEquipe: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
+  void salvarEmpresa() async {
+    var equipe = EmpresaDAO(idEmpresa: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
-      await util_http.post(path: rotaInserirEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.post(path: rotaInserirEmpresa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     } else {
-      await util_http.patch(path: rotaAlterarEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.patch(path: rotaAlterarEmpresa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     }
     Navigator.of(context).pop();
   }

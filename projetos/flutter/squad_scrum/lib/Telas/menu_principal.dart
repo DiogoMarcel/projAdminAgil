@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Cadastros/consulta_cargo.dart';
+import 'package:squad_scrum/Cadastros/consulta_empresa.dart';
 import 'package:squad_scrum/Cadastros/consulta_equipe.dart';
 import 'package:squad_scrum/Telas/configuracao_nota_felicidade.dart';
 
@@ -58,6 +59,10 @@ class _MainMenuState extends State<MenuPrincipal> {
                   title: const Text('Cargo'),
                   onTap: consultaCargo,
                 ),
+                ListTile(
+                  title: const Text('Empresa'),
+                  onTap: consultaEmpresa,
+                ),
               ],
             ),
           ],
@@ -87,6 +92,14 @@ class _MainMenuState extends State<MenuPrincipal> {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context){
         return const ConsultaCargo();
+      }),
+    );
+  }
+
+  void consultaEmpresa(){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context){
+        return const ConsultaEmpresa();
       }),
     );
   }

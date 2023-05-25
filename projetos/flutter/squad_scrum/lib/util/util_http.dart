@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:squad_scrum/Consts/consts.dart';
 
 Future<dynamic> get({required String path, required BuildContext context}) async {
-  Uri url = Uri.http(Ip_Server, path);
+  Uri url = Uri.http(ipServer, path);
   var response = await http.get(url);
   if(response.statusCode == 200){
     return jsonDecode(response.body);
@@ -18,7 +18,7 @@ Future<dynamic> get({required String path, required BuildContext context}) async
 }
 
 Future<void> post({required String path, required String jsonDAO, required BuildContext context}) async {
-  Uri url = Uri.http(Ip_Server, path);
+  Uri url = Uri.http(ipServer, path);
   var response = await http.post(url, body: jsonDAO);
   if(response.statusCode != 200){
     if (context.mounted) {
@@ -30,7 +30,7 @@ Future<void> post({required String path, required String jsonDAO, required Build
 }
 
 Future<void> patch({required String path, required String jsonDAO, required BuildContext context}) async {
-  Uri url = Uri.http(Ip_Server, path);
+  Uri url = Uri.http(ipServer, path);
   var response = await http.patch(url, body: jsonDAO);
   if(response.statusCode != 200){
     if (context.mounted) {
@@ -42,7 +42,7 @@ Future<void> patch({required String path, required String jsonDAO, required Buil
 }
 
 Future<void> delete({required String path, required String jsonDAO, required BuildContext context}) async {
-  Uri url = Uri.http(Ip_Server, path);
+  Uri url = Uri.http(ipServer, path);
   var response = await http.delete(url, body: jsonDAO);
   if(response.statusCode != 200){
     if (context.mounted) {
