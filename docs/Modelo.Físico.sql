@@ -1,30 +1,6 @@
 begin;
 -----------
 
-DROP TABLE cargo CASCADE;
-DROP TABLE empresa CASCADE;
-DROP TABLE equipe CASCADE;
-DROP TABLE fatores CASCADE;
-DROP TABLE funcao CASCADE;
-DROP TABLE incremento CASCADE;
-DROP TABLE melhorar CASCADE;
-DROP TABLE meta CASCADE;
-DROP TABLE pergunta CASCADE;
-DROP TABLE pesquisa CASCADE;
-DROP TABLE quefoibom CASCADE;
-DROP TABLE quefoiruim CASCADE;
-DROP TABLE respostausuario CASCADE;
-DROP TABLE retrospectiva CASCADE;
-DROP TABLE retrospectiva_sprint CASCADE;
-DROP TABLE sprint CASCADE;
-DROP TABLE usuario CASCADE;
-DROP TABLE usuario_cargo CASCADE;
-DROP TABLE usuario_empresa CASCADE;
-DROP TABLE usuario_equipe CASCADE;
-DROP TABLE usuario_funcao CASCADE;
-
------------
-
 create table equipe 
 ( 
  id_equipe bigserial primary key,
@@ -180,26 +156,26 @@ create table sprint_pesquisa
  idsprint bigint
 ); 
 
-alter table retrospectiva 			add foreign key(idsprint) 				references sprint (id_sprint);
-alter table retrospectiva 			add foreign key(idcfgretrospectiva) 	references cfgretrospectiva (id_cfgretrospectiva);
-alter table pesquisa_pergunta 		add foreign key(idpesquisa) 			references pesquisa (id_pesquisa);
-alter table retrospectiva_item 		add foreign key(idretrospectiva) 		references retrospectiva (id_retrospectiva);
-alter table retrospectiva_item 		add foreign key(idcfgretrospectivaitem) references cfgretrospectiva_item (id_cfgrestrospectivaitem);
-alter table cfgretrospectiva_item 	add foreign key(idcfgretrospectiva) 	references cfgretrospectiva (id_cfgretrospectiva);
-alter table sprint_equipe 			add foreign key(idsprint) 				references sprint (id_sprint);
-alter table sprint_equipe 			add foreign key(idequipe) 				references equipe (id_equipe);
-alter table sprint_participante 	add foreign key(idsprintequipe) 		references sprint_equipe (id_sprintequipe);
-alter table sprint_participante 	add foreign key(idcolaborador) 			references colaborador (id_colaborador);
-alter table resposta_pesquisa 		add foreign key(idsprintparticipante) 	references sprint_participante (id_sprintparticipante);
-alter table resposta_pesquisa 		add foreign key(idpesquisapergunta) 	references pesquisa_pergunta (id_pesquisapergunta);
-alter table cards_retrospectivaitem add foreign key(idretrospectivaitem) 	references retrospectiva_item (id_retrospectivaitem);
-alter table colaborador_empresa 	add foreign key(id_empresa) 			references empresa (id_empresa);
-alter table colaborador_empresa 	add foreign key(id_colaborador) 		references colaborador (id_colaborador);
-alter table colaborador_funcao 		add foreign key(id_funcao) 				references funcao (id_funcao);
-alter table colaborador_funcao 		add foreign key(id_colaborador) 		references colaborador (id_colaborador);
-alter table colaborador_cargo 		add foreign key(id_cargo) 				references cargo (id_cargo);
-alter table colaborador_cargo 		add foreign key(id_colaborador) 		references colaborador (id_colaborador);
-alter table equipe_colaborador 		add foreign key(id_equipe) 				references equipe (id_equipe);
-alter table equipe_colaborador 		add foreign key(id_colaborador) 		references colaborador (id_colaborador);
-alter table sprint_pesquisa 		add foreign key(idpesquisa) 			references pesquisa (id_pesquisa);
-alter table sprint_pesquisa 		add foreign key(idsprint) 				references sprint (id_sprint);
+alter table retrospectiva 			add foreign key(idsprint) 				references sprint (id_sprint) on update cascade on delete cascade;
+alter table retrospectiva 			add foreign key(idcfgretrospectiva) 	references cfgretrospectiva (id_cfgretrospectiva) on update cascade on delete cascade;
+alter table pesquisa_pergunta 		add foreign key(idpesquisa) 			references pesquisa (id_pesquisa) on update cascade on delete cascade;
+alter table retrospectiva_item 		add foreign key(idretrospectiva) 		references retrospectiva (id_retrospectiva) on update cascade on delete cascade;
+alter table retrospectiva_item 		add foreign key(idcfgretrospectivaitem) references cfgretrospectiva_item (id_cfgrestrospectivaitem) on update cascade on delete cascade;
+alter table cfgretrospectiva_item 	add foreign key(idcfgretrospectiva) 	references cfgretrospectiva (id_cfgretrospectiva) on update cascade on delete cascade;
+alter table sprint_equipe 			add foreign key(idsprint) 				references sprint (id_sprint) on update cascade on delete cascade;
+alter table sprint_equipe 			add foreign key(idequipe) 				references equipe (id_equipe) on update cascade on delete cascade;
+alter table sprint_participante 	add foreign key(idsprintequipe) 		references sprint_equipe (id_sprintequipe) on update cascade on delete cascade;
+alter table sprint_participante 	add foreign key(idcolaborador) 			references colaborador (id_colaborador) on update cascade on delete cascade;
+alter table resposta_pesquisa 		add foreign key(idsprintparticipante) 	references sprint_participante (id_sprintparticipante) on update cascade on delete cascade;
+alter table resposta_pesquisa 		add foreign key(idpesquisapergunta) 	references pesquisa_pergunta (id_pesquisapergunta) on update cascade on delete cascade;
+alter table cards_retrospectivaitem add foreign key(idretrospectivaitem) 	references retrospectiva_item (id_retrospectivaitem) on update cascade on delete cascade;
+alter table colaborador_empresa 	add foreign key(id_empresa) 			references empresa (id_empresa) on update cascade on delete cascade;
+alter table colaborador_empresa 	add foreign key(id_colaborador) 		references colaborador (id_colaborador) on update cascade on delete cascade;
+alter table colaborador_funcao 		add foreign key(id_funcao) 				references funcao (id_funcao) on update cascade on delete cascade;
+alter table colaborador_funcao 		add foreign key(id_colaborador) 		references colaborador (id_colaborador) on update cascade on delete cascade;
+alter table colaborador_cargo 		add foreign key(id_cargo) 				references cargo (id_cargo) on update cascade on delete cascade;
+alter table colaborador_cargo 		add foreign key(id_colaborador) 		references colaborador (id_colaborador) on update cascade on delete cascade;
+alter table equipe_colaborador 		add foreign key(id_equipe) 				references equipe (id_equipe) on update cascade on delete cascade;
+alter table equipe_colaborador 		add foreign key(id_colaborador) 		references colaborador (id_colaborador) on update cascade on delete cascade;
+alter table sprint_pesquisa 		add foreign key(idpesquisa) 			references pesquisa (id_pesquisa) on update cascade on delete cascade;
+alter table sprint_pesquisa 		add foreign key(idsprint) 				references sprint (id_sprint) on update cascade on delete cascade;

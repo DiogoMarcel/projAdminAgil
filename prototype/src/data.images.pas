@@ -11,6 +11,7 @@ type
     iListImages: TVirtualImageList;
     iCollection: TImageCollection;
     iListImages20: TVirtualImageList;
+    iListImages10: TVirtualImageList;
   private
     { Private declarations }
   public

@@ -32,11 +32,14 @@ inherited fPadrao: TfPadrao
     inherited SpeedButton1: TSpeedButton
       Height = 40
       OnClick = Frame11SpeedButton1Click
+      ExplicitHeight = 40
     end
     inherited SpeedButton2: TSpeedButton
       Left = 1061
       Height = 40
       OnClick = Frame11SpeedButton2Click
+      ExplicitLeft = 1061
+      ExplicitHeight = 40
     end
   end
   object svMenu: TSplitView
@@ -57,7 +60,7 @@ inherited fPadrao: TfPadrao
       Left = 0
       Top = 0
       Width = 250
-      Height = 233
+      Height = 449
       Align = alTop
       BevelInner = bvNone
       BevelOuter = bvNone
@@ -119,7 +122,6 @@ inherited fPadrao: TfPadrao
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 3
-    ExplicitLeft = 256
   end
   object ActionList1: TActionList
     Left = 176
@@ -141,6 +143,30 @@ inherited fPadrao: TfPadrao
     object aConfigUser: TAction
       Caption = '<aConfigUser>'
       OnExecute = aConfigUserExecute
+    end
+    object aCadEmpresa: TAction
+      Category = 'Cadastros'
+      Caption = '<aCadEmpresa>'
+    end
+    object aCadCargo: TAction
+      Category = 'Cadastros'
+      Caption = '<aCadCargo>'
+    end
+    object aCadFuncao: TAction
+      Category = 'Cadastros'
+      Caption = '<aCadFuncao>'
+    end
+    object aCadEquipe: TAction
+      Category = 'Cadastros'
+      Caption = '<aCadEquipe>'
+    end
+    object aCadColaborador: TAction
+      Category = 'Cadastros'
+      Caption = '<aCadColaborador>'
+    end
+    object aCadSprint: TAction
+      Category = 'Cadastros'
+      Caption = '<aCadSprint>'
     end
   end
 end

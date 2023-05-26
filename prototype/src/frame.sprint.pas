@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Buttons, data.images,
-  Vcl.StdCtrls, Vcl.ExtCtrls, System.DateUtils;
+  System.UITypes, Vcl.StdCtrls, Vcl.ExtCtrls, System.DateUtils;
 
 type
   TfraSprint = class(TFrame)

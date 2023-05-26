@@ -20,14 +20,12 @@ object fraSprint: TfraSprint
   object Label6: TLabel
     Left = 40
     Top = 0
-    Width = 455
-    Height = 40
+    Width = 75
+    Height = 13
     Align = alClient
     Alignment = taCenter
     Caption = '<descr_sprint>'
     Layout = tlCenter
-    ExplicitWidth = 75
-    ExplicitHeight = 13
   end
   object SpeedButton2: TSpeedButton
     Left = 495

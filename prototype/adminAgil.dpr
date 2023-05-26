@@ -16,6 +16,7 @@ uses
   view.pesquisa.gerente in 'src\view.pesquisa.gerente.pas' {fPesquisaGerente},
   frame.inc.pesquisa in 'src\frame.inc.pesquisa.pas' {fraIncPesquisa: TFrame},
   frame.inc.item.pesquisa in 'src\frame.inc.item.pesquisa.pas' {fraItemPesquisa: TFrame},
+  view.cad.padrao in 'src\view.cad.padrao.pas' {fCadPadrao},
   view.cad.sprint in 'src\view.cad.sprint.pas' {fCadSprint};
 
 {$R *.res}

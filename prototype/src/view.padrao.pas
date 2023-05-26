@@ -21,6 +21,12 @@ type
     aConfigUser: TAction;
     cbUser: TCategoryButtons;
     Panel1: TPanel;
+    aCadEmpresa: TAction;
+    aCadCargo: TAction;
+    aCadFuncao: TAction;
+    aCadEquipe: TAction;
+    aCadColaborador: TAction;
+    aCadSprint: TAction;
     procedure FormShow(Sender: TObject);
     procedure aCerimoniaExecute(Sender: TObject);
     procedure aPesquisaExecute(Sender: TObject);
@@ -72,6 +78,20 @@ end;
 
 procedure TfPadrao.AdicionarCategoriasMenu;
 begin
+  with cbMenu.Categories.Add do
+  begin
+    Caption := '<menu_index_1>';
+    with Items do
+    begin
+      Add.Action := aCadEmpresa;
+      Add.Action := aCadCargo;
+      Add.Action := aCadFuncao;
+      Add.Action := aCadEquipe;
+      Add.Action := aCadColaborador;
+      Add.Action := aCadSprint;
+    end;
+  end;
+
   with cbMenu.Categories.Add do
   begin
     Caption := '<menu_index_0>';

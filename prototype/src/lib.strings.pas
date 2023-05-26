@@ -21,13 +21,12 @@ type
     procedure ConverterSpeedButton(aButton: TSpeedButton);
     procedure ConverterAction(aAction: TAction);
     procedure ConverterButtonCategory(aButton: TButtonCategory);
+    function PegarVersaoSprint(IncMes: boolean = false): string;
   end;
 
   TLibStrings = class(TInterfacedObject, iLibStrings)
   private
     FArrayStrings: TDictionary<string, string>;
-
-    function PegarVersaoSprint: string;
 
   protected
    { protected declarations }
@@ -35,6 +34,7 @@ type
     destructor Destroy; override;
 
     procedure onCreate;
+    function PegarVersaoSprint(IncMes: boolean = false): string;
     function PegarTituloSistema: string;
     procedure ConverterLabel(aLabel: TLabel);
     procedure ConverterSpeedButton(aButton: TSpeedButton);
@@ -77,6 +77,13 @@ begin
     Add('-',                    '');
     Add('<titulo>',             'adminAgil');
     Add('<menu_index_0>',       'Retrospectiva');
+    Add('<menu_index_1>',       'Cadastro');
+    Add('<aCadEmpresa>',        'Empresa');
+    Add('<aCadCargo>',          'Cargo');
+    Add('<aCadFuncao>',         'Função');
+    Add('<aCadEquipe>',         'Equipe');
+    Add('<aCadColaborador>',    'Colaborador');
+    Add('<aCadSprint>',         'Sprint');
     Add('<aPesquisa>',          'Pesquisa Felicidade');
     Add('<aPesquisaSM>',        'Gerenciar Pesquisa');
     Add('<aCerimonia>',         'Cerimonia');
@@ -102,9 +109,14 @@ begin
   Result := FArrayStrings.Items['<titulo>'];
 end;
 
-function TLibStrings.PegarVersaoSprint: string;
+function TLibStrings.PegarVersaoSprint(IncMes: boolean = false): string;
+var
+  Mes: TDateTime;
 begin
-  Result := IntToStr(YearOf(Now()))+'.'+IntToStr(MonthOf(Now()))
+  Mes := Now();
+  if IncMes then
+    Mes := IncMonth(Mes, 1);
+  Result := IntToStr(YearOf(Now()))+'.'+IntToStr(MonthOf(Mes));
 end;
 
 procedure TLibStrings.ConverterAction(aAction: TAction);
