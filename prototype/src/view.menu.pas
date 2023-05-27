@@ -11,6 +11,11 @@ type
   TfMenu = class(TfPadrao)
     procedure aPesquisaExecute(Sender: TObject);
     procedure aPesquisaSMExecute(Sender: TObject);
+    procedure aCadSprintExecute(Sender: TObject);
+    procedure aCadEquipeExecute(Sender: TObject);
+    procedure aCadCargoExecute(Sender: TObject);
+    procedure aCadFuncaoExecute(Sender: TObject);
+    procedure aCadEmpresaExecute(Sender: TObject);
   private
     { Private declarations }
   public
@@ -23,10 +28,43 @@ var
 implementation
 
 uses
+  view.cad.equipe,
+  view.cad.sprint,
+  view.cad.cargo,
+  view.cad.funcao,
+  view.cad.empresa,
   view.pesquisa.gerente,
   view.pesquisa;
 
 {$R *.dfm}
+
+procedure TfMenu.aCadCargoExecute(Sender: TObject);
+begin
+  inherited;
+  AbrirTelaSelf(TfCadCargo.Create(Self));
+end;
+
+procedure TfMenu.aCadEmpresaExecute(Sender: TObject);
+begin
+  inherited;
+  AbrirTelaSelf(TfCadEmpresa.Create(Self));
+end;
+
+procedure TfMenu.aCadEquipeExecute(Sender: TObject);
+begin
+  AbrirTelaSelf(TfCadEquipe.Create(Self));
+end;
+
+procedure TfMenu.aCadFuncaoExecute(Sender: TObject);
+begin
+  inherited;
+  AbrirTelaSelf(TfCadFuncao.Create(Self));
+end;
+
+procedure TfMenu.aCadSprintExecute(Sender: TObject);
+begin
+  AbrirTelaSelf(TfCadSprint.Create(Self));
+end;
 
 procedure TfMenu.aPesquisaExecute(Sender: TObject);
 begin

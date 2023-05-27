@@ -163,6 +163,7 @@ inherited fPadrao: TfPadrao
     object aCadColaborador: TAction
       Category = 'Cadastros'
       Caption = '<aCadColaborador>'
+      OnExecute = aCadColaboradorExecute
     end
     object aCadSprint: TAction
       Category = 'Cadastros'

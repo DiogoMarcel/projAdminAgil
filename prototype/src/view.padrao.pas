@@ -38,6 +38,7 @@ type
     procedure ChamaSubMenu(aMenu, aSubMenuBt: TCategoryButtons ; aRect: TRect ) ;
     procedure Frame11SpeedButton2Click(Sender: TObject);
     procedure Frame11SpeedButton1Click(Sender: TObject);
+    procedure aCadColaboradorExecute(Sender: TObject);
   private
     {FRec: TRect;}
 
@@ -62,6 +63,12 @@ begin
   finally
     FreeAndNil(aClassSelf);
   end;
+end;
+
+procedure TfPadrao.aCadColaboradorExecute(Sender: TObject);
+begin
+  inherited;
+  Showmessage('aCadColaboradorExecute');
 end;
 
 procedure TfPadrao.aCerimoniaExecute(Sender: TObject);

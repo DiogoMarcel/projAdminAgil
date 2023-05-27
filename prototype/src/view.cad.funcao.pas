@@ -1,10 +1,10 @@
-unit view.cad.sprint;
+unit view.cad.funcao;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, view.cad.padrao, Data.DB, lib.strings,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, view.cad.padrao, Data.DB,
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, System.Actions, Vcl.ActnList,
@@ -12,16 +12,10 @@ uses
   Vcl.ExtCtrls, Vcl.CategoryButtons, Vcl.WinXCtrls, frame.titulo;
 
 type
-  TfCadSprint = class(TfCadPadrao)
-    tableRegistroNome: TStringField;
-    tableRegistroDataInicial: TDateField;
-    tableRegistroDataFinal: TDateField;
+  TfCadFuncao = class(TfCadPadrao)
+    tableRegistronome: TStringField;
     Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     Edit1: TEdit;
-    DateTimePicker1: TDateTimePicker;
-    DateTimePicker2: TDateTimePicker;
   private
     { Private declarations }
   public
@@ -29,42 +23,34 @@ type
     procedure CarregarCampos; override;
     procedure LimparCampos; override;
     procedure SalvarCadastro; override;
-
   end;
 
 implementation
 
 {$R *.dfm}
 
-{ TfCadSprint }
+{ TfCadFuncao }
 
-procedure TfCadSprint.AdicionarRegistroPadrao;
+procedure TfCadFuncao.AdicionarRegistroPadrao;
 begin
   inherited;
-
-  tableRegistroNome.AsString := TLibStrings.ObterInstancia.PegarVersaoSprint;
-  tableRegistroDataInicial.AsDateTime := Now();
-  tableRegistroDataFinal.AsDateTime := Now()+14;
+  tableRegistroNome.AsString := 'Scrum Master';
   tableRegistro.Post;
 end;
 
-procedure TfCadSprint.CarregarCampos;
+procedure TfCadFuncao.CarregarCampos;
 begin
   inherited;
   edit1.Text := tableRegistroNome.AsString;
-  DateTimePicker1.DateTime := tableRegistroDataInicial.AsDateTime;
-  DateTimePicker2.DateTime := tableRegistroDataFinal.AsDateTime;
 end;
 
-procedure TfCadSprint.LimparCampos;
+procedure TfCadFuncao.LimparCampos;
 begin
   inherited;
   edit1.Text := EmptyStr;
-  DateTimePicker1.DateTime := Now;
-  DateTimePicker2.DateTime := Now;
 end;
 
-procedure TfCadSprint.SalvarCadastro;
+procedure TfCadFuncao.SalvarCadastro;
 begin
   inherited;
   if not (tableRegistro.State in [dsEdit]) then
@@ -74,8 +60,6 @@ begin
   end;
 
   tableRegistroNome.AsString := edit1.Text;
-  tableRegistroDataInicial.AsDateTime := DateTimePicker1.DateTime;
-  tableRegistroDataFinal.AsDateTime := DateTimePicker2.DateTime;
   tableRegistro.Post;
 end;
 

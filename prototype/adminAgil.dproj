@@ -189,6 +189,22 @@
             <Form>fCadSprint</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\view.cad.equipe.pas">
+            <Form>fCadEquipe</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\view.cad.cargo.pas">
+            <Form>fCadCargo</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\view.cad.funcao.pas">
+            <Form>fCadFuncao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\view.cad.empresa.pas">
+            <Form>fCadEmpresa</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -215,9 +231,9 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="bin\Win32\Debug\adminAgil.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>adminAgil.exe</RemoteName>
+                <DeployFile LocalName="bin\Win64\Debug\adminAgil.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>adminAgil.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -227,9 +243,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="bin\Win64\Debug\adminAgil.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>adminAgil.rsm</RemoteName>
+                <DeployFile LocalName="bin\Win32\Debug\adminAgil.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>adminAgil.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

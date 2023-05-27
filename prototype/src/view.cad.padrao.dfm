@@ -2,6 +2,14 @@ inherited fCadPadrao: TfCadPadrao
   Caption = 'fCadPadrao'
   PixelsPerInch = 96
   TextHeight = 29
+  inherited Frame11: TfTitulo
+    inherited Label1: TLabel
+      Height = 40
+    end
+    inherited lTituloTela: TLabel
+      Height = 40
+    end
+  end
   inherited Panel1: TPanel
     object PageControl1: TPageControl
       AlignWithMargins = True
@@ -159,9 +167,7 @@ inherited fCadPadrao: TfCadPadrao
             Alignment = taRightJustify
             Caption = 'lIDKey'
             Layout = tlCenter
-            ExplicitLeft = 208
-            ExplicitTop = 0
-            ExplicitHeight = 41
+            ExplicitHeight = 29
           end
           object Label1: TLabel
             AlignWithMargins = True
@@ -198,6 +204,7 @@ inherited fCadPadrao: TfCadPadrao
     end
     object aExcluir: TAction
       Category = 'NoCadastro'
+      OnExecute = aExcluirExecute
     end
   end
   object dsRegistro: TDataSource

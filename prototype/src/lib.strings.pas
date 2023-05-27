@@ -101,6 +101,10 @@ begin
     Add('<descr_sprint>',       'Sprint '+ PegarVersaoSprint);
     Add('<incPesquisa>',        'Incluir Pesquisa');
     Add('<cadastroSprint>',     'Cadastro de Sprint');
+    Add('<cadEquipe>',          'Cadastro de Equipe');
+    Add('<cadCargo>',           'Cadastro de Cargo');
+    Add('<cadFuncao>',          'Cadastro de Função');
+    Add('<cadEmpresa>',         'Cadastro de Empresa');
   end;
 end;
 

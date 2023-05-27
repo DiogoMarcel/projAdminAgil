@@ -17,7 +17,11 @@ uses
   frame.inc.pesquisa in 'src\frame.inc.pesquisa.pas' {fraIncPesquisa: TFrame},
   frame.inc.item.pesquisa in 'src\frame.inc.item.pesquisa.pas' {fraItemPesquisa: TFrame},
   view.cad.padrao in 'src\view.cad.padrao.pas' {fCadPadrao},
-  view.cad.sprint in 'src\view.cad.sprint.pas' {fCadSprint};
+  view.cad.sprint in 'src\view.cad.sprint.pas' {fCadSprint},
+  view.cad.equipe in 'src\view.cad.equipe.pas' {fCadEquipe},
+  view.cad.cargo in 'src\view.cad.cargo.pas' {fCadCargo},
+  view.cad.funcao in 'src\view.cad.funcao.pas' {fCadFuncao},
+  view.cad.empresa in 'src\view.cad.empresa.pas' {fCadEmpresa};
 
 {$R *.res}
 

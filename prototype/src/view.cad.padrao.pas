@@ -13,10 +13,6 @@ uses
   Vcl.StdCtrls;
 
 type
-//  TCamposCad = record
-//
-//  end;
-
   TfCadPadrao = class(TfPadrao)
     PageControl1: TPageControl;
     tabConsulta: TTabSheet;
@@ -42,14 +38,17 @@ type
     Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure aInserirExecute(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
     procedure aCancelarExecute(Sender: TObject);
     procedure aSalvarExecute(Sender: TObject);
     procedure aAlterarExecute(Sender: TObject);
+    procedure aExcluirExecute(Sender: TObject);
   private
     { Private declarations }
   public
     procedure AdicionarRegistroPadrao; virtual;
+    procedure CarregarCampos; virtual; abstract;
+    procedure LimparCampos; virtual; abstract;
+    procedure SalvarCadastro; virtual; abstract;
 
   end;
 
@@ -62,30 +61,48 @@ begin
   inherited;
   PageControl1.ActivePage := tabCadastro;
   lidkey.caption := tableRegistroid.AsInteger.ToString;
+  tableRegistro.Edit;
+  CarregarCampos;
 end;
 
 procedure TfCadPadrao.aCancelarExecute(Sender: TObject);
 begin
   inherited;
+  tableRegistro.Cancel;
   PageControl1.ActivePage := tabConsulta;
+  LimparCampos;
 end;
 
 procedure TfCadPadrao.AdicionarRegistroPadrao;
 begin
-  //
+  tableRegistro.Open;
+
+  tableRegistro.Append;
+  tableRegistroid.AsInteger := 1;
+end;
+
+procedure TfCadPadrao.aExcluirExecute(Sender: TObject);
+begin
+  inherited;
+  if tableRegistro.IsEmpty then
+    Exit;
+
+  tableRegistro.Delete;
 end;
 
 procedure TfCadPadrao.aInserirExecute(Sender: TObject);
 begin
   inherited;
   PageControl1.ActivePage := tabCadastro;
-  lidkey.caption := integer(tableRegistroid.AsInteger +1).ToString;
+  lidkey.caption := integer(tableRegistro.RecordCount +1).ToString;
 end;
 
 procedure TfCadPadrao.aSalvarExecute(Sender: TObject);
 begin
+  SalvarCadastro;
   inherited;
-  PageControl1.ActivePage := tabCadastro;
+  PageControl1.ActivePage := tabConsulta;
+  LimparCampos;
 end;
 
 procedure TfCadPadrao.FormShow(Sender: TObject);
@@ -93,11 +110,7 @@ begin
   svMenu.Close;
   inherited;
   AdicionarRegistroPadrao;
-end;
-
-procedure TfCadPadrao.SpeedButton1Click(Sender: TObject);
-begin
-  inherited;
+  LimparCampos;
   PageControl1.ActivePage := tabConsulta;
 end;
 
