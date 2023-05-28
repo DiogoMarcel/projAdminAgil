@@ -3,8 +3,12 @@ inherited fCadEmpresa: TfCadEmpresa
   PixelsPerInch = 96
   TextHeight = 29
   inherited Frame11: TfTitulo
+    inherited Label1: TLabel
+      Height = 40
+    end
     inherited lTituloTela: TLabel
       Width = 163
+      Height = 40
       Caption = '<cadEmpresa>'
       ExplicitWidth = 163
     end
@@ -36,6 +40,11 @@ inherited fCadEmpresa: TfCadEmpresa
           Alignment = taRightJustify
           Caption = 'Nome:'
         end
+        inherited Panel4: TPanel
+          inherited lIDKey: TLabel
+            Height = 35
+          end
+        end
         object Edit1: TEdit
           Left = 163
           Top = 44
@@ -43,7 +52,7 @@ inherited fCadEmpresa: TfCadEmpresa
           Height = 37
           MaxLength = 50
           TabOrder = 2
-          TextHint = 'Digite o nome da Fun'#231#227'o'
+          TextHint = 'Digite o nome da Empresa'
         end
       end
     end

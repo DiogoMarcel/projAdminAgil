@@ -105,6 +105,7 @@ begin
     Add('<cadCargo>',           'Cadastro de Cargo');
     Add('<cadFuncao>',          'Cadastro de Função');
     Add('<cadEmpresa>',         'Cadastro de Empresa');
+    Add('<cadColaborador>',     'Cadastro de Colaborador');
   end;
 end;
 

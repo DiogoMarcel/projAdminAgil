@@ -21,7 +21,10 @@ uses
   view.cad.equipe in 'src\view.cad.equipe.pas' {fCadEquipe},
   view.cad.cargo in 'src\view.cad.cargo.pas' {fCadCargo},
   view.cad.funcao in 'src\view.cad.funcao.pas' {fCadFuncao},
-  view.cad.empresa in 'src\view.cad.empresa.pas' {fCadEmpresa};
+  view.cad.empresa in 'src\view.cad.empresa.pas' {fCadEmpresa},
+  view.cad.colaborador in 'src\view.cad.colaborador.pas' {fCadColaborador},
+  lib.utils in 'src\lib.utils.pas',
+  frame.card.colab in 'src\frame.card.colab.pas' {fraCardColab: TFrame};
 
 {$R *.res}
 
