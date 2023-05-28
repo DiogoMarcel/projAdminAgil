@@ -1,0 +1,12 @@
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/squad_scrum
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/icudtl.dat
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/lib/libflutter_linux_gtk.so
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/AssetManifest.json
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/AssetManifest.smcbin
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/FontManifest.json
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/NOTICES.Z
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/shaders/ink_sparkle.frag
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/data/flutter_assets/version.json
+/mnt/c/Users/luanc/OneDrive/Documents/projAdminAgil/projetos/flutter/squad_scrum/build/linux/x64/release/bundle/lib/libapp.so

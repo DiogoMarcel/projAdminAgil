@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:squad_scrum/BaseWidget/base_state_inclusao.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/ObjetosPostgres/equipe_dao.dart';
@@ -12,12 +13,23 @@ class InclusaoEquipe extends StatefulWidget {
   const InclusaoEquipe({Key? key, this.tipoCrud = TipoCrud.inserir, this.equipeAlterar}): super(key: key);
 
   @override
-  State<InclusaoEquipe> createState() => _InclusaoEquipeState();
+  BaseStateInclusao<InclusaoEquipe> createState() => _InclusaoEquipeState();
 }
 
-class _InclusaoEquipeState extends State<InclusaoEquipe> {
+class _InclusaoEquipeState extends BaseStateInclusao<InclusaoEquipe> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerNome = TextEditingController();
+
+  @override
+  void onGravar() async {
+    var equipe = EquipeDAO(idEquipe: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
+    if (widget.tipoCrud == TipoCrud.inserir) {
+      await util_http.post(path: rotaInserirEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+    } else {
+      await util_http.patch(path: rotaAlterarEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+    }
+    Navigator.of(context).pop();
+  }
 
   @override
   void initState() {
@@ -28,50 +40,27 @@ class _InclusaoEquipeState extends State<InclusaoEquipe> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: salvarEquipe,
-        child: const Icon(Icons.save),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          children: [
-            TextFormField(
-              enabled: false,
-              controller: controllerCodigo,
-              decoration: const InputDecoration(
-                labelText: "Código Equipe",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            TextFormField(
-              autofocus: true,
-              controller: controllerNome,
-              decoration: const InputDecoration(
-                labelText: "Informe o Nome da Equipe",
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
+  List<Widget> buildListFormField() {
+    return [
+      TextFormField(
+        enabled: false,
+        controller: controllerCodigo,
+        decoration: const InputDecoration(
+          labelText: "Código Equipe",
+          border: OutlineInputBorder(),
         ),
       ),
-    );
-  }
-
-  void salvarEquipe() async {
-    var equipe = EquipeDAO(idEquipe: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
-    if (widget.tipoCrud == TipoCrud.inserir) {
-      await util_http.post(path: rotaInserirEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
-    } else {
-      await util_http.patch(path: rotaAlterarEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
-    }
-    Navigator.of(context).pop();
+      const SizedBox(
+        height: 15,
+      ),
+      TextFormField(
+        autofocus: true,
+        controller: controllerNome,
+        decoration: const InputDecoration(
+          labelText: "Informe o Nome da Equipe",
+          border: OutlineInputBorder(),
+        ),
+      ),
+    ];
   }
 }
