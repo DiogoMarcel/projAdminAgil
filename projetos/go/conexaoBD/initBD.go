@@ -9,7 +9,7 @@ var Db *sql.DB
 var err error
 
 func InitBD() {
-	stringConexao := "postgres://postgres:postgres@34.95.131.245/squadscrum?sslmode=disable"
+	stringConexao := "postgres://postgres:postgres@104.198.69.106/squadscrum?sslmode=disable"
 
 	Db, err = sql.Open("postgres", stringConexao)
 	if err != nil {
