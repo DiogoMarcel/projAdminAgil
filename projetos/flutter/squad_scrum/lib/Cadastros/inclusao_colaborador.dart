@@ -7,9 +7,7 @@ import 'package:squad_scrum/ObjetosPostgres/colaborador_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class InclusaoColaborador extends StatefulWidget {
-  const InclusaoColaborador(
-      {Key? key, this.tipoCrud = TipoCrud.inserir, this.colaboradorAlterar})
-      : super(key: key);
+  const InclusaoColaborador({Key? key, this.tipoCrud = TipoCrud.inserir, this.colaboradorAlterar}) : super(key: key);
 
   final TipoCrud tipoCrud;
   final ColaboradorDAO? colaboradorAlterar;
@@ -22,29 +20,29 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerUsuario = TextEditingController();
   TextEditingController controllerSenha = TextEditingController();
-  TextEditingController controllerApelido = TextEditingController();
+  TextEditingController controllerNome = TextEditingController();
   bool gerenciaPesquisa = false;
   bool gerenciaUsuario = false;
 
   @override
   void onGravar() async {
-    var cargo = ColaboradorDAO(
+    var colaborador = ColaboradorDAO(
       idColaborador: int.tryParse(controllerCodigo.text),
       usuario: controllerUsuario.text,
       senha: controllerSenha.text,
-      apelido: controllerApelido.text,
+      nome: controllerNome.text,
       gerenciapesquisa: gerenciaPesquisa,
       gerenciausuario: gerenciaUsuario,
     );
     if (widget.tipoCrud == TipoCrud.inserir) {
       await util_http.post(
           path: rotaInserirColaborador,
-          jsonDAO: jsonEncode(cargo.toJson()),
+          jsonDAO: jsonEncode(colaborador.toJson()),
           context: context);
     } else {
       await util_http.patch(
           path: rotaAlterarColaborador,
-          jsonDAO: jsonEncode(cargo.toJson()),
+          jsonDAO: jsonEncode(colaborador.toJson()),
           context: context);
     }
     Navigator.of(context).pop();
@@ -53,11 +51,13 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
   @override
   void initState() {
     super.initState();
+    super.objetoPostgres = "Colaborador";
+    super.tipoCrud = widget.tipoCrud;
     if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.colaboradorAlterar!.idColaborador.toString();
       controllerUsuario.text = widget.colaboradorAlterar!.usuario;
       controllerSenha.text = widget.colaboradorAlterar!.senha;
-      controllerApelido.text = widget.colaboradorAlterar!.apelido;
+      controllerNome.text = widget.colaboradorAlterar!.nome;
       gerenciaPesquisa = widget.colaboradorAlterar!.gerenciapesquisa;
       gerenciaUsuario = widget.colaboradorAlterar!.gerenciausuario;
     }
@@ -80,7 +80,7 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
         autofocus: true,
         controller: controllerUsuario,
         decoration: const InputDecoration(
-          labelText: "Informe o Nome do Usuário",
+          labelText: "E-Mail",
           border: OutlineInputBorder(),
         ),
       ),
@@ -92,7 +92,7 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
         controller: controllerSenha,
         obscureText: true,
         decoration: const InputDecoration(
-          labelText: "Informe a Senha",
+          labelText: "Senha",
           border: OutlineInputBorder(),
         ),
       ),
@@ -101,9 +101,9 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
       ),
       TextFormField(
         autofocus: true,
-        controller: controllerApelido,
+        controller: controllerNome,
         decoration: const InputDecoration(
-          labelText: "Informe o Apelido",
+          labelText: "Nome ou Apelido",
           border: OutlineInputBorder(),
         ),
       ),

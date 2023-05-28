@@ -34,6 +34,8 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoEquipe> {
   @override
   void initState() {
     super.initState();
+    super.objetoPostgres = "Equipe";
+    super.tipoCrud = widget.tipoCrud;
     if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.equipeAlterar!.idEquipe.toString();
       controllerNome.text = widget.equipeAlterar!.nome;

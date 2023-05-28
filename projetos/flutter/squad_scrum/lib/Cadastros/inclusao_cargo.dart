@@ -42,6 +42,8 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoCargo> {
   @override
   void initState() {
     super.initState();
+    super.objetoPostgres = "Cargo";
+    super.tipoCrud = widget.tipoCrud;
     if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.cargoAlterar!.idCargo.toString();
       controllerDescricao.text = widget.cargoAlterar!.descricao;

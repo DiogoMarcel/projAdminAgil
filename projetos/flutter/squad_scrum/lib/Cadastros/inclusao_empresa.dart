@@ -34,6 +34,8 @@ class _InclusaoEmpresaState extends BaseStateInclusao<InclusaoEmpresa> {
   @override
   void initState() {
     super.initState();
+    super.objetoPostgres = "Empresa";
+    super.tipoCrud = widget.tipoCrud;
     if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.empresaAlterar!.idEmpresa.toString();
       controllerNome.text = widget.empresaAlterar!.nome;

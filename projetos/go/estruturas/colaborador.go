@@ -11,7 +11,7 @@ type Colaborador struct {
 	Id_Colaborador   int64  `json:"Id_Colaborador"`
 	Usuario          string `json:"Usuario"`
 	Senha            string `json:"Senha"`
-	Apelido          string `json:"Apelido"`
+	Nome             string `json:"Nome"`
 	GerenciaPesquisa bool   `json:"GerenciaPesquisa"`
 	GerenciaUsuario  bool   `json:"GerenciaUsuario"`
 }
@@ -21,8 +21,8 @@ func (colaborador *Colaborador) Inserir(w http.ResponseWriter, r *http.Request) 
 
 	json.Unmarshal(jsonColaborador, &colaborador)
 
-	utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,APELIDO,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, $2, $3, $4, $5)",
-		colaborador.Usuario, colaborador.Senha, colaborador.Apelido, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
+	utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, $2, $3, $4, $5)",
+		colaborador.Usuario, colaborador.Senha, colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
 }
 
 func (colaborador *Colaborador) Alterar(w http.ResponseWriter, r *http.Request) {
@@ -33,13 +33,13 @@ func (colaborador *Colaborador) Alterar(w http.ResponseWriter, r *http.Request) 
 	utilDB.ExecutarSQL(w, "UPDATE COLABORADOR "+
 		" SET USUARIO = $1,"+
 		" SENHA = $2,"+
-		" APELIDO = $3,"+
+		" NOME = $3,"+
 		" GERENCIAPESQUISA = $4,"+
 		" GERENCIAUSUARIO = $5"+
-		" WHERE ID_CARGO = $2",
+		" WHERE ID_COLABORADOR = $2",
 		colaborador.Usuario,
 		colaborador.Senha,
-		colaborador.Apelido,
+		colaborador.Nome,
 		colaborador.GerenciaPesquisa,
 		colaborador.GerenciaUsuario)
 }
@@ -57,7 +57,7 @@ func (colaborador *Colaborador) PegarTodos(w http.ResponseWriter, r *http.Reques
 		"SELECT ID_COLABORADOR"+
 			" , USUARIO"+
 			" , SENHA"+
-			" , APELIDO"+
+			" , NOME"+
 			" , GERENCIAPESQUISA"+
 			" , GERENCIAUSUARIO"+
 			" FROM COLABORADOR"+
@@ -70,7 +70,7 @@ func (colaborador *Colaborador) PegarTodos(w http.ResponseWriter, r *http.Reques
 				Id_Colaborador:   element["id_colaborador"].(int64),
 				Usuario:          element["usuario"].(string),
 				Senha:            element["senha"].(string),
-				Apelido:          element["apelido"].(string),
+				Nome:             element["nome"].(string),
 				GerenciaPesquisa: element["gerenciapesquisa"].(bool),
 				GerenciaUsuario:  element["gerenciausuario"].(bool),
 			})

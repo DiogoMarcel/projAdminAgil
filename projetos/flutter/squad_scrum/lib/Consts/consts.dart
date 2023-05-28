@@ -10,10 +10,10 @@ const rotaAlterarCargo = "/cargo/alterar";
 const rotaDeletarCargo = "/cargo/deletar";
 const pegarTodosCargo = "/cargo/pegarTodos";
 
-const rotaInserirEmpresa = "/cargo/inserir";
-const rotaAlterarEmpresa = "/cargo/alterar";
-const rotaDeletarEmpresa = "/cargo/deletar";
-const pegarTodosEmpresa = "/cargo/pegarTodos";
+const rotaInserirEmpresa = "/empresa/inserir";
+const rotaAlterarEmpresa = "/empresa/alterar";
+const rotaDeletarEmpresa = "/empresa/deletar";
+const pegarTodosEmpresa = "/empresa/pegarTodos";
 
 const rotaInserirFuncao = "/funcao/inserir";
 const rotaAlterarFuncao = "/funcao/alterar";

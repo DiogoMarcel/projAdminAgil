@@ -29,10 +29,10 @@ func main() {
 	rotas.HandleFunc("/cargo/pegarTodos", cargo.PegarTodos).Methods(http.MethodGet)
 
 	var empresa = estruturas.Empresa{}
-	rotas.HandleFunc("/cargo/inserir", empresa.Inserir).Methods(http.MethodPost)
-	rotas.HandleFunc("/cargo/alterar", empresa.Alterar).Methods(http.MethodPatch)
-	rotas.HandleFunc("/cargo/deletar", empresa.Deletar).Methods(http.MethodDelete)
-	rotas.HandleFunc("/cargo/pegarTodos", empresa.PegarTodos).Methods(http.MethodGet)
+	rotas.HandleFunc("/empresa/inserir", empresa.Inserir).Methods(http.MethodPost)
+	rotas.HandleFunc("/empresa/alterar", empresa.Alterar).Methods(http.MethodPatch)
+	rotas.HandleFunc("/empresa/deletar", empresa.Deletar).Methods(http.MethodDelete)
+	rotas.HandleFunc("/empresa/pegarTodos", empresa.PegarTodos).Methods(http.MethodGet)
 
 	var funcao = estruturas.Funcao{}
 	rotas.HandleFunc("/funcao/inserir", funcao.Inserir).Methods(http.MethodPost)

@@ -2,7 +2,7 @@ class ColaboradorDAO {
   int? idColaborador;
   String usuario;
   String senha;
-  String apelido;
+  String nome;
   bool gerenciapesquisa;
   bool gerenciausuario;
 
@@ -10,7 +10,7 @@ class ColaboradorDAO {
       {this.idColaborador,
       required this.usuario,
       required this.senha,
-      required this.apelido,
+      required this.nome,
       required this.gerenciapesquisa,
       required this.gerenciausuario});
 
@@ -19,7 +19,7 @@ class ColaboradorDAO {
       idColaborador: json["Id_Colaborador"],
       usuario: json["Usuario"],
       senha: json["Senha"],
-      apelido: json["Apelido"],
+      nome: json["Nome"],
       gerenciapesquisa: json["GerenciaPesquisa"],
       gerenciausuario: json["GerenciaUsuario"],
     );
@@ -30,7 +30,7 @@ class ColaboradorDAO {
       "Id_Colaborador": idColaborador ?? "",
       "Usuario": usuario,
       "Senha": senha,
-      "Apelido": apelido,
+      "Nome": nome,
       "GerenciaPesquisa": gerenciapesquisa,
       "GerenciaUsuario": gerenciausuario,
     };

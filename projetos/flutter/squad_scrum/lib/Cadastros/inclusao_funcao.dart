@@ -34,6 +34,8 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoFuncao> {
   @override
   void initState() {
     super.initState();
+    super.objetoPostgres = "Função";
+    super.tipoCrud = widget.tipoCrud;
     if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.funcaoAlterar!.idFuncao.toString();
       controllerDescricao.text = widget.funcaoAlterar!.descricao;
