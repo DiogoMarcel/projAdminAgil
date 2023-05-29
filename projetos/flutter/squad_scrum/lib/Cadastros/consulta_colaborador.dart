@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/BaseWidget/base_state_consulta.dart';
 import 'package:squad_scrum/Cadastros/inclusao_colaborador.dart';
-import 'package:squad_scrum/Cadastros/inclusao_equipe.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/ObjetosPostgres/colaborador_dao.dart';

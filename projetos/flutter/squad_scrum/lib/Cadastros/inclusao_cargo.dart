@@ -50,6 +50,7 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoCargo> {
     }
   }
 
+  @override
   List<Widget> buildListFormField() {
     return [
       TextFormField(

@@ -63,6 +63,7 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
     }
   }
 
+  @override
   List<Widget> buildListFormField() {
     return [
       TextFormField(
@@ -112,7 +113,7 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
       ),
       Row(
         children: [
-          Text("Gerencia Pesquisa"),
+          const Text("Gerencia Pesquisa"),
           Switch(
             value: gerenciaPesquisa,
             onChanged: (value) {
@@ -128,7 +129,7 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
       ),
       Row(
         children: [
-          Text("Gerencia Usuário"),
+          const Text("Gerencia Usuário"),
           Switch(
             value: gerenciaUsuario,
             onChanged: (value) {

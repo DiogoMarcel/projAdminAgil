@@ -42,6 +42,7 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoFuncao> {
     }
   }
 
+  @override
   List<Widget> buildListFormField() {
     return [
       TextFormField(

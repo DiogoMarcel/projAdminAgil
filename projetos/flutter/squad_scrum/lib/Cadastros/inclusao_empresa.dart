@@ -20,7 +20,7 @@ class _InclusaoEmpresaState extends BaseStateInclusao<InclusaoEmpresa> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerNome = TextEditingController();
 
-
+  @override
   void onGravar() async {
     var equipe = EmpresaDAO(idEmpresa: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
@@ -42,6 +42,7 @@ class _InclusaoEmpresaState extends BaseStateInclusao<InclusaoEmpresa> {
     }
   }
 
+  @override
   List<Widget> buildListFormField() {
     return [
       TextFormField(
