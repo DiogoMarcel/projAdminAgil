@@ -250,7 +250,7 @@ insert into public.colaborador(usuario,
                                senha, 
                                nome, 
                                gerenciapesquisa, 
-                               gerenciausuario)                     values ('master', md5('usr!master23'), 'master', false, false);
+                               gerenciausuario)                     values ('master', md5('usr!master23'), 'master', true, true);
 							   
 insert into public.colaborador_empresa(idempresa, idcolaborador)    values (1, 1);
 
