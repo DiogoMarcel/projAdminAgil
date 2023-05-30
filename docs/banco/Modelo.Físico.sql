@@ -1,3 +1,4 @@
+--squadscrum
 begin;
 -----------
 
@@ -179,3 +180,69 @@ alter table colaborador_equipe 		add foreign key(idequipe) 				references equipe
 alter table colaborador_equipe 		add foreign key(idcolaborador) 			references colaborador 				(id_colaborador) 			/*on update cascade on delete cascade*/;
 alter table sprint_pesquisa 		add foreign key(idpesquisa) 			references pesquisa 				(id_pesquisa) 	 			/*on update cascade on delete cascade*/;
 alter table sprint_pesquisa 		add foreign key(idsprint) 				references sprint 					(id_sprint) 	 			/*on update cascade on delete cascade*/;
+
+-- commmit;
+
+-- begin; /*create index for id tables*/
+
+create index on public.equipe  					using btree (id_equipe 					asc nulls last) tablespace pg_default;
+create index on public.empresa  				using btree (id_empresa 				asc nulls last) tablespace pg_default;
+create index on public.funcao  					using btree (id_funcao 					asc nulls last) tablespace pg_default;
+create index on public.cargo  					using btree (id_cargo 					asc nulls last) tablespace pg_default;
+create index on public.colaborador  			using btree (id_colaborador 			asc nulls last) tablespace pg_default;
+create index on public.sprint  					using btree (id_sprint 					asc nulls last) tablespace pg_default;
+create index on public.pesquisa  				using btree (id_pesquisa 				asc nulls last) tablespace pg_default;
+create index on public.retrospectiva  			using btree (id_retrospectiva 			asc nulls last) tablespace pg_default;
+create index on public.pesquisa_pergunta  		using btree (id_pesquisapergunta 		asc nulls last) tablespace pg_default;
+create index on public.retrospectiva_item  		using btree (id_retrospectivaitem 		asc nulls last) tablespace pg_default;
+create index on public.cfgretrospectiva_item  	using btree (id_cfgrestrospectivaitem 	asc nulls last) tablespace pg_default;
+create index on public.cfgretrospectiva  		using btree (id_cfgretrospectiva 		asc nulls last) tablespace pg_default;
+create index on public.sprint_equipe  			using btree (id_sprintequipe 			asc nulls last) tablespace pg_default;
+create index on public.sprint_participante  	using btree (id_sprintparticipante 		asc nulls last) tablespace pg_default;
+create index on public.resposta_pesquisa  		using btree (id_respostapesquisa 		asc nulls last) tablespace pg_default;
+create index on public.cards_retrospectivaitem  using btree (id_cardsretrospectivaitem 	asc nulls last) tablespace pg_default;
+create index on public.colaborador_empresa  	using btree (id_colaboradorempresa 		asc nulls last) tablespace pg_default;
+create index on public.colaborador_funcao  		using btree (id_colaboradorfuncao 		asc nulls last) tablespace pg_default;
+create index on public.colaborador_cargo  		using btree (id_colaboradorcargo 		asc nulls last) tablespace pg_default;
+create index on public.colaborador_equipe 		using btree (id_colaboradorequipe 		asc nulls last) tablespace pg_default;
+create index on public.sprint_pesquisa  		using btree (id_sprintpesquisa 			asc nulls last) tablespace pg_default;
+
+-- commmit;
+
+-- begin; /*insert default values - master*/
+
+insert into public.empresa(
+	id_empresa, nome)
+	values (nextval('public.empresa_id_empresa_seq'), 'Empresa Master');
+
+insert into public.cargo(
+	id_cargo, descricao)
+	values (nextval('public.cargo_id_cargo_seq'), 'Cargo Master');
+
+insert into public.cargo(
+	id_cargo, descricao)
+	values (nextval('public.cargo_id_cargo_seq'), 'Analista');
+
+insert into public.cargo(
+	id_cargo, descricao)
+	values (nextval('public.cargo_id_cargo_seq'), 'Desenvolvedor');
+
+insert into public.cargo(
+	id_cargo, descricao)
+	values (nextval('public.cargo_id_cargo_seq'), 'Product Owner');
+
+insert into public.funcao(
+	id_funcao, descricao)
+	values (nextval('public.funcao_id_funcao_seq'), 'Scrum Master');
+
+insert into public.colaborador(
+	id_colaborador, usuario, senha, nome, gerenciapesquisa, gerenciausuario)
+	values (nextval('public.colaborador_id_colaborador_seq'), 'master', md5('usr!master23'), 'master', false, false);
+
+insert into public.colaborador_empresa(
+	idempresa, idcolaborador)
+	values (1, 1);
+
+insert into public.colaborador_cargo(
+	idcargo, idcolaborador)
+	values (1, 1);
