@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"imports/controllers"
 	"imports/estruturas"
 	"net/http"
 
@@ -14,11 +15,11 @@ var RegisterStoreRoutes = func(router *mux.Router) {
 	router.HandleFunc("/equipe/deletar", equipe.Deletar).Methods(http.MethodDelete)
 	router.HandleFunc("/equipe/pegarTodos", equipe.PegarTodos).Methods(http.MethodGet)
 
-	var cargo = estruturas.Cargo{}
-	router.HandleFunc("/cargo/inserir", cargo.Inserir).Methods(http.MethodPost)
-	router.HandleFunc("/cargo/alterar", cargo.Alterar).Methods(http.MethodPatch)
-	router.HandleFunc("/cargo/deletar", cargo.Deletar).Methods(http.MethodDelete)
-	router.HandleFunc("/cargo/pegarTodos", cargo.PegarTodos).Methods(http.MethodGet)
+	//var cargo = estruturas.Cargo{}
+	router.HandleFunc("/cargo/inserir", controllers.CargoInserir).Methods(http.MethodPost)
+	router.HandleFunc("/cargo/alterar", controllers.CargoAlterar).Methods(http.MethodPatch)
+	router.HandleFunc("/cargo/deletar", controllers.CargoDeletar).Methods(http.MethodDelete)
+	router.HandleFunc("/cargo/pegarTodos", controllers.CargoPegarTodos).Methods(http.MethodGet)
 
 	var empresa = estruturas.Empresa{}
 	router.HandleFunc("/empresa/inserir", empresa.Inserir).Methods(http.MethodPost)
