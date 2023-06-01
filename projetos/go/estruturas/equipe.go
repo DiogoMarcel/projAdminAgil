@@ -8,8 +8,8 @@ import (
 )
 
 type Equipe struct {
-	Id_Equipe int64  `json:"Id_Equipe"`
-	Nome      string `json:"Nome"`
+	Id_Equipe int64  `json:"id_equipe"`
+	Nome      string `json:"nome"`
 }
 
 func (equipe *Equipe) Inserir(w http.ResponseWriter, r *http.Request) {

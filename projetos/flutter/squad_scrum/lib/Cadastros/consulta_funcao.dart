@@ -4,7 +4,7 @@ import 'package:squad_scrum/BaseWidget/base_state_consulta.dart';
 import 'package:squad_scrum/Cadastros/inclusao_funcao.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
-import 'package:squad_scrum/ObjetosPostgres/funcao_dao.dart';
+import 'package:squad_scrum/EntidadePostgres/funcao_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class ConsultaFuncao extends StatefulWidget {

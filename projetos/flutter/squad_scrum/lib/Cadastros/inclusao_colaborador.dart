@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:squad_scrum/BaseWidget/base_state_inclusao.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
-import 'package:squad_scrum/ObjetosPostgres/colaborador_dao.dart';
+import 'package:squad_scrum/EntidadePostgres/colaborador_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class InclusaoColaborador extends StatefulWidget {
@@ -19,7 +19,6 @@ class InclusaoColaborador extends StatefulWidget {
 class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerUsuario = TextEditingController();
-  TextEditingController controllerSenha = TextEditingController();
   TextEditingController controllerNome = TextEditingController();
   bool gerenciaPesquisa = false;
   bool gerenciaUsuario = false;
@@ -29,7 +28,6 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
     var colaborador = ColaboradorDAO(
       idColaborador: int.tryParse(controllerCodigo.text),
       usuario: controllerUsuario.text,
-      senha: controllerSenha.text,
       nome: controllerNome.text,
       gerenciapesquisa: gerenciaPesquisa,
       gerenciausuario: gerenciaUsuario,
@@ -56,7 +54,6 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
     if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.colaboradorAlterar!.idColaborador.toString();
       controllerUsuario.text = widget.colaboradorAlterar!.usuario;
-      controllerSenha.text = widget.colaboradorAlterar!.senha;
       controllerNome.text = widget.colaboradorAlterar!.nome;
       gerenciaPesquisa = widget.colaboradorAlterar!.gerenciapesquisa;
       gerenciaUsuario = widget.colaboradorAlterar!.gerenciausuario;
@@ -82,18 +79,6 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
         controller: controllerUsuario,
         decoration: const InputDecoration(
           labelText: "E-Mail",
-          border: OutlineInputBorder(),
-        ),
-      ),
-      const SizedBox(
-        height: 15,
-      ),
-      TextFormField(
-        autofocus: true,
-        controller: controllerSenha,
-        obscureText: true,
-        decoration: const InputDecoration(
-          labelText: "Senha",
           border: OutlineInputBorder(),
         ),
       ),

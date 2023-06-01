@@ -8,8 +8,8 @@ import (
 )
 
 type Funcao struct {
-	Id_Funcao int64  `json:"Id_Funcao"`
-	Descricao string `json:"Descricao"`
+	Id_Funcao int64  `json:"id_funcao"`
+	Descricao string `json:"descricao"`
 }
 
 func (funcao *Funcao) Inserir(w http.ResponseWriter, r *http.Request) {
