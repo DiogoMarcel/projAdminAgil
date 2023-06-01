@@ -8,12 +8,12 @@ import (
 )
 
 type Colaborador struct {
-	Id_Colaborador   int64  `json:"Id_Colaborador"`
-	Usuario          string `json:"Usuario"`
-	Senha            string `json:"Senha"`
-	Nome             string `json:"Nome"`
-	GerenciaPesquisa bool   `json:"GerenciaPesquisa"`
-	GerenciaUsuario  bool   `json:"GerenciaUsuario"`
+	Id_Colaborador   int64  `json:"id_colaborador"`
+	Usuario          string `json:"usuario"`
+	Senha            string `json:"senha"`
+	Nome             string `json:"nome"`
+	GerenciaPesquisa bool   `json:"gerenciapesquisa"`
+	GerenciaUsuario  bool   `json:"gerenciausuario"`
 }
 
 func (colaborador *Colaborador) Inserir(w http.ResponseWriter, r *http.Request) {
