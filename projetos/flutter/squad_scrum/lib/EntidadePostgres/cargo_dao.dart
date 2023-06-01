@@ -6,15 +6,15 @@ class CargoDAO{
 
   factory CargoDAO.fromJson(Map<String, dynamic> json) {
     return CargoDAO(
-      idCargo: json["Id_Cargo"],
-      descricao: json["Descricao"],
+      idCargo: json["id_cargo"],
+      descricao: json["descricao"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "Id_Cargo": idCargo ?? "",
-      "Descricao": descricao,
+      "id_cargo": idCargo ?? "",
+      "descricao": descricao,
     };
   }
 }

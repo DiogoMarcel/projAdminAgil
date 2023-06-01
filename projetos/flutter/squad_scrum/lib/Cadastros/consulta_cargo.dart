@@ -4,7 +4,7 @@ import 'package:squad_scrum/BaseWidget/base_state_consulta.dart';
 import 'package:squad_scrum/Cadastros/inclusao_cargo.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
-import 'package:squad_scrum/ObjetosPostgres/cargo_dao.dart';
+import 'package:squad_scrum/EntidadePostgres/cargo_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as http_util;
 
 class ConsultaCargo extends StatefulWidget {

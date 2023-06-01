@@ -6,15 +6,15 @@ class FuncaoDAO {
 
   factory FuncaoDAO.fromJson(Map<String, dynamic> json) {
     return FuncaoDAO(
-      idFuncao: json["Id_Funcao"],
-      descricao: json["Descricao"],
+      idFuncao: json["id_funcao"],
+      descricao: json["descricao"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "Id_Funcao": idFuncao ?? "",
-      "Descricao": descricao,
+      "id_funcao": idFuncao ?? "",
+      "descricao": descricao,
     };
   }
 }

@@ -6,15 +6,15 @@ class EmpresaDAO {
 
   factory EmpresaDAO.fromJson(Map<String, dynamic> json) {
     return EmpresaDAO(
-      idEmpresa: json["Id_Empresa"],
-      nome: json["Nome"],
+      idEmpresa: json["id_empresa"],
+      nome: json["nome"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "Id_Empresa": idEmpresa ?? "",
-      "Nome": nome,
+      "id_empresa": idEmpresa ?? "",
+      "nome": nome,
     };
   }
 }
