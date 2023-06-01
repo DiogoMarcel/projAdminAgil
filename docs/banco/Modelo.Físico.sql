@@ -248,13 +248,8 @@ insert into public.colaborador(usuario,
                                senha, 
                                nome, 
                                gerenciapesquisa, 
-<<<<<<< HEAD
-                               gerenciausuario)                     values ('master', md5('usr!master23'), 'master', false, false);
-                               
-=======
                                gerenciausuario)                     values ('master', md5('usr!master23'), 'master', true, true);
-							   
->>>>>>> c44efb42b9e80394f34e0db691b9756ced9de80b
+
 insert into public.colaborador_empresa(idempresa, idcolaborador)    values (1, 1);
 
 insert into public.colaborador_cargo(idcargo, idcolaborador)        values (1, 1);
