@@ -236,13 +236,11 @@ create index idx_id_sprintpesquisa              on public.sprint_pesquisa       
 
 insert into public.empresa(nome)                    values ('Empresa Master');
 
-insert into public.cargo(descricao)                 values ('Cargo Master');
-
-insert into public.cargo(descricao)                 values ('Analista');
-
-insert into public.cargo(descricao)                 values ('Desenvolvedor');
-
-insert into public.cargo(descricao)                 values ('Product Owner');
+/*testar esse insert*/
+insert into public.cargo(descricao)                 values ('Cargo Master')
+                                                          ,('Analista')
+                                                          ,('Desenvolvedor')
+                                                          ,('Product Owner');
 
 insert into public.funcao(descricao)                values ('Scrum Master');
 
@@ -251,7 +249,7 @@ insert into public.colaborador(usuario,
                                nome, 
                                gerenciapesquisa, 
                                gerenciausuario)                     values ('master', md5('usr!master23'), 'master', true, true);
-							   
+
 insert into public.colaborador_empresa(idempresa, idcolaborador)    values (1, 1);
 
 insert into public.colaborador_cargo(idcargo, idcolaborador)        values (1, 1);
