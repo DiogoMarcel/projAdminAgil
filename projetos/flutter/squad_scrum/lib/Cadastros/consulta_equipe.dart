@@ -53,7 +53,7 @@ class _EquipeState extends BaseStateConsulta<ConsultaEquipe> {
   @override
   void onDeletar(int index) async {
     await util_http.delete(
-      path: rotaDeletarEquipe,
+      path: rotaEquipe,
       jsonDAO: jsonEncode(listaEquipe[index].toJson()),
       context: context,
     );
@@ -64,7 +64,7 @@ class _EquipeState extends BaseStateConsulta<ConsultaEquipe> {
   @override
   Future<void> carregarTodosRegistros() async {
     listaEquipe.clear();
-    var json = await util_http.get(path: pegarTodosEquipes, context: context);
+    var json = await util_http.get(path: rotaEquipe, context: context);
     listaEquipe =
         List<EquipeDAO>.from(json.map((json) => EquipeDAO.fromJson(json)));
     setState(() {});

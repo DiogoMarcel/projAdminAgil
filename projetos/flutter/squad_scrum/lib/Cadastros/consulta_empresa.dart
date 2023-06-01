@@ -55,7 +55,7 @@ class _ConsultaEmpresaState extends BaseStateConsulta<ConsultaEmpresa> {
   @override
   void onDeletar(int index) async {
     await util_http.delete(
-      path: rotaDeletarEmpresa,
+      path: rotaEmpresa,
       jsonDAO: jsonEncode(listaEmpresa[index].toJson()),
       context: context,
     );
@@ -66,7 +66,7 @@ class _ConsultaEmpresaState extends BaseStateConsulta<ConsultaEmpresa> {
   @override
   Future<void> carregarTodosRegistros() async {
     listaEmpresa.clear();
-    var json = await util_http.get(path: pegarTodosEmpresa, context: context);
+    var json = await util_http.get(path: rotaEmpresa, context: context);
 
     listaEmpresa =
         List<EmpresaDAO>.from(json.map((json) => EmpresaDAO.fromJson(json)));

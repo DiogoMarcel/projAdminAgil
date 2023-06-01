@@ -27,12 +27,12 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoCargo> {
         descricao: controllerDescricao.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
       await util_http.post(
-          path: rotaInserirCargo,
+          path: rotaCargo,
           jsonDAO: jsonEncode(cargo.toJson()),
           context: context);
     } else {
       await util_http.patch(
-          path: rotaAlterarCargo,
+          path: rotaCargo,
           jsonDAO: jsonEncode(cargo.toJson()),
           context: context);
     }

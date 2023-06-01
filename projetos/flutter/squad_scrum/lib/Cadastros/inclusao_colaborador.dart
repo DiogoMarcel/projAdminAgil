@@ -34,12 +34,12 @@ class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
     );
     if (widget.tipoCrud == TipoCrud.inserir) {
       await util_http.post(
-          path: rotaInserirColaborador,
+          path: rotaColaborador,
           jsonDAO: jsonEncode(colaborador.toJson()),
           context: context);
     } else {
       await util_http.patch(
-          path: rotaAlterarColaborador,
+          path: rotaColaborador,
           jsonDAO: jsonEncode(colaborador.toJson()),
           context: context);
     }

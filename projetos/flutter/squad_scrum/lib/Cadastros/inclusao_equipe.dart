@@ -24,9 +24,9 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoEquipe> {
   void onGravar() async {
     var equipe = EquipeDAO(idEquipe: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
-      await util_http.post(path: rotaInserirEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.post(path: rotaEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     } else {
-      await util_http.patch(path: rotaAlterarEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.patch(path: rotaEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     }
     Navigator.of(context).pop();
   }

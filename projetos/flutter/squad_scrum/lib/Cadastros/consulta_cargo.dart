@@ -55,7 +55,7 @@ class _ConsultaCargoState extends BaseStateConsulta<ConsultaCargo> {
   @override
   void onDeletar(int index) async {
     await http_util.delete(
-      path: rotaDeletarCargo,
+      path: rotaCargo,
       jsonDAO: jsonEncode(listaCargo[index].toJson()),
       context: context,
     );
@@ -66,7 +66,7 @@ class _ConsultaCargoState extends BaseStateConsulta<ConsultaCargo> {
   @override
   Future<void> carregarTodosRegistros() async {
     listaCargo.clear();
-    var json = await http_util.get(path: pegarTodosCargo, context: context);
+    var json = await http_util.get(path: rotaCargo, context: context);
     listaCargo = List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
     setState(() {});
   }

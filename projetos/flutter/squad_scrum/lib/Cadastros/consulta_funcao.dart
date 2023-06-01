@@ -53,7 +53,7 @@ class _EquipeState extends BaseStateConsulta<ConsultaFuncao> {
   @override
   void onDeletar(int index) async {
     await util_http.delete(
-      path: rotaDeletarFuncao,
+      path: rotaFuncao,
       jsonDAO: jsonEncode(listaFuncao[index].toJson()),
       context: context,
     );
@@ -64,7 +64,7 @@ class _EquipeState extends BaseStateConsulta<ConsultaFuncao> {
   @override
   Future<void> carregarTodosRegistros() async {
     listaFuncao.clear();
-    var json = await util_http.get(path: pegarTodosFuncao, context: context);
+    var json = await util_http.get(path: rotaFuncao, context: context);
     listaFuncao = List<FuncaoDAO>.from(json.map((json) => FuncaoDAO.fromJson(json)));
     setState(() {});
   }
