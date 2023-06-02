@@ -35,16 +35,15 @@ func ColaboradorAlterar(w http.ResponseWriter, r *http.Request) {
 
 	utilDB.ExecutarSQL(w, "UPDATE COLABORADOR "+
 		" SET USUARIO = $1,"+
-		" SENHA = $2,"+
-		" NOME = $3,"+
-		" GERENCIAPESQUISA = $4,"+
-		" GERENCIAUSUARIO = $5"+
-		" WHERE ID_COLABORADOR = $2",
+		" NOME = $2,"+
+		" GERENCIAPESQUISA = $3,"+
+		" GERENCIAUSUARIO = $4"+
+		" WHERE ID_COLABORADOR = $5",
 		colaborador.Usuario,
-		colaborador.Senha,
 		colaborador.Nome,
 		colaborador.GerenciaPesquisa,
-		colaborador.GerenciaUsuario)
+		colaborador.GerenciaUsuario,
+		colaborador.Id_Colaborador)
 }
 
 func ColaboradorDeletar(w http.ResponseWriter, r *http.Request) {

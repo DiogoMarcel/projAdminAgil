@@ -5,6 +5,7 @@ import 'package:squad_scrum/Cadastros/consulta_empresa.dart';
 import 'package:squad_scrum/Cadastros/consulta_equipe.dart';
 import 'package:squad_scrum/Cadastros/consulta_funcao.dart';
 import 'package:squad_scrum/Cadastros/consulta_pesquisa.dart';
+import 'package:squad_scrum/Cadastros/consulta_sprint.dart';
 import 'package:squad_scrum/Telas/configuracao_nota_felicidade.dart';
 
 class MenuPrincipal extends StatefulWidget {
@@ -78,6 +79,10 @@ class _MainMenuState extends State<MenuPrincipal> {
                   title: const Text('Pesquisa'),
                   onTap: consultaPesquisa,
                 ),
+                ListTile(
+                  title: const Text('Sprint'),
+                  onTap: consultaSprint,
+                ),
               ],
             ),
           ],
@@ -139,6 +144,14 @@ class _MainMenuState extends State<MenuPrincipal> {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context){
         return const ConsultaPesquisa();
+      }),
+    );
+  }
+
+  void consultaSprint(){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context){
+        return const ConsultaSprint();
       }),
     );
   }

@@ -6,3 +6,4 @@ const rotaEmpresa = "/empresa";
 const rotaFuncao = "/funcao";
 const rotaColaborador = "/colaborador";
 const rotaPesquisa = "/pesquisa";
+const rotaSprint = "/sprint";

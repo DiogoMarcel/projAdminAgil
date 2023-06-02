@@ -78,7 +78,7 @@ class _EquipeState extends BaseStateConsulta<ConsultaColaborador> {
   Widget buildItemListView(context, index) {
     return ListTile(
       leading: Text(listaColaborador[index].idColaborador.toString()),
-      title: Text(listaColaborador[index].usuario),
+      title: Text(listaColaborador[index].nome),
     );
   }
 }
