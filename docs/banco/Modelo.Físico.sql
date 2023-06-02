@@ -6,42 +6,42 @@ begin;
 create table equipe 
 ( 
  id_equipe bigserial primary key,
- nome varchar(50)
+ nome varchar(50) not null 
 ); 
 
 create table empresa 
 ( 
  id_empresa bigserial not null primary key,
- nome varchar(50)
+ nome varchar(50) not null 
 ); 
 
 create table funcao 
 ( 
  id_funcao bigserial not null primary key,
- descricao varchar(50)
+ descricao varchar(50) not null 
 ); 
 
 create table cargo 
 ( 
  id_cargo bigserial not null primary key,
- descricao varchar(50)
+ descricao varchar(50) not null 
 ); 
 
 create table colaborador 
 ( 
  id_colaborador bigserial not null primary key,
- usuario varchar(50),
- senha varchar(50),
- nome varchar(50),
- gerenciapesquisa boolean,
- gerenciausuario boolean,
+ usuario varchar(50) not null, 
+ senha varchar(50) not null,
+ nome varchar(50) not null,
+ gerenciapesquisa boolean not null default false,
+ gerenciausuario boolean not null default false,
  unique (usuario)
 );
 
 create table sprint 
 ( 
  id_sprint bigserial not null primary key,
- nome varchar(50),
+ nome varchar(50) not null,
  datafinal date not null,
  datainicio date not null 
 ); 
@@ -49,61 +49,62 @@ create table sprint
 create table pesquisa 
 ( 
  id_pesquisa bigserial not null primary key,
- titulo varchar(50)
+ titulo varchar(50) not null
 ); 
 
 create table retrospectiva 
 ( 
  id_retrospectiva bigserial not null primary key,
  metaalcancada boolean not null default false,
- idsprint bigint,
- idcfgretrospectiva bigint
+ idsprint bigint not null,
+ idcfgretrospectiva bigint not null
 ); 
 
 create table pesquisa_pergunta 
 ( 
  id_pesquisapergunta bigserial not null primary key,
- pergunta varchar(300),
+ pergunta varchar(300) not null,
  valorfinal numeric(5,2),
  valorinicial numeric(5,2),
  tiporesposta char not null default 'd',
  tamanhototal int,
- idpesquisa bigint,
- check (tiporesposta like '%d, s, b%')
+ idpesquisa bigint not null,
+ obrigatoria boolean not null default true,
+ check (tiporesposta in ('d', 's', 'b'))
 ); 
 
 create table retrospectiva_item 
 ( 
  id_retrospectivaitem bigserial not null primary key,
- idretrospectiva bigint,
- idcfgretrospectivaitem bigint
+ idretrospectiva bigint not null,
+ idcfgretrospectivaitem bigint not null
 ); 
 
 create table cfgretrospectiva_item 
 ( 
  id_cfgrestrospectivaitem bigserial not null primary key,
- descricao varchar(50),
- idcfgretrospectiva bigint
+ descricao varchar(50) not null,
+ idcfgretrospectiva bigint not null
 ); 
 
 create table cfgretrospectiva 
 ( 
  id_cfgretrospectiva bigserial not null primary key,
- nome varchar(50)
+ nome varchar(50) not null
 ); 
 
 create table sprint_equipe 
 ( 
  id_sprintequipe bigserial not null primary key,
- idsprint bigint,
- idequipe bigint
+ idsprint bigint not null,
+ idequipe bigint not null
 ); 
 
 create table sprint_participante 
 ( 
  id_sprintparticipante bigserial not null primary key,
- idsprintequipe bigint,
- idcolaborador bigint
+ idsprintequipe bigint not null,
+ idcolaborador bigint not null
 );
 
 create table resposta_pesquisa 
@@ -112,50 +113,50 @@ create table resposta_pesquisa
  respostastring varchar(300),
  respostadouble numeric(5,2),
  respostaboolean boolean,
- idsprintparticipante bigint,
- idpesquisapergunta bigint
+ idsprintparticipante bigint not null,
+ idpesquisapergunta bigint not null
 ); 
 
 create table cards_retrospectivaitem 
 ( 
  id_cardsretrospectivaitem bigserial not null primary key,
- descricao varchar(50),
- idretrospectivaitem bigint
+ descricao varchar(50) not null,
+ idretrospectivaitem bigint not null
 ); 
 
 create table colaborador_empresa 
 ( 
  id_colaboradorempresa bigserial not null primary key,
- idempresa bigint,
- idcolaborador bigint
+ idempresa bigint not null,
+ idcolaborador bigint not null
 ); 
 
 create table colaborador_funcao 
 ( 
  id_colaboradorfuncao bigserial not null primary key,
- idfuncao bigint,
- idcolaborador bigint
+ idfuncao bigint not null,
+ idcolaborador bigint not null
 ); 
 
 create table colaborador_cargo 
 ( 
  id_colaboradorcargo bigserial not null primary key,
- idcargo bigint,
- idcolaborador bigint
+ idcargo bigint not null,
+ idcolaborador bigint not null
 ); 
 
 create table colaborador_equipe
 ( 
  id_colaboradorequipe bigserial not null primary key,
- idequipe bigint,
- idcolaborador bigint
+ idequipe bigint not null,
+ idcolaborador bigint not null
 ); 
 
 create table sprint_pesquisa 
 ( 
  id_sprintpesquisa bigserial not null primary key,
- idpesquisa bigint,
- idsprint bigint
+ idpesquisa bigint not null,
+ idsprint bigint not null
 ); 
 
 /*Ajustar sequencias para nomes menores - padrão postgres tabela_campo_seq - mudei para: seq_campo*/
@@ -236,7 +237,6 @@ create index idx_id_sprintpesquisa              on public.sprint_pesquisa       
 
 insert into public.empresa(nome)                    values ('Empresa Master');
 
-/*testar esse insert*/
 insert into public.cargo(descricao)                 values ('Cargo Master')
                                                           ,('Analista')
                                                           ,('Desenvolvedor')
@@ -248,11 +248,30 @@ insert into public.colaborador(usuario,
                                senha, 
                                nome, 
                                gerenciapesquisa, 
-                               gerenciausuario)                     values ('master', md5('usr!master23'), 'master', true, true);
+                               gerenciausuario) values ('master', md5('usr!master23'), 'master', true, true);
 
-insert into public.colaborador_empresa(idempresa, idcolaborador)    values (1, 1);
+insert into public.colaborador_empresa(idempresa, idcolaborador) values (1, 1);
 
-insert into public.colaborador_cargo(idcargo, idcolaborador)        values (1, 1);
+insert into public.colaborador_cargo(idcargo, idcolaborador) values (1, 1);
+
+insert into public.pesquisa(titulo) values ('Pesquisa Satisfação Sprint');
+
+insert into public.pesquisa_pergunta(
+	pergunta, valorfinal, valorinicial, tiporesposta, tamanhototal, idpesquisa, obrigatoria)
+	values ('Escolha uma palavra que representa como você se sentiu na Sprint.', null, null, 's', null, 1, true)
+		  ,('Sua nota para Pessoas (Time, comunicação, união, engajamento)', 5, 0, 'd', null, 1, true)
+		  ,('Sua nota para Processos (Fluxo, Planejamento, Resultados, metodologias)', 5, 0, 'd', null, 1, true)
+		  ,('Sua nota para Ferramentas ( Infraestrutura, internet, energia, instabilidades)', 5, 0, 'd', null, 1, true)
+		  ,('Comentários', null, null, 's', null, 1, false);
+
+insert into public.cfgretrospectiva(nome) values ('Principal');
+
+insert into public.cfgretrospectiva_item(descricao, idcfgretrospectiva) values ('Meta da sprint', 1)
+                                                                              ,('Incremento - O que foi pronto na Sprint?', 1)
+                                                                              ,('Principais fatores da Sprint.', 1)
+                                                                              ,('O que foi bom e devemos manter?', 1)
+                                                                              ,('O que foi ruim e devemos melhorar?', 1)
+                                                                              ,('Ações de melhoria para a próxima Sprint.', 1)
 
 /*
 ---------- tabelas e pks
