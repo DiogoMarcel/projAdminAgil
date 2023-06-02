@@ -40,18 +40,18 @@ func (s *SendEmail) SendEmail() {
 		log.Fatal(errJson)
 	}
 
-	message := []byte(fmt.Sprintf("To: %s \r\n"+
-		"Subject: Sua autenticação de usuário\r\n\r\n"+
-		"Olá, tudo bem? \r\n\r\n"+
-		"Sua senha foi gerada automaticamente, utilize-a para conectar ao sistema.\r\n\r\n"+
-		"Chave: %s", s.To, s.senha))
-
 	// Create authentication
 	smtpHost := "smtp.gmail.com"
 	smtpPort := "587"
 	auth := smtp.PlainAuth("", cfgUserEmail.From, cfgUserEmail.Password, smtpHost)
 
 	s.wg.Wait()
+
+	message := []byte(fmt.Sprintf("To: %s \r\n"+
+		"Subject: Sua autenticação de usuário\r\n\r\n"+
+		"Olá, tudo bem? \r\n\r\n"+
+		"Sua senha foi gerada automaticamente, utilize-a para conectar ao sistema.\r\n\r\n"+
+		"Chave: %s", s.To, s.senha))
 
 	// Send actual message
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, cfgUserEmail.From, s.To, message)
