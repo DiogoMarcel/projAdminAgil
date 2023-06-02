@@ -28,4 +28,6 @@ func main() {
 
 func init() {
 	conexao.InitBD()
+
+	// Conferir se o e-mail master está configurado corretamente !!! - Requisito
 }
