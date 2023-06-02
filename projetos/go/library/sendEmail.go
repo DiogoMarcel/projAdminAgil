@@ -26,23 +26,15 @@ func (s *SendEmail) PegarSenha() string {
 }
 
 func (s *SendEmail) SendEmail() {
-
-	fmt.Println("1")
-
 	s.wg.Add(1)
-
-	fmt.Println("2 go")
-
 	go s.GerarSenhaRandom()
-
-	fmt.Println("3")
 
 	arquivo, errFile := os.ReadFile("cfgUserEmail.igo")
 	if errFile != nil {
 		log.Fatal(errFile)
 	}
-	var cfgUserEmail *cfgUserEmail
 
+	var cfgUserEmail *cfgUserEmail
 	errJson := json.Unmarshal(arquivo, &cfgUserEmail)
 	if errJson != nil {
 		log.Fatal(errJson)
@@ -59,11 +51,7 @@ func (s *SendEmail) SendEmail() {
 	smtpPort := "587"
 	auth := smtp.PlainAuth("", cfgUserEmail.From, cfgUserEmail.Password, smtpHost)
 
-	fmt.Println("4 - waite")
-
 	s.wg.Wait()
-
-	fmt.Println("5 - send")
 
 	// Send actual message
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, cfgUserEmail.From, s.To, message)
