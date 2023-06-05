@@ -3,9 +3,7 @@ package library
 import (
 	"encoding/json"
 	"imports/entities"
-	"log"
 	"net/smtp"
-	"sync"
 )
 
 type ManageEmail struct {
@@ -13,24 +11,29 @@ type ManageEmail struct {
 	Messsage []byte
 }
 
-func (s *ManageEmail) checkConfiguration() (string, string) {
+func (s *ManageEmail) checkConfiguration() (string, string, error) {
 	var cfgUserEmail *entities.ConfiguracaoUsuarioEmail
 	var adfiles *AdminFiles
-	arquivo := adfiles.AFReadFile("cfgUserEmail.igo")
-	errJson := json.Unmarshal(arquivo, &cfgUserEmail)
 
-	if errJson != nil {
-		log.Fatal(errJson)
+	arquivo, errFile := adfiles.AFReadFile(FILE_CFG_EMAIL_NAME)
+	if errFile != nil {
+		return "", "", errFile
 	}
 
-	return cfgUserEmail.From, cfgUserEmail.Password
+	errJson := json.Unmarshal(arquivo, &cfgUserEmail)
+	if errJson != nil {
+		return "", "", errJson
+	}
+
+	return cfgUserEmail.From, cfgUserEmail.Password, nil
 }
 
-func (s *ManageEmail) SendEmail(wg *sync.WaitGroup) {
-	defer func() {
-		wg.Done()
-	}()
-	from, password := s.checkConfiguration()
+func (s *ManageEmail) SendEmail() error {
+	from, password, errCheck := s.checkConfiguration()
+
+	if errCheck != nil {
+		return errCheck
+	}
 
 	// Create authentication
 	smtpHost := "smtp.gmail.com"
@@ -40,6 +43,8 @@ func (s *ManageEmail) SendEmail(wg *sync.WaitGroup) {
 	// Send actual message
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, s.To, s.Messsage)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }

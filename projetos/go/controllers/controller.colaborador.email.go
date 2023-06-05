@@ -3,30 +3,23 @@ package controllers
 import (
 	"fmt"
 	"imports/library"
-	"sync"
 )
 
 type ColaboradorEmail struct {
-	User string
-	pass *library.Password
-	wg   sync.WaitGroup
+	User     string
+	password library.Password
 }
 
-func (ce *ColaboradorEmail) GenerateEmailAndPassword() {
-	ce.wg.Add(1)
-	go ce.pass.GeneratePassword(&ce.wg)
+func (ce *ColaboradorEmail) GenerateEmailAndPassword() error {
+	ce.password.GeneratePassword()
 
-	var email *library.ManageEmail
-	email.To = ce.emailTo()
-	email.Messsage = ce.messageText()
+	email := library.ManageEmail{To: ce.emailTo(), Messsage: ce.messageText()}
 
-	ce.wg.Add(1)
-	go email.SendEmail(&ce.wg)
+	return email.SendEmail()
 }
 
 func (ce *ColaboradorEmail) GetPassword() string {
-	ce.wg.Wait()
-	return ce.pass.GetPassword()
+	return ce.password.GetPassword()
 }
 
 func (ce *ColaboradorEmail) emailTo() []string {

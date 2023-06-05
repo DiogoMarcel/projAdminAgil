@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"imports/entities"
+	"imports/library"
 	"imports/utilDB"
 	"io"
 
@@ -19,10 +20,15 @@ func ColaboradorInserir(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(jsonColaborador, &colaborador)
 
 	colaboradorEmail := ColaboradorEmail{User: colaborador.Usuario}
-	colaboradorEmail.GenerateEmailAndPassword()
 
-	utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, MD5($2), $3, $4, $5)",
-		colaborador.Usuario, colaboradorEmail.GetPassword(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
+	errMail := colaboradorEmail.GenerateEmailAndPassword()
+
+	if errMail != nil {
+		library.ErrorLogger.Println(library.MESSAGE_FILE_CFGEMAIL_NOTFOUND)
+	} else {
+		utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, MD5($2), $3, $4, $5)",
+			colaborador.Usuario, colaboradorEmail.GetPassword(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
+	}
 }
 
 func ColaboradorAlterar(w http.ResponseWriter, r *http.Request) {

@@ -1,35 +1,26 @@
 package library
 
 import (
-	"log"
 	"os"
 )
 
 type AdminFiles struct{}
 
-func (af *AdminFiles) AFReadFile(name string) []byte {
+func (af *AdminFiles) AFReadFile(name string) ([]byte, error) {
 	arquivo, errFile := os.ReadFile(name)
 	if errFile != nil {
-		log.Fatal(errFile)
+		return nil, errFile
 	}
-	return arquivo
+	return arquivo, nil
 }
 
 func (af *AdminFiles) AFFileCfgEmailExists() {
-	// Here Stat() function returns file info and
-	//if there is no file, then it will return an error
-
-	myfile, e := os.Stat("cfgUserEmails.igo")
+	_, e := os.Stat(FILE_CFG_EMAIL_NAME)
 	if e != nil {
-
-		// Checking if the given file exists or not
-		// Using IsNotExist() function
 		if os.IsNotExist(e) {
-			log.Fatal("File not Found !!")
+			WarningLogger.Println(MESSAGE_FILE_CFGEMAIL_NOTFOUND)
 		}
+	} else {
+		InfoLogger.Println(MESSAGE_FILE_CFGEMAIL_EXISTS)
 	}
-	log.Println("File Exist!!")
-	log.Println("Detail of file is:")
-	log.Println("Name: ", myfile.Name())
-	log.Println("Size: ", myfile.Size())
 }

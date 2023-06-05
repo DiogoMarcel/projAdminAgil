@@ -2,17 +2,13 @@ package library
 
 import (
 	"math/rand"
-	"sync"
 )
 
 type Password struct {
 	password string
 }
 
-func (p *Password) GeneratePassword(wg *sync.WaitGroup) {
-	defer func() {
-		wg.Done()
-	}()
+func (p *Password) GeneratePassword() {
 	digits := "0123456789"
 	specials := "~=+%^*/()[]{}/!@#$?|"
 	all := "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
