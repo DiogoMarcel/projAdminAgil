@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	conexao "imports/conexaoBD"
+	"imports/library"
 	"imports/routes"
 	"log"
 	"net/http"
@@ -29,5 +30,6 @@ func main() {
 func init() {
 	conexao.InitBD()
 
-	// Conferir se o e-mail master está configurado corretamente !!! - Requisito
+	var adminPass *library.AdminFiles
+	adminPass.AFFileCfgEmailExists()
 }

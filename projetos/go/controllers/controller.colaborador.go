@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"imports/entities"
-	"imports/library"
 	"imports/utilDB"
 	"io"
 
@@ -19,11 +18,11 @@ func ColaboradorInserir(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(jsonColaborador, &colaborador)
 
-	email := library.SendEmail{To: []string{colaborador.Usuario}}
-	email.SendEmail()
+	colaboradorEmail := ColaboradorEmail{User: colaborador.Usuario}
+	colaboradorEmail.GenerateEmailAndPassword()
 
 	utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, MD5($2), $3, $4, $5)",
-		colaborador.Usuario, email.PegarSenha(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
+		colaborador.Usuario, colaboradorEmail.GetPassword(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
 }
 
 func ColaboradorAlterar(w http.ResponseWriter, r *http.Request) {
