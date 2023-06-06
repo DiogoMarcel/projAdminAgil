@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -23,7 +24,8 @@ func main() {
 
 	http.Handle("/", rotas)
 
-	log.Fatal(http.ListenAndServe(port, rotas))
+	handler := cors.AllowAll().Handler(rotas)
+	log.Fatal(http.ListenAndServe(port, handler))
 }
 
 func init() {

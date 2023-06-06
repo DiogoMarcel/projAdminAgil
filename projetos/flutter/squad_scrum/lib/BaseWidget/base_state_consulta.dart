@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BaseStateConsulta<T> extends State{
+abstract class BaseStateConsulta<T extends StatefulWidget> extends State<T> {
   late String tituloTela;
 
   void onInserir() {
