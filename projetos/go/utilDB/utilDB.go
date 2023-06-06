@@ -10,7 +10,7 @@ func ExecutarSQL(w http.ResponseWriter, sql string, args ...any) {
 	if linha.Err() == nil {
 		w.Write([]byte("Registro Salvo Com Sucesso!!"))
 	} else {
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Erro no Servidor GO: " + linha.Err().Error()))
 	}
 
@@ -40,7 +40,7 @@ func GetQuerySQL(w http.ResponseWriter, sql string) ([]map[string]interface{}, e
 
 		return resultQuery, nil
 	} else {
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Erro no Servidor GO: " + err.Error()))
 		return nil, err
 	}
