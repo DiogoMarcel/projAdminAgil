@@ -19,11 +19,16 @@ func ColaboradorInserir(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(jsonColaborador, &colaborador)
 
-	email := library.SendEmail{To: []string{colaborador.Usuario}}
-	email.SendEmail()
+	colaboradorEmail := ColaboradorEmail{User: colaborador.Usuario}
 
-	utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, MD5($2), $3, $4, $5)",
-		colaborador.Usuario, email.PegarSenha(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
+	errMail := colaboradorEmail.GenerateEmailAndPassword()
+
+	if errMail != nil {
+		library.ErrorLogger.Println(library.MESSAGE_FILE_CFGEMAIL_NOTFOUND)
+	} else {
+		utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, MD5($2), $3, $4, $5)",
+			colaborador.Usuario, colaboradorEmail.GetPassword(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
+	}
 }
 
 func ColaboradorAlterar(w http.ResponseWriter, r *http.Request) {

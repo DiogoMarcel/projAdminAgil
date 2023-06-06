@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	conexao "imports/conexaoBD"
+	"imports/library"
 	"imports/routes"
 	"log"
 	"net/http"
@@ -20,7 +20,8 @@ func main() {
 	routes.RegisterStoreRoutes(rotas)
 
 	var port = "127.0.0.1:3000"
-	fmt.Println("Server running in port:", port)
+
+	library.InfoLogger.Println("Server running in port:", port)
 
 	http.Handle("/", rotas)
 
@@ -31,5 +32,6 @@ func main() {
 func init() {
 	conexao.InitBD()
 
-	// Conferir se o e-mail master está configurado corretamente !!! - Requisito
+	var adminPass *library.AdminFiles
+	adminPass.AFFileCfgEmailExists()
 }
