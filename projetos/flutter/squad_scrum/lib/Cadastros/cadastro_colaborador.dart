@@ -6,17 +6,17 @@ import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/EntidadePostgres/colaborador_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
-class InclusaoColaborador extends StatefulWidget {
-  const InclusaoColaborador({Key? key, this.tipoCrud = TipoCrud.inserir, this.colaboradorAlterar}) : super(key: key);
+class CadastroColaborador extends StatefulWidget {
+  const CadastroColaborador({Key? key, this.tipoCrud = TipoCrud.inserir, this.colaboradorAlterar}) : super(key: key);
 
   final TipoCrud tipoCrud;
   final ColaboradorDAO? colaboradorAlterar;
 
   @override
-  BaseStateInclusao<InclusaoColaborador> createState() => _InclusaoCargoState();
+  BaseStateInclusao<CadastroColaborador> createState() => _InclusaoCargoState();
 }
 
-class _InclusaoCargoState extends BaseStateInclusao<InclusaoColaborador> {
+class _InclusaoCargoState extends BaseStateInclusao<CadastroColaborador> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerUsuario = TextEditingController();
   TextEditingController controllerNome = TextEditingController();

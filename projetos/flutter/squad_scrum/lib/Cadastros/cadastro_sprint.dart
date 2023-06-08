@@ -9,19 +9,19 @@ import 'package:squad_scrum/EntidadePostgres/sprint_dao.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
-class InclusaoSprint extends StatefulWidget {
+class CadastroSprint extends StatefulWidget {
   final TipoCrud tipoCrud;
   final SprintDAO? sprintAlterar;
 
-  const InclusaoSprint(
+  const CadastroSprint(
       {Key? key, this.tipoCrud = TipoCrud.inserir, this.sprintAlterar})
       : super(key: key);
 
   @override
-  BaseStateInclusao<InclusaoSprint> createState() => _InclusaoEquipeState();
+  BaseStateInclusao<CadastroSprint> createState() => _InclusaoEquipeState();
 }
 
-class _InclusaoEquipeState extends BaseStateInclusao<InclusaoSprint> {
+class _InclusaoEquipeState extends BaseStateInclusao<CadastroSprint> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerNome = TextEditingController();
   late DateTime dataInicio;
@@ -118,9 +118,6 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoSprint> {
         onDateSelected: (date){
           dataFinal = date;
         },
-      ),
-      const SizedBox(
-        height: 15,
       ),
     ];
   }

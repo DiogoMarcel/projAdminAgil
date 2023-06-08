@@ -3,30 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:squad_scrum/BaseWidget/base_state_inclusao.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
-import 'package:squad_scrum/EntidadePostgres/funcao_dao.dart';
+import 'package:squad_scrum/EntidadePostgres/empresa_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
-class InclusaoFuncao extends StatefulWidget {
+class CadastroEmpresa extends StatefulWidget {
   final TipoCrud tipoCrud;
-  final FuncaoDAO? funcaoAlterar;
+  final EmpresaDAO? empresaAlterar;
 
-  const InclusaoFuncao({Key? key, this.tipoCrud = TipoCrud.inserir, this.funcaoAlterar}): super(key: key);
+  const CadastroEmpresa({Key? key, required this.tipoCrud, this.empresaAlterar}) : super(key: key);
 
   @override
-  BaseStateInclusao<InclusaoFuncao> createState() => _InclusaoEquipeState();
+  BaseStateInclusao<CadastroEmpresa> createState() => _CadastroEmpresaState();
 }
 
-class _InclusaoEquipeState extends BaseStateInclusao<InclusaoFuncao> {
+class _CadastroEmpresaState extends BaseStateInclusao<CadastroEmpresa> {
   TextEditingController controllerCodigo = TextEditingController();
-  TextEditingController controllerDescricao = TextEditingController();
+  TextEditingController controllerNome = TextEditingController();
 
   @override
   void onGravar() async {
-    var equipe = FuncaoDAO(idFuncao: int.tryParse(controllerCodigo.text), descricao: controllerDescricao.text);
+    var equipe = EmpresaDAO(idEmpresa: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
-      await util_http.post(path: rotaFuncao, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.post(path: rotaEmpresa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     } else {
-      await util_http.patch(path: rotaFuncao, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.patch(path: rotaEmpresa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     }
     Navigator.of(context).pop();
   }
@@ -34,11 +34,11 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoFuncao> {
   @override
   void initState() {
     super.initState();
-    super.objetoPostgres = "Função";
+    super.objetoPostgres = "Empresa";
     super.tipoCrud = widget.tipoCrud;
     if (widget.tipoCrud == TipoCrud.alterar) {
-      controllerCodigo.text = widget.funcaoAlterar!.idFuncao.toString();
-      controllerDescricao.text = widget.funcaoAlterar!.descricao;
+      controllerCodigo.text = widget.empresaAlterar!.idEmpresa.toString();
+      controllerNome.text = widget.empresaAlterar!.nome;
     }
   }
 
@@ -49,7 +49,7 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoFuncao> {
         enabled: false,
         controller: controllerCodigo,
         decoration: const InputDecoration(
-          labelText: "Código Funcao",
+          labelText: "Código Empresa",
           border: OutlineInputBorder(),
         ),
       ),
@@ -58,9 +58,9 @@ class _InclusaoEquipeState extends BaseStateInclusao<InclusaoFuncao> {
       ),
       TextFormField(
         autofocus: true,
-        controller: controllerDescricao,
+        controller: controllerNome,
         decoration: const InputDecoration(
-          labelText: "Informe o Nome da Função",
+          labelText: "Informe o Nome da Empresa",
           border: OutlineInputBorder(),
         ),
       ),
