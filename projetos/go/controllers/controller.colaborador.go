@@ -20,11 +20,12 @@ func ColaboradorInserir(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(jsonColaborador, &colaborador)
 
 	colaboradorEmail := ColaboradorEmail{User: colaborador.Usuario}
-
 	errMail := colaboradorEmail.GenerateEmailAndPassword()
 
 	if errMail != nil {
 		library.ErrorLogger.Println(library.MESSAGE_FILE_CFGEMAIL_NOTFOUND)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(library.MESSAGE_FILE_CFGEMAIL_NOTFOUND))
 	} else {
 		utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, MD5($2), $3, $4, $5)",
 			colaborador.Usuario, colaboradorEmail.GetPassword(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
