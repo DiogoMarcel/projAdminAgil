@@ -19,7 +19,7 @@ func main() {
 
 	routes.RegisterStoreRoutes(rotas)
 
-	var port = "127.0.0.1:3000"
+	var port = "0.0.0.0:3000"
 
 	library.InfoLogger.Println("Server running in port:", port)
 
