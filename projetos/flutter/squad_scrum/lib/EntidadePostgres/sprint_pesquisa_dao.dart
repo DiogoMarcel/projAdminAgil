@@ -1,9 +1,9 @@
 class SprintPesquisaDAO {
   int? idSprintPesquisa;
-  int idPesquisa;
+  int? idPesquisa;
   int idSprint;
 
-  SprintPesquisaDAO({this.idSprintPesquisa, required this.idPesquisa, required this.idSprint});
+  SprintPesquisaDAO({this.idSprintPesquisa, this.idPesquisa, required this.idSprint});
 
   factory SprintPesquisaDAO.fromJson(Map<String, dynamic> json) {
     return SprintPesquisaDAO(

@@ -17,13 +17,14 @@ Future<dynamic> get({required String path, required BuildContext context}) async
   }
 }
 
-Future<void> post({required String path, required String jsonDAO, required BuildContext context}) async {
+Future<dynamic> post({required String path, required String jsonDAO, required BuildContext context}) async {
   Uri url = Uri.http(ipServer, path);
   var response = await http.post(url, body: jsonDAO);
-  if(response.statusCode != 200){
+  if(response.statusCode == 200){
+    return jsonDecode(response.body);
+  } else {
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao Gravar os Dados ${response.body}')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao Gravar os Dados ${response.body}')));
     }
     throw Exception(response.body);
   }

@@ -41,6 +41,8 @@ dependencies:
   http: ^1.0.0
   date_field: ^3.0.5
   easy_mask: ^2.0.1
+  data_table_2: ^2.5.2
+  search_choices: ^2.2.5
 
 dev_dependencies:
   flutter_test:

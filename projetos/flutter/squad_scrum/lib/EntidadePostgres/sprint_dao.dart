@@ -1,10 +1,18 @@
+import 'package:squad_scrum/EntidadePostgres/sprint_pesquisa_dao.dart';
+
 class SprintDAO {
   int? idSprint;
   DateTime dataInicio;
   DateTime dataFinal;
   String nome;
+  SprintPesquisaDAO? pesquisaDAO;
 
-  SprintDAO({this.idSprint, required this.dataInicio, required this.dataFinal, required this.nome});
+  SprintDAO(
+      {this.idSprint,
+      required this.dataInicio,
+      required this.dataFinal,
+      required this.nome,
+      this.pesquisaDAO});
 
   factory SprintDAO.fromJson(Map<String, dynamic> json) {
     return SprintDAO(
@@ -12,6 +20,11 @@ class SprintDAO {
       dataInicio: DateTime.parse(json['datainicio']),
       dataFinal: DateTime.parse(json['datafinal']),
       nome: json['nome'],
+      pesquisaDAO: SprintPesquisaDAO(
+        idSprint: json['sprintpesquisa']['idsprint'],
+        idPesquisa: json['sprintpesquisa']['idpesquisa'],
+        idSprintPesquisa: json['sprintpesquisa']['id_pesquisasprint'],
+      ),
     );
   }
 

@@ -1,33 +1,150 @@
 import 'dart:convert';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:squad_scrum/BaseWidget/base_state_consulta.dart';
-import 'package:squad_scrum/Cadastros/inclusao_pesquisa.dart';
+import 'package:squad_scrum/Cadastros/cadastro_pesquisa.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/EntidadePostgres/pesquisa_dao.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
+import 'package:squad_scrum/Widgets/base_consulta.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class ConsultaPesquisa extends StatefulWidget {
   const ConsultaPesquisa({Key? key}) : super(key: key);
 
   @override
-  BaseStateConsulta<ConsultaPesquisa> createState() => _EquipeState();
+  State<ConsultaPesquisa> createState() => _ConsultaPesquisaState();
 }
 
-class _EquipeState extends BaseStateConsulta<ConsultaPesquisa> {
+class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
   List<PesquisaDAO> listaPesquisa = [];
+  bool sortAscending = false;
+  int? sortColumnIndex;
 
-  @override
-  void initState() {
-    super.tituloTela = "Consulta Pesquisa";
-    super.initState();
+  List<DataColumn> listaDataColumn() {
+    return [
+      DataColumn2(
+        label: const Text(
+          "Id",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        onSort: onSort,
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: const Text(
+          "Título",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        onSort: onSort,
+        size: ColumnSize.M,
+      ),
+      const DataColumn2(label: Text(""), size: ColumnSize.S),
+      const DataColumn2(label: Text(""), size: ColumnSize.S),
+    ];
+  }
+
+  void onSort(int columnIndex, bool ascending) {
+    sortColumnIndex = columnIndex;
+    sortAscending = ascending;
+
+    setState(() {
+      if (sortColumnIndex == 0) {
+        if (sortAscending) {
+          listaPesquisa.sort((a, b) {
+            return b.idPesquisa!.compareTo(a.idPesquisa!);
+          });
+        } else {
+          listaPesquisa.sort((a, b) {
+            return a.idPesquisa!.compareTo(b.idPesquisa!);
+          });
+        }
+      } else if (sortColumnIndex == 1) {
+        if (sortAscending) {
+          listaPesquisa.sort((a, b) {
+            return b.titulo.compareTo(a.titulo);
+          });
+        } else {
+          listaPesquisa.sort((a, b) {
+            return a.titulo.compareTo(b.titulo);
+          });
+        }
+      }
+    });
+  }
+
+  List<DataRow> listaDataRow() {
+    return listaPesquisa
+        .map(
+          (e) => DataRow2(
+            color: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(0.08);
+                }
+                if (listaPesquisa.indexOf(e).isEven) {
+                  return Colors.grey.withOpacity(0.3);
+                }
+                return null;
+              },
+            ),
+            cells: [
+              DataCell(Text(e.idPesquisa.toString())),
+              DataCell(Text(e.titulo)),
+              DataCell(
+                IconButton(
+                  tooltip: "Editar",
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    onButtonAlterar(context, listaPesquisa.indexOf(e));
+                  },
+                ),
+              ),
+              DataCell(
+                IconButton(
+                  tooltip: "Excluir",
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    onButtonDeletar(listaPesquisa.indexOf(e));
+                  },
+                ),
+              ),
+            ],
+          ),
+        )
+        .toList();
   }
 
   @override
-  void onInserir() {
+  void initState() {
+    super.initState();
+    carregarTodosRegistros();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseConsulta(
+      tituloTela: "Consulta Pesquisa",
+      onButtonInserir: onButtonInserir,
+      listaDataColumn: listaDataColumn(),
+      listaDataRow: listaDataRow(),
+      sortAscending: sortAscending,
+      sortColumnIndex: sortColumnIndex,
+    );
+  }
+
+  void onButtonInserir() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return const InclusaoPesquisa(
+        return const CadastroPesquisa(
           tipoCrud: TipoCrud.inserir,
         );
       }),
@@ -36,11 +153,10 @@ class _EquipeState extends BaseStateConsulta<ConsultaPesquisa> {
     });
   }
 
-  @override
-  void onAlterar(BuildContext context, int index) {
+  void onButtonAlterar(BuildContext context, int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return InclusaoPesquisa(
+        return CadastroPesquisa(
           tipoCrud: TipoCrud.alterar,
           pesquisaAlterar: listaPesquisa[index],
         );
@@ -50,8 +166,7 @@ class _EquipeState extends BaseStateConsulta<ConsultaPesquisa> {
     });
   }
 
-  @override
-  void onDeletar(int index) async {
+  void onButtonDeletar(int index) async {
     await util_http.delete(
       path: rotaPesquisa,
       jsonDAO: jsonEncode(listaPesquisa[index].toJson()),
@@ -61,24 +176,11 @@ class _EquipeState extends BaseStateConsulta<ConsultaPesquisa> {
     setState(() {});
   }
 
-  @override
   Future<void> carregarTodosRegistros() async {
     listaPesquisa.clear();
     var json = await util_http.get(path: rotaPesquisa, context: context);
-    listaPesquisa = List<PesquisaDAO>.from(json.map((json) => PesquisaDAO.fromJson(json)));
+    listaPesquisa =
+        List<PesquisaDAO>.from(json.map((json) => PesquisaDAO.fromJson(json)));
     setState(() {});
-  }
-
-  @override
-  int countListView() {
-    return listaPesquisa.length;
-  }
-
-  @override
-  Widget buildItemListView(context, index) {
-    return ListTile(
-      leading: Text(listaPesquisa[index].idPesquisa.toString()),
-      title: Text(listaPesquisa[index].titulo),
-    );
   }
 }

@@ -1,33 +1,150 @@
 import 'dart:convert';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:squad_scrum/BaseWidget/base_state_consulta.dart';
-import 'package:squad_scrum/Cadastros/inclusao_cargo.dart';
+import 'package:squad_scrum/Cadastros/cadastro_cargo.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/EntidadePostgres/cargo_dao.dart';
+import 'package:squad_scrum/Widgets/base_consulta.dart';
 import 'package:squad_scrum/util/util_http.dart' as http_util;
 
 class ConsultaCargo extends StatefulWidget {
   const ConsultaCargo({Key? key}) : super(key: key);
 
   @override
-  BaseStateConsulta<ConsultaCargo> createState() => _ConsultaCargoState();
+  State<ConsultaCargo> createState() => _ConsultaCargoState();
 }
 
-class _ConsultaCargoState extends BaseStateConsulta<ConsultaCargo> {
+class _ConsultaCargoState extends State<ConsultaCargo> {
   List<CargoDAO> listaCargo = [];
+  bool sortAscending = false;
+  int? sortColumnIndex;
 
-  @override
-  void initState() {
-    super.tituloTela = "Consulta Cargo";
-    super.initState();
+  List<DataColumn> listaDataColumn() {
+    return [
+      DataColumn2(
+        label: const Text(
+          "Id",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        onSort: onSort,
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: const Text(
+          "Descrição",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        onSort: onSort,
+        size: ColumnSize.S,
+      ),
+      const DataColumn2(label: Text(""), size: ColumnSize.S),
+      const DataColumn2(label: Text(""), size: ColumnSize.S),
+    ];
+  }
+
+  void onSort(int columnIndex, bool ascending) {
+    sortColumnIndex = columnIndex;
+    sortAscending = ascending;
+
+    setState(() {
+      if (sortColumnIndex == 0) {
+        if (sortAscending) {
+          listaCargo.sort((a, b) {
+            return b.idCargo!.compareTo(a.idCargo!);
+          });
+        } else {
+          listaCargo.sort((a, b) {
+            return a.idCargo!.compareTo(b.idCargo!);
+          });
+        }
+      } else if (sortColumnIndex == 1) {
+        if (sortAscending) {
+          listaCargo.sort((a, b) {
+            return b.descricao.compareTo(a.descricao);
+          });
+        } else {
+          listaCargo.sort((a, b) {
+            return a.descricao.compareTo(b.descricao);
+          });
+        }
+      }
+    });
+  }
+
+  List<DataRow> listaDataRow() {
+    return listaCargo
+        .map(
+          (e) => DataRow2(
+            color: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(0.08);
+                }
+                if (listaCargo.indexOf(e).isEven) {
+                  return Colors.grey.withOpacity(0.3);
+                }
+                return null;
+              },
+            ),
+            cells: [
+              DataCell(Text(e.idCargo.toString())),
+              DataCell(Text(e.descricao)),
+              DataCell(
+                IconButton(
+                  tooltip: "Editar",
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    onButtonAlterar(context, listaCargo.indexOf(e));
+                  },
+                ),
+              ),
+              DataCell(
+                IconButton(
+                  tooltip: "Excluir",
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    onButtonDeletar(listaCargo.indexOf(e));
+                  },
+                ),
+              ),
+            ],
+          ),
+        )
+        .toList();
   }
 
   @override
-  void onInserir() {
+  void initState() {
+    super.initState();
+    carregarTodosRegistros();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseConsulta(
+      tituloTela: "Consulta Cargo",
+      onButtonInserir: onButtonInserir,
+      listaDataColumn: listaDataColumn(),
+      listaDataRow: listaDataRow(),
+      sortAscending: sortAscending,
+      sortColumnIndex: sortColumnIndex,
+    );
+  }
+
+  void onButtonInserir() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return const InclusaoCargo(
+        return const CadastroCargo(
           tipoCrud: TipoCrud.inserir,
         );
       }),
@@ -36,11 +153,10 @@ class _ConsultaCargoState extends BaseStateConsulta<ConsultaCargo> {
     });
   }
 
-  @override
-  void onAlterar(BuildContext context, int index) {
+  void onButtonAlterar(BuildContext context, int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return InclusaoCargo(
+        return CadastroCargo(
           tipoCrud: TipoCrud.alterar,
           cargoAlterar: listaCargo[index],
         );
@@ -52,8 +168,7 @@ class _ConsultaCargoState extends BaseStateConsulta<ConsultaCargo> {
     );
   }
 
-  @override
-  void onDeletar(int index) async {
+  void onButtonDeletar(int index) async {
     await http_util.delete(
       path: rotaCargo,
       jsonDAO: jsonEncode(listaCargo[index].toJson()),
@@ -63,24 +178,11 @@ class _ConsultaCargoState extends BaseStateConsulta<ConsultaCargo> {
     setState(() {});
   }
 
-  @override
   Future<void> carregarTodosRegistros() async {
     listaCargo.clear();
     var json = await http_util.get(path: rotaCargo, context: context);
-    listaCargo = List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
+    listaCargo =
+        List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
     setState(() {});
-  }
-
-  @override
-  int countListView() {
-    return listaCargo.length;
-  }
-
-  @override
-  Widget buildItemListView(context, index) {
-    return ListTile(
-      leading: Text(listaCargo[index].idCargo.toString()),
-      title: Text(listaCargo[index].descricao),
-    );
   }
 }
