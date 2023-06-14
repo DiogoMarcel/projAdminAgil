@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"imports/entities"
 	"imports/utilDB"
 	"io"
@@ -65,8 +64,8 @@ func PesquisaPerguntaPegarTodos(w http.ResponseWriter, r *http.Request) {
 	query, err := utilDB.GetQuerySQL(w,
 		"SELECT  ID_PESQUISAPERGUNTA"+
 			"  , PERGUNTA"+
-			"  , 3.14159::DECIMAL VALORFINAL"+
-			"  , CAST(COALESCE(VALORINICIAL,0.0) AS NUMERIC(5,2)) VALORINICIAL"+
+			"  , COALESCE(VALORFINAL,0) VALORFINAL"+
+			"  , COALESCE(VALORINICIAL,0) VALORINICIAL"+
 			"  , TIPORESPOSTA"+
 			"  , COALESCE(TAMANHOTOTAL,0) TAMANHOTOTAL"+
 			"  , IDPESQUISA"+
@@ -76,18 +75,15 @@ func PesquisaPerguntaPegarTodos(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		listaPesquisaPergunta := []entities.PesquisaPergunta{}
 		for _, element := range query {
-			valorFinal := fmt.Sprintf("%s", element["valorfinal"])
-			valorInicial := fmt.Sprintf("%s", element["valorinicial"])
-			tipoResposta := fmt.Sprintf("%s", element["tiporesposta"])
-
-			valorFinalFloat64, _ := strconv.ParseFloat(valorFinal, 64)
-			valorInicialFloat64, _ := strconv.ParseFloat(valorInicial, 64)
+			valorFinal, _ := strconv.ParseFloat(string(element["valorfinal"].([]uint8)), 64)
+			valorInicial, _ := strconv.ParseFloat(string(element["valorinicial"].([]uint8)), 64)
+			tipoResposta := string(element["tiporesposta"].([]uint8))
 
 			listaPesquisaPergunta = append(listaPesquisaPergunta, entities.PesquisaPergunta{
 				Id_PesquisaPergunta: element["id_pesquisapergunta"].(int64),
 				Pergunta:            element["pergunta"].(string),
-				ValorFinal:          valorFinalFloat64,
-				ValorInicial:        valorInicialFloat64,
+				ValorFinal:          valorFinal,
+				ValorInicial:        valorInicial,
 				TipoResposta:        tipoResposta,
 				TamanhoTotal:        element["tamanhototal"].(int64),
 				Obrigatoria:         element["obrigatoria"].(bool),
