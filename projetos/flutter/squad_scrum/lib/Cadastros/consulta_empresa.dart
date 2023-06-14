@@ -39,7 +39,6 @@ class _ConsultaEmpresaState extends State<ConsultaEmpresa> {
         size: ColumnSize.S,
       ),
       const DataColumn2(label: Text(""), size: ColumnSize.S),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -79,10 +78,7 @@ class _ConsultaEmpresaState extends State<ConsultaEmpresa> {
             color: MaterialStateProperty.resolveWith<Color?>(
               (Set<MaterialState> states) {
                 if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.08);
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.08);
                 }
                 if (listaEmpresa.indexOf(e).isEven) {
                   return Colors.grey.withOpacity(0.3);
@@ -94,27 +90,29 @@ class _ConsultaEmpresaState extends State<ConsultaEmpresa> {
               DataCell(Text(e.idEmpresa.toString())),
               DataCell(Text(e.nome)),
               DataCell(
-                IconButton(
-                  tooltip: "Editar",
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    onButtonAlterar(context, listaEmpresa.indexOf(e));
-                  },
-                ),
-              ),
-              DataCell(
-                IconButton(
-                  tooltip: "Excluir",
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    onButtonDeletar(listaEmpresa.indexOf(e));
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        onButtonAlterar(context, listaEmpresa.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        onButtonDeletar(listaEmpresa.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

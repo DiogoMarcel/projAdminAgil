@@ -23,7 +23,7 @@ class SprintDAO {
       pesquisaDAO: SprintPesquisaDAO(
         idSprint: json['sprintpesquisa']['idsprint'],
         idPesquisa: json['sprintpesquisa']['idpesquisa'],
-        idSprintPesquisa: json['sprintpesquisa']['id_pesquisasprint'],
+        idSprintPesquisa: json['sprintpesquisa']['id_sprintpesquisa'],
       ),
     );
   }

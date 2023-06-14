@@ -1,2 +1,2 @@
-INFO: 2023/06/12 21:06:58 lib.readFile.go:24: Arquivo de configuração de e-mail encontrado!
-INFO: 2023/06/12 21:06:58 main.go:24: Server running in port: 127.0.0.1:3000
+INFO: 2023/06/14 14:52:16 lib.readFile.go:24: Arquivo de configuração de e-mail encontrado!
+INFO: 2023/06/14 14:52:16 main.go:24: Server running in port: 0.0.0.0:3000

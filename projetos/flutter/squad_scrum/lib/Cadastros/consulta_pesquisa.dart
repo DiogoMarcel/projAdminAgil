@@ -39,7 +39,6 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
         size: ColumnSize.M,
       ),
       const DataColumn2(label: Text(""), size: ColumnSize.S),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -79,10 +78,7 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
             color: MaterialStateProperty.resolveWith<Color?>(
               (Set<MaterialState> states) {
                 if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.08);
+                  return Theme.of(context).colorScheme.primary.withOpacity(0.08);
                 }
                 if (listaPesquisa.indexOf(e).isEven) {
                   return Colors.grey.withOpacity(0.3);
@@ -94,27 +90,29 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
               DataCell(Text(e.idPesquisa.toString())),
               DataCell(Text(e.titulo)),
               DataCell(
-                IconButton(
-                  tooltip: "Editar",
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    onButtonAlterar(context, listaPesquisa.indexOf(e));
-                  },
-                ),
-              ),
-              DataCell(
-                IconButton(
-                  tooltip: "Excluir",
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    onButtonDeletar(listaPesquisa.indexOf(e));
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        onButtonAlterar(context, listaPesquisa.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        onButtonDeletar(listaPesquisa.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

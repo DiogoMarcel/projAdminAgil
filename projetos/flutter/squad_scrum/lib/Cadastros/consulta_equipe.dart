@@ -39,7 +39,6 @@ class _ConsultaEquipeState extends State<ConsultaEquipe> {
         size: ColumnSize.M,
       ),
       const DataColumn2(label: Text(""), size: ColumnSize.S),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -94,27 +93,29 @@ class _ConsultaEquipeState extends State<ConsultaEquipe> {
               DataCell(Text(e.idEquipe.toString())),
               DataCell(Text(e.nome)),
               DataCell(
-                IconButton(
-                  tooltip: "Editar",
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    onButtonAlterar(context, listaEquipe.indexOf(e));
-                  },
-                ),
-              ),
-              DataCell(
-                IconButton(
-                  tooltip: "Excluir",
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    onButtonDeletar(listaEquipe.indexOf(e));
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        onButtonAlterar(context, listaEquipe.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        onButtonDeletar(listaEquipe.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

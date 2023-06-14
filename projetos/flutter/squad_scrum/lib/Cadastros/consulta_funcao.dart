@@ -39,7 +39,6 @@ class _ConsultaFuncaoState extends State<ConsultaFuncao> {
         size: ColumnSize.M,
       ),
       const DataColumn2(label: Text(""), size: ColumnSize.S),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -94,27 +93,29 @@ class _ConsultaFuncaoState extends State<ConsultaFuncao> {
               DataCell(Text(e.idFuncao.toString())),
               DataCell(Text(e.descricao)),
               DataCell(
-                IconButton(
-                  tooltip: "Editar",
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    onButtonAlterar(context, listaFuncao.indexOf(e));
-                  },
-                ),
-              ),
-              DataCell(
-                IconButton(
-                  tooltip: "Excluir",
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    onButtonDeletar(listaFuncao.indexOf(e));
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        onButtonAlterar(context, listaFuncao.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        onButtonDeletar(listaFuncao.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

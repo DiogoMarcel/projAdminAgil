@@ -39,7 +39,6 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
         size: ColumnSize.S,
       ),
       const DataColumn2(label: Text(""), size: ColumnSize.S),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -94,27 +93,29 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
               DataCell(Text(e.idCargo.toString())),
               DataCell(Text(e.descricao)),
               DataCell(
-                IconButton(
-                  tooltip: "Editar",
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    onButtonAlterar(context, listaCargo.indexOf(e));
-                  },
-                ),
-              ),
-              DataCell(
-                IconButton(
-                  tooltip: "Excluir",
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    onButtonDeletar(listaCargo.indexOf(e));
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        onButtonAlterar(context, listaCargo.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        onButtonDeletar(listaCargo.indexOf(e));
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
