@@ -15,9 +15,12 @@ func PesquisaInserir(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("content-Type", "application/json")
 	var pesquisa entities.Pesquisa
-	jsonPesquisa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonPesquisa, &pesquisa)
+	err := json.NewDecoder(r.Body).Decode(&pesquisa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "INSERT INTO PESQUISA (TITULO) VALUES($1)", pesquisa.Titulo)
 }
@@ -25,9 +28,12 @@ func PesquisaInserir(w http.ResponseWriter, r *http.Request) {
 func PesquisaAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var pesquisa entities.Pesquisa
-	jsonPesquisa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonPesquisa, &pesquisa)
+	err := json.NewDecoder(r.Body).Decode(&pesquisa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE PESQUISA SET TITULO = $1 WHERE ID_PESQUISA = $2", pesquisa.Titulo, pesquisa.Id_Pesquisa)
 }
@@ -35,9 +41,12 @@ func PesquisaAlterar(w http.ResponseWriter, r *http.Request) {
 func PesquisaDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var pesquisa entities.Pesquisa
-	jsonPesquisa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonPesquisa, &pesquisa)
+	err := json.NewDecoder(r.Body).Decode(&pesquisa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM PESQUISA WHERE ID_PESQUISA = $1", pesquisa.Id_Pesquisa)
 }
@@ -53,12 +62,10 @@ func PesquisaPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaPesquisa)
-		if err == nil {
-			w.Write(response)
-		} else {
+		err = json.NewEncoder(w).Encode(listaPesquisa)
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			io.WriteString(w, err.Error())
 		}
 	}
 }

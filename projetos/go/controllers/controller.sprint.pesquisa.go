@@ -18,9 +18,12 @@ func SprintPesquisaInserir(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("content-Type", "application/json")
 	var sprintPesquisa entities.SprintPesquisa
-	jsonSprintPesquisa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonSprintPesquisa, &sprintPesquisa)
+	err = json.NewDecoder(r.Body).Decode(&sprintPesquisa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	tx, err = conexaobd.Db.Begin()
 	if err != nil {
@@ -38,25 +41,23 @@ func SprintPesquisaInserir(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		err = tx.Commit()
 		if err == nil {
-			response, _ := json.Marshal(map[string]int{"insertId": insertId})
-			if err == nil {
-				w.Write([]byte(response))
-			} else {
+			err = json.NewEncoder(w).Encode(map[string]int{"insertId": insertId})
+			if err != nil {
 				w.WriteHeader(http.StatusBadRequest)
-				w.Write([]byte("Erro ao gerar o Json no Controller.Sprint.Pesquisa no Servidor GO: " + err.Error()))
+				io.WriteString(w, "Erro ao gerar o Json no Controller.Sprint.Pesquisa no Servidor GO: "+err.Error())
 			}
 		} else {
 			tx.Rollback()
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("Erro ao Commitar a Transacao no Servidor GO: " + err.Error()))
+			io.WriteString(w, "Erro ao Commitar a Transacao no Servidor GO: "+err.Error())
 		}
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
 		err = tx.Rollback()
 		if err == nil {
-			w.Write([]byte("Erro ao Commitar a Transacao no Servidor GO: " + err.Error()))
+			io.WriteString(w, "Erro ao Commitar a Transacao no Servidor GO: "+err.Error())
 		} else {
-			w.Write([]byte("Erro ao efetuar o Roolback da Transacao no Servidor GO: " + err.Error()))
+			io.WriteString(w, "Erro ao efetuar o Roolback da Transacao no Servidor GO: "+err.Error())
 		}
 	}
 }
@@ -64,9 +65,12 @@ func SprintPesquisaInserir(w http.ResponseWriter, r *http.Request) {
 func SprintPesquisaAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var sprintPesquisa entities.SprintPesquisa
-	jsonSprintPesquisa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonSprintPesquisa, &sprintPesquisa)
+	err := json.NewDecoder(r.Body).Decode(&sprintPesquisa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE SPRINT_PESQUISA SET IDPESQUISA=$1,IDSPRINT=$2 WHERE ID_SPRINTPESQUISA=$3",
 		sprintPesquisa.IdPesquisa, sprintPesquisa.IdSprint, sprintPesquisa.Id_SprintPesquisa)
@@ -75,9 +79,12 @@ func SprintPesquisaAlterar(w http.ResponseWriter, r *http.Request) {
 func SprintPesquisaDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var sprintPesquisa entities.SprintPesquisa
-	jsonSprintPesquisa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonSprintPesquisa, &sprintPesquisa)
+	err := json.NewDecoder(r.Body).Decode(&sprintPesquisa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM SPRINT_PESQUISA WHERE ID_SPRINTPESQUISA = $1", sprintPesquisa.Id_SprintPesquisa)
 }
@@ -96,12 +103,10 @@ func SprintPesquisaPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaSprintPesquisa)
-		if err == nil {
-			w.Write(response)
-		} else {
+		err = json.NewEncoder(w).Encode(listaSprintPesquisa)
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			io.WriteString(w, err.Error())
 		}
 	}
 }

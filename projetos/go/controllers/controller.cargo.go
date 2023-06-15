@@ -12,12 +12,14 @@ import (
 )
 
 func CargoInserir(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("content-Type", "application/json")
 	var cargo entities.Cargo
-	jsonCargo, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonCargo, &cargo)
+	err := json.NewDecoder(r.Body).Decode(&cargo)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "INSERT INTO CARGO (DESCRICAO) VALUES($1)", cargo.Descricao)
 }
@@ -25,9 +27,12 @@ func CargoInserir(w http.ResponseWriter, r *http.Request) {
 func CargoAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var cargo entities.Cargo
-	jsonCargo, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonCargo, &cargo)
+	err := json.NewDecoder(r.Body).Decode(&cargo)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE CARGO SET DESCRICAO = $1 WHERE ID_CARGO = $2", cargo.Descricao, cargo.Id_Cargo)
 }
@@ -35,9 +40,12 @@ func CargoAlterar(w http.ResponseWriter, r *http.Request) {
 func CargoDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var cargo entities.Cargo
-	jsonCargo, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonCargo, &cargo)
+	err := json.NewDecoder(r.Body).Decode(&cargo)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM CARGO WHERE ID_CARGO = $1", cargo.Id_Cargo)
 }
@@ -53,12 +61,10 @@ func CargoPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaCargo)
-		if err == nil {
-			w.Write(response)
-		} else {
-			w.WriteHeader(400)
-			w.Write([]byte(err.Error()))
+		err := json.NewEncoder(w).Encode(listaCargo)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, err.Error())
 		}
 	}
 }

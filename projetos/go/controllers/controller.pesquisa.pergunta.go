@@ -15,9 +15,12 @@ import (
 func PesquisaPerguntaInserir(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var pesquisaPergunta entities.PesquisaPergunta
-	jsonPesquisaPergunta, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonPesquisaPergunta, &pesquisaPergunta)
+	err := json.NewDecoder(r.Body).Decode(&pesquisaPergunta)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "INSERT INTO PESQUISAPERGUNTA ("+
 		"PERGUNTA,VALORFINAL,VALORINICIAL,"+
@@ -31,9 +34,12 @@ func PesquisaPerguntaInserir(w http.ResponseWriter, r *http.Request) {
 func PesquisaPerguntaAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var pesquisaPergunta entities.PesquisaPergunta
-	jsonPesquisaPergunta, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonPesquisaPergunta, &pesquisaPergunta)
+	err := json.NewDecoder(r.Body).Decode(&pesquisaPergunta)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE PESQUISAPERGUNTA"+
 		" SET PERGUNTA = $1,"+
@@ -53,9 +59,12 @@ func PesquisaPerguntaAlterar(w http.ResponseWriter, r *http.Request) {
 func PesquisaPerguntaDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var pesquisaPergunta entities.PesquisaPergunta
-	jsonPesquisaPergunta, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonPesquisaPergunta, &pesquisaPergunta)
+	err := json.NewDecoder(r.Body).Decode(&pesquisaPergunta)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM PESQUISAPERGUNTA WHERE ID_PESQUISAPERGUNTA = $1", pesquisaPergunta.Id_PesquisaPergunta)
 }
@@ -91,12 +100,10 @@ func PesquisaPerguntaPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaPesquisaPergunta)
-		if err == nil {
-			w.Write(response)
-		} else {
+		err := json.NewEncoder(w).Encode(listaPesquisaPergunta)
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			io.WriteString(w, err.Error())
 		}
 	}
 }

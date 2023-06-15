@@ -14,9 +14,12 @@ import (
 func EquipeInserir(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var equipe entities.Equipe
-	jsonEquipe, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonEquipe, &equipe)
+	err := json.NewDecoder(r.Body).Decode(&equipe)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "INSERT INTO EQUIPE (NOME) VALUES($1)", equipe.Nome)
 }
@@ -24,9 +27,12 @@ func EquipeInserir(w http.ResponseWriter, r *http.Request) {
 func EquipeAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var equipe entities.Equipe
-	jsonEquipe, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonEquipe, &equipe)
+	err := json.NewDecoder(r.Body).Decode(&equipe)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE EQUIPE SET NOME = $1 WHERE ID_EQUIPE = $2", equipe.Nome, equipe.Id_Equipe)
 }
@@ -34,9 +40,12 @@ func EquipeAlterar(w http.ResponseWriter, r *http.Request) {
 func EquipeDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var equipe entities.Equipe
-	jsonEquipe, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonEquipe, &equipe)
+	err := json.NewDecoder(r.Body).Decode(&equipe)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM EQUIPE WHERE ID_EQUIPE = $1", equipe.Id_Equipe)
 }
@@ -53,12 +62,10 @@ func EquipePegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaEquipe)
-		if err == nil {
-			w.Write(response)
-		} else {
-			w.WriteHeader(400)
-			w.Write([]byte(err.Error()))
+		err = json.NewEncoder(w).Encode(listaEquipe)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, err.Error())
 		}
 	}
 }

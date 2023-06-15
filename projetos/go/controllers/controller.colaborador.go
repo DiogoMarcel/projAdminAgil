@@ -15,17 +15,19 @@ import (
 func ColaboradorInserir(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var colaborador entities.Colaborador
-	jsonColaborador, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonColaborador, &colaborador)
-
+	err := json.NewDecoder(r.Body).Decode(&colaborador)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 	colaboradorEmail := ColaboradorEmail{User: colaborador.Usuario}
 	errMail := colaboradorEmail.GenerateEmailAndPassword()
 
 	if errMail != nil {
 		library.ErrorLogger.Println(library.MESSAGE_FILE_CFGEMAIL_NOTFOUND)
 		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte(library.MESSAGE_FILE_CFGEMAIL_NOTFOUND))
+		io.WriteString(w, library.MESSAGE_FILE_CFGEMAIL_NOTFOUND)
 	} else {
 		utilDB.ExecutarSQL(w, "INSERT INTO COLABORADOR (USUARIO,SENHA,NOME,GERENCIAPESQUISA,GERENCIAUSUARIO) VALUES($1, MD5($2), $3, $4, $5)",
 			colaborador.Usuario, colaboradorEmail.GetPassword(), colaborador.Nome, colaborador.GerenciaPesquisa, colaborador.GerenciaUsuario)
@@ -35,9 +37,12 @@ func ColaboradorInserir(w http.ResponseWriter, r *http.Request) {
 func ColaboradorAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var colaborador entities.Colaborador
-	jsonColaborador, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonColaborador, &colaborador)
+	err := json.NewDecoder(r.Body).Decode(&colaborador)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE COLABORADOR "+
 		" SET USUARIO = $1,"+
@@ -55,9 +60,12 @@ func ColaboradorAlterar(w http.ResponseWriter, r *http.Request) {
 func ColaboradorDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var colaborador entities.Colaborador
-	jsonColaborador, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonColaborador, &colaborador)
+	err := json.NewDecoder(r.Body).Decode(&colaborador)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM COLABORADOR WHERE ID_COLABORADOR = $1", colaborador.Id_Colaborador)
 }
@@ -86,12 +94,10 @@ func ColaboradorPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaColaborador)
-		if err == nil {
-			w.Write(response)
-		} else {
+		err := json.NewEncoder(w).Encode(listaColaborador)
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			io.WriteString(w, err.Error())
 		}
 	}
 }

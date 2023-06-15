@@ -6,14 +6,14 @@ class PesquisaDAO {
 
   factory PesquisaDAO.fromJson(Map<String, dynamic> json) {
     return PesquisaDAO(
-      idPesquisa: json["id_pesquisa"],
+      idPesquisa: int.parse(json["id_pesquisa"]),
       titulo: json["titulo"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id_pesquisa": idPesquisa ?? "",
+      "id_pesquisa": idPesquisa.toString(),
       "titulo": titulo,
     };
   }

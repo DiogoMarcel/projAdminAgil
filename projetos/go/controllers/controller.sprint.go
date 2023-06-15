@@ -14,11 +14,12 @@ import (
 func SprintInserir(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var sprint entities.Sprint
-	jsonSprint, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonSprint, &sprint)
-
-	print(sprint.Nome)
+	err := json.NewDecoder(r.Body).Decode(&sprint)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "INSERT INTO SPRINT (NOME,DATAINICIO,DATAFINAL) VALUES($1, $2, $3)",
 		sprint.Nome, sprint.DataInicio, sprint.DataFinal)
@@ -27,9 +28,12 @@ func SprintInserir(w http.ResponseWriter, r *http.Request) {
 func SprintAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var sprint entities.Sprint
-	jsonSprint, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonSprint, &sprint)
+	err := json.NewDecoder(r.Body).Decode(&sprint)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE SPRINT SET NOME=$1, DATAINICIO=$2, DATAFINAL=$3 WHERE ID_SPRINT = $4",
 		sprint.Nome, sprint.DataInicio, sprint.DataFinal, sprint.Id_Sprint)
@@ -38,9 +42,12 @@ func SprintAlterar(w http.ResponseWriter, r *http.Request) {
 func SprintDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var sprint entities.Sprint
-	jsonSprint, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonSprint, &sprint)
+	err := json.NewDecoder(r.Body).Decode(&sprint)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM SPRINT WHERE ID_SPRINT = $1", sprint.Id_Sprint)
 }
@@ -74,12 +81,10 @@ func SprintPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaSprint)
-		if err == nil {
-			w.Write(response)
-		} else {
+		err = json.NewEncoder(w).Encode(listaSprint)
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			io.WriteString(w, err.Error())
 		}
 	}
 }

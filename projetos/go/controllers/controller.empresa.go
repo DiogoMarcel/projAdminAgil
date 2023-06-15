@@ -14,9 +14,12 @@ import (
 func EmpresaInserir(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var empresa entities.Empresa
-	jsonEmpresa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonEmpresa, &empresa)
+	err := json.NewDecoder(r.Body).Decode(&empresa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "INSERT INTO EMPRESA (NOME) VALUES($1)", empresa.Nome)
 }
@@ -24,9 +27,12 @@ func EmpresaInserir(w http.ResponseWriter, r *http.Request) {
 func EmpresaAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var empresa entities.Empresa
-	jsonEmpresa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonEmpresa, &empresa)
+	err := json.NewDecoder(r.Body).Decode(&empresa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE EMPRESA SET NOME = $1 WHERE ID_EMPRESA = $2", empresa.Nome, empresa.Id_Empresa)
 }
@@ -34,9 +40,12 @@ func EmpresaAlterar(w http.ResponseWriter, r *http.Request) {
 func EmpresaDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var empresa entities.Empresa
-	jsonEmpresa, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonEmpresa, &empresa)
+	err := json.NewDecoder(r.Body).Decode(&empresa)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM EMPRESA WHERE ID_EMPRESA = $1", empresa.Id_Empresa)
 }
@@ -53,12 +62,10 @@ func EmpresaPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaEmpresa)
-		if err == nil {
-			w.Write(response)
-		} else {
+		json.NewEncoder(w).Encode(listaEmpresa)
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(err.Error()))
+			io.WriteString(w, err.Error())
 		}
 	}
 }

@@ -182,8 +182,7 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
   Future<void> carregarTodosRegistros() async {
     listaCargo.clear();
     var json = await http_util.get(path: rotaCargo, context: context);
-    listaCargo =
-        List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
+    listaCargo = List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
     setState(() {});
   }
 }

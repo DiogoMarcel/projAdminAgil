@@ -16,21 +16,21 @@ class SprintDAO {
 
   factory SprintDAO.fromJson(Map<String, dynamic> json) {
     return SprintDAO(
-      idSprint: json['id_sprint'],
+      idSprint: int.parse(json['id_sprint']),
       dataInicio: DateTime.parse(json['datainicio']),
       dataFinal: DateTime.parse(json['datafinal']),
       nome: json['nome'],
       pesquisaDAO: SprintPesquisaDAO(
         idSprint: json['sprintpesquisa']['idsprint'],
         idPesquisa: json['sprintpesquisa']['idpesquisa'],
-        idSprintPesquisa: json['sprintpesquisa']['id_sprintpesquisa'],
+        idSprintPesquisa: int.parse(json['sprintpesquisa']['id_sprintpesquisa']),
       ),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id_sprint': idSprint ?? "",
+      'id_sprint': idSprint.toString(),
       'datainicio': dataInicio.toUtc().toIso8601String(),
       'datafinal': dataFinal.toUtc().toIso8601String(),
       'nome': nome,

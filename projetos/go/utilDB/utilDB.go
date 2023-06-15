@@ -1,17 +1,19 @@
 package utilDB
 
 import (
+	"encoding/json"
 	conexaobd "imports/conexaoBD"
+	"io"
 	"net/http"
 )
 
 func ExecutarSQL(w http.ResponseWriter, sql string, args ...any) {
 	linha := conexaobd.Db.QueryRow(sql, args...)
 	if linha.Err() == nil {
-		w.Write([]byte("Registro Salvo Com Sucesso!!"))
+		json.NewEncoder(w).Encode("Registro Salvo Com Sucesso!!")
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Erro no Servidor GO: " + linha.Err().Error()))
+		io.WriteString(w, "Erro no Servidor GO: "+linha.Err().Error())
 	}
 
 }
@@ -41,7 +43,7 @@ func GetQuerySQL(w http.ResponseWriter, sql string) ([]map[string]interface{}, e
 		return resultQuery, nil
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Erro no Servidor GO: " + err.Error()))
+		io.WriteString(w, "Erro no Servidor GO: "+err.Error())
 		return nil, err
 	}
 }

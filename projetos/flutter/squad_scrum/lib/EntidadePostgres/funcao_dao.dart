@@ -6,14 +6,14 @@ class FuncaoDAO {
 
   factory FuncaoDAO.fromJson(Map<String, dynamic> json) {
     return FuncaoDAO(
-      idFuncao: json["id_funcao"],
+      idFuncao: int.parse(json["id_funcao"]),
       descricao: json["descricao"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id_funcao": idFuncao ?? "",
+      "id_funcao": idFuncao.toString(),
       "descricao": descricao,
     };
   }

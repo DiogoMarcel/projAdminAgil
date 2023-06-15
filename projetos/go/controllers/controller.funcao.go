@@ -13,9 +13,12 @@ import (
 func FuncaoInserir(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var funcao entities.Funcao
-	jsonFuncao, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonFuncao, &funcao)
+	err := json.NewDecoder(r.Body).Decode(&funcao)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "INSERT INTO FUNCAO (DESCRICAO) VALUES($1)", funcao.Descricao)
 }
@@ -23,9 +26,12 @@ func FuncaoInserir(w http.ResponseWriter, r *http.Request) {
 func FuncaoAlterar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var funcao entities.Funcao
-	jsonFuncao, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonFuncao, &funcao)
+	err := json.NewDecoder(r.Body).Decode(&funcao)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "UPDATE FUNCAO SET DESCRICAO = $1 WHERE ID_FUNCAO = $2", funcao.Descricao, funcao.Id_Funcao)
 }
@@ -33,9 +39,12 @@ func FuncaoAlterar(w http.ResponseWriter, r *http.Request) {
 func FuncaoDeletar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	var funcao entities.Funcao
-	jsonFuncao, _ := io.ReadAll(r.Body)
 
-	json.Unmarshal(jsonFuncao, &funcao)
+	err := json.NewDecoder(r.Body).Decode(&funcao)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, err.Error())
+	}
 
 	utilDB.ExecutarSQL(w, "DELETE FROM FUNCAO WHERE ID_FUNCAO = $1", funcao.Id_Funcao)
 }
@@ -52,12 +61,10 @@ func FuncaoPegarTodos(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		response, err := json.Marshal(listaFuncao)
-		if err == nil {
-			w.Write(response)
-		} else {
-			w.WriteHeader(400)
-			w.Write([]byte(err.Error()))
+		err = json.NewEncoder(w).Encode(listaFuncao)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, err.Error())
 		}
 	}
 }

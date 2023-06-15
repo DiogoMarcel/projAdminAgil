@@ -7,7 +7,7 @@ class SprintPesquisaDAO {
 
   factory SprintPesquisaDAO.fromJson(Map<String, dynamic> json) {
     return SprintPesquisaDAO(
-      idSprintPesquisa: json['id_sprintpesquisa'],
+      idSprintPesquisa: int.parse(json['id_sprintpesquisa']),
       idPesquisa: json['idpesquisa'],
       idSprint: json['idsprint'],
     );
@@ -15,7 +15,7 @@ class SprintPesquisaDAO {
 
   Map<String, dynamic> toJson() {
     return {
-      'id_sprintpesquisa': idSprintPesquisa ?? "",
+      'id_sprintpesquisa': idSprintPesquisa.toString(),
       'idpesquisa': idPesquisa,
       'idsprint': idSprint,
     };

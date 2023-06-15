@@ -14,7 +14,7 @@ class ColaboradorDAO {
 
   factory ColaboradorDAO.fromJson(Map<String, dynamic> json) {
     return ColaboradorDAO(
-      idColaborador: json["id_colaborador"],
+      idColaborador: int.parse(json["id_colaborador"]),
       usuario: json["usuario"],
       nome: json["nome"],
       gerenciapesquisa: json["gerenciapesquisa"],
@@ -24,7 +24,7 @@ class ColaboradorDAO {
 
   Map<String, dynamic> toJson() {
     return {
-      "id_colaborador": idColaborador ?? "",
+      "id_colaborador": idColaborador.toString(),
       "usuario": usuario,
       "nome": nome,
       "gerenciapesquisa": gerenciapesquisa,
