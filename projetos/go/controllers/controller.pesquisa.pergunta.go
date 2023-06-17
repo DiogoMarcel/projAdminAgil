@@ -71,14 +71,17 @@ func PesquisaPerguntaDeletar(w http.ResponseWriter, r *http.Request) {
 
 func PesquisaPerguntaPegarTodos(w http.ResponseWriter, r *http.Request) {
 	query, err := utilDB.GetQuerySQL(w,
-		"SELECT  ID_PESQUISAPERGUNTA"+
+		" SELECT ID_PESQUISAPERGUNTA"+
 			"  , PERGUNTA"+
 			"  , COALESCE(VALORFINAL,0) VALORFINAL"+
 			"  , COALESCE(VALORINICIAL,0) VALORINICIAL"+
-			"  , TIPORESPOSTA"+
 			"  , COALESCE(TAMANHOTOTAL,0) TAMANHOTOTAL"+
 			"  , IDPESQUISA"+
 			"  , OBRIGATORIA "+
+			"  , CASE WHEN UPPER(TIPORESPOSTA) = 'D' THEN 'Decimal' "+
+			"         WHEN UPPER(TIPORESPOSTA) = 'S' THEN 'String' "+
+			"         ELSE 'Boolean' "+
+			"         END TIPORESPOSTA"+
 			"  FROM PESQUISA_PERGUNTA"+
 			" ORDER BY ID_PESQUISAPERGUNTA")
 	if err == nil {
@@ -86,14 +89,13 @@ func PesquisaPerguntaPegarTodos(w http.ResponseWriter, r *http.Request) {
 		for _, element := range query {
 			valorFinal, _ := strconv.ParseFloat(string(element["valorfinal"].([]uint8)), 64)
 			valorInicial, _ := strconv.ParseFloat(string(element["valorinicial"].([]uint8)), 64)
-			tipoResposta := string(element["tiporesposta"].([]uint8))
 
 			listaPesquisaPergunta = append(listaPesquisaPergunta, entities.PesquisaPergunta{
 				Id_PesquisaPergunta: element["id_pesquisapergunta"].(int64),
 				Pergunta:            element["pergunta"].(string),
 				ValorFinal:          valorFinal,
 				ValorInicial:        valorInicial,
-				TipoResposta:        tipoResposta,
+				TipoResposta:        element["tiporesposta"].(string),
 				TamanhoTotal:        element["tamanhototal"].(int64),
 				Obrigatoria:         element["obrigatoria"].(bool),
 				IdPesquisa:          element["idpesquisa"].(int64),
