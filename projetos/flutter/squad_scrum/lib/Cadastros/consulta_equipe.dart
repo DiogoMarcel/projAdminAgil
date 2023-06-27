@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Cadastros/cadastro_equipe.dart';
 import 'package:squad_scrum/Consts/consts.dart';
@@ -22,23 +21,20 @@ class _ConsultaEquipeState extends State<ConsultaEquipe> {
 
   List<DataColumn> listaDataColumn() {
     return [
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Id",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Nome",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.M,
       ),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -71,59 +67,6 @@ class _ConsultaEquipeState extends State<ConsultaEquipe> {
     });
   }
 
-  List<DataRow> listaDataRow() {
-    return listaEquipe
-        .map(
-          (e) => DataRow2(
-            color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.08);
-                }
-                if (listaEquipe.indexOf(e).isEven) {
-                  return Colors.grey.withOpacity(0.3);
-                }
-                return null;
-              },
-            ),
-            cells: [
-              DataCell(Text(e.idEquipe.toString())),
-              DataCell(Text(e.nome)),
-              DataCell(
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        onButtonAlterar(context, listaEquipe.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        onButtonDeletar(listaEquipe.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
-        .toList();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -133,10 +76,17 @@ class _ConsultaEquipeState extends State<ConsultaEquipe> {
   @override
   Widget build(BuildContext context) {
     return BaseConsulta(
-      tituloTela: "Consulta Equipe",
-      onButtonInserir: onButtonInserir,
       listaDataColumn: listaDataColumn(),
-      listaDataRow: listaDataRow(),
+      listaDados: listaEquipe,
+      processarColunas: (value){
+        return [
+          DataCell(Text(value.idEquipe.toString())),
+          DataCell(Text(value.nome)),
+        ];
+      },
+      onButtonInserir: onButtonInserir,
+      onAlterar: onButtonAlterar,
+      onDeletar: onButtonDeletar,
       sortAscending: sortAscending,
       sortColumnIndex: sortColumnIndex,
     );
@@ -154,7 +104,7 @@ class _ConsultaEquipeState extends State<ConsultaEquipe> {
     });
   }
 
-  void onButtonAlterar(BuildContext context, int index) {
+  void onButtonAlterar(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return CadastroEquipe(
@@ -180,8 +130,7 @@ class _ConsultaEquipeState extends State<ConsultaEquipe> {
   Future<void> carregarTodosRegistros() async {
     listaEquipe.clear();
     var json = await util_http.get(path: rotaEquipe, context: context);
-    listaEquipe =
-        List<EquipeDAO>.from(json.map((json) => EquipeDAO.fromJson(json)));
+    listaEquipe = List<EquipeDAO>.from(json.map((json) => EquipeDAO.fromJson(json)));
     setState(() {});
   }
 }

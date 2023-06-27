@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Cadastros/cadastro_cargo.dart';
 import 'package:squad_scrum/Consts/consts.dart';
@@ -22,23 +21,20 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
 
   List<DataColumn> listaDataColumn() {
     return [
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Id",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Descrição",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -71,59 +67,6 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
     });
   }
 
-  List<DataRow> listaDataRow() {
-    return listaCargo
-        .map(
-          (e) => DataRow2(
-            color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.08);
-                }
-                if (listaCargo.indexOf(e).isEven) {
-                  return Colors.grey.withOpacity(0.3);
-                }
-                return null;
-              },
-            ),
-            cells: [
-              DataCell(Text(e.idCargo.toString())),
-              DataCell(Text(e.descricao)),
-              DataCell(
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        onButtonAlterar(context, listaCargo.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        onButtonDeletar(listaCargo.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
-        .toList();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -133,10 +76,17 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
   @override
   Widget build(BuildContext context) {
     return BaseConsulta(
-      tituloTela: "Consulta Cargo",
-      onButtonInserir: onButtonInserir,
       listaDataColumn: listaDataColumn(),
-      listaDataRow: listaDataRow(),
+      listaDados: listaCargo,
+      processarColunas: (value){
+        return [
+          DataCell(Text(value.idCargo.toString())),
+          DataCell(Text(value.descricao)),
+        ];
+      },
+      onButtonInserir: onButtonInserir,
+      onAlterar: onButtonAlterar,
+      onDeletar: onButtonDeletar,
       sortAscending: sortAscending,
       sortColumnIndex: sortColumnIndex,
     );
@@ -154,7 +104,7 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
     });
   }
 
-  void onButtonAlterar(BuildContext context, int index) {
+  void onButtonAlterar(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return CadastroCargo(
@@ -182,7 +132,8 @@ class _ConsultaCargoState extends State<ConsultaCargo> {
   Future<void> carregarTodosRegistros() async {
     listaCargo.clear();
     var json = await http_util.get(path: rotaCargo, context: context);
-    listaCargo = List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
+    listaCargo =
+        List<CargoDAO>.from(json.map((json) => CargoDAO.fromJson(json)));
     setState(() {});
   }
 }

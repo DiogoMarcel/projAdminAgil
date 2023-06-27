@@ -21,14 +21,13 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroPesquisa> {
   TextEditingController controllerTitulo = TextEditingController();
 
   @override
-  void onGravar() async {
+  Future<void> onGravar() async {
     var equipe = PesquisaDAO(idPesquisa: int.tryParse(controllerCodigo.text), titulo: controllerTitulo.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
       await util_http.post(path: rotaPesquisa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     } else {
       await util_http.patch(path: rotaPesquisa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -49,7 +48,7 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroPesquisa> {
         enabled: false,
         controller: controllerCodigo,
         decoration: const InputDecoration(
-          labelText: "Código Pesquisa",
+          labelText: "Código",
           border: OutlineInputBorder(),
         ),
       ),
@@ -57,6 +56,7 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroPesquisa> {
         height: 15,
       ),
       TextFormField(
+        validator: onValidarTituloPesquisa,
         autofocus: true,
         controller: controllerTitulo,
         decoration: const InputDecoration(
@@ -65,5 +65,12 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroPesquisa> {
         ),
       ),
     ];
+  }
+
+  String? onValidarTituloPesquisa(value){
+    if(value.toString().trim().isEmpty){
+      return "Título da Pesquisa Obrigatorio";
+    }
+    return null;
   }
 }

@@ -5,6 +5,7 @@ import (
 	"imports/entities"
 	"imports/utilDB"
 	"io"
+	"strconv"
 
 	"net/http"
 
@@ -57,7 +58,7 @@ func PesquisaPegarTodos(w http.ResponseWriter, r *http.Request) {
 		listaPesquisa := []entities.Pesquisa{}
 		for _, element := range query {
 			listaPesquisa = append(listaPesquisa, entities.Pesquisa{
-				Id_Pesquisa: element["id_pesquisa"].(int64),
+				Id_Pesquisa: strconv.FormatInt(element["id_pesquisa"].(int64), 10),
 				Titulo:      element["titulo"].(string),
 			})
 		}

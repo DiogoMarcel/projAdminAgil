@@ -1,7 +1,7 @@
 package entities
 
 type Colaborador struct {
-	Id_Colaborador   int64  `json:"id_colaborador,string,omitempty"`
+	Id_Colaborador   int64  `json:"id_colaborador,string"`
 	Usuario          string `json:"usuario"`
 	Senha            string `json:"senha"`
 	Nome             string `json:"nome"`

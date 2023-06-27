@@ -4,6 +4,7 @@ import 'package:squad_scrum/BaseWidget/base_state_inclusao.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
 import 'package:squad_scrum/EntidadePostgres/colaborador_dao.dart';
+import 'package:squad_scrum/util/funcoes.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class CadastroColaborador extends StatefulWidget {
@@ -24,7 +25,7 @@ class _InclusaoCargoState extends BaseStateInclusao<CadastroColaborador> {
   bool gerenciaUsuario = false;
 
   @override
-  void onGravar() async {
+  Future<void> onGravar() async {
     var colaborador = ColaboradorDAO(
       idColaborador: int.tryParse(controllerCodigo.text),
       usuario: controllerUsuario.text,
@@ -43,7 +44,6 @@ class _InclusaoCargoState extends BaseStateInclusao<CadastroColaborador> {
           jsonDAO: jsonEncode(colaborador.toJson()),
           context: context);
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -67,7 +67,7 @@ class _InclusaoCargoState extends BaseStateInclusao<CadastroColaborador> {
         enabled: false,
         controller: controllerCodigo,
         decoration: const InputDecoration(
-          labelText: "Código Colaborador",
+          labelText: "Código",
           border: OutlineInputBorder(),
         ),
       ),
@@ -75,6 +75,7 @@ class _InclusaoCargoState extends BaseStateInclusao<CadastroColaborador> {
         height: 15,
       ),
       TextFormField(
+        validator: onValidarEmailColaborador,
         autofocus: true,
         controller: controllerUsuario,
         decoration: const InputDecoration(
@@ -86,6 +87,7 @@ class _InclusaoCargoState extends BaseStateInclusao<CadastroColaborador> {
         height: 15,
       ),
       TextFormField(
+        validator: onValidarNomeOuApelido,
         autofocus: true,
         controller: controllerNome,
         decoration: const InputDecoration(
@@ -126,5 +128,19 @@ class _InclusaoCargoState extends BaseStateInclusao<CadastroColaborador> {
         ],
       ),
     ];
+  }
+
+  String? onValidarEmailColaborador(value){
+    if(Funcoes.validarEmail(value.toString().trim())){
+      return null;
+    } else {
+      return "E-Mail Inválido";
+    }
+  }
+
+  String? onValidarNomeOuApelido(value){
+    if(value.toString().trim().isEmpty){
+      return "Nome ou Apelido é Obrigatorio";
+    }
   }
 }

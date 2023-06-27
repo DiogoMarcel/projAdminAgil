@@ -7,7 +7,9 @@ import 'package:squad_scrum/EntidadePostgres/cargo_dao.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class CadastroCargo extends StatefulWidget {
-  const CadastroCargo({Key? key, this.tipoCrud = TipoCrud.inserir, this.cargoAlterar}) : super(key: key);
+  const CadastroCargo(
+      {Key? key, this.tipoCrud = TipoCrud.inserir, this.cargoAlterar})
+      : super(key: key);
 
   final TipoCrud tipoCrud;
   final CargoDAO? cargoAlterar;
@@ -21,22 +23,23 @@ class _CadastroCargoState extends BaseStateInclusao<CadastroCargo> {
   TextEditingController controllerDescricao = TextEditingController();
 
   @override
-  void onGravar() async {
-    var cargo = CargoDAO(
-        idCargo: int.tryParse(controllerCodigo.text),
-        descricao: controllerDescricao.text);
-    if (widget.tipoCrud == TipoCrud.inserir) {
-      await util_http.post(
-          path: rotaCargo,
-          jsonDAO: jsonEncode(cargo.toJson()),
-          context: context);
-    } else {
-      await util_http.patch(
-          path: rotaCargo,
-          jsonDAO: jsonEncode(cargo.toJson()),
-          context: context);
+  Future<void> onGravar() async {
+    if (formKey.currentState!.validate()) {
+      var cargo = CargoDAO(
+          idCargo: int.tryParse(controllerCodigo.text),
+          descricao: controllerDescricao.text);
+      if (widget.tipoCrud == TipoCrud.inserir) {
+        await util_http.post(
+            path: rotaCargo,
+            jsonDAO: jsonEncode(cargo.toJson()),
+            context: context);
+      } else {
+        await util_http.patch(
+            path: rotaCargo,
+            jsonDAO: jsonEncode(cargo.toJson()),
+            context: context);
+      }
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -57,7 +60,7 @@ class _CadastroCargoState extends BaseStateInclusao<CadastroCargo> {
         enabled: false,
         controller: controllerCodigo,
         decoration: const InputDecoration(
-          labelText: "Código Cargo",
+          labelText: "Código",
           border: OutlineInputBorder(),
         ),
       ),
@@ -65,6 +68,7 @@ class _CadastroCargoState extends BaseStateInclusao<CadastroCargo> {
         height: 15,
       ),
       TextFormField(
+        validator: onValidarNomeCargo,
         autofocus: true,
         controller: controllerDescricao,
         decoration: const InputDecoration(
@@ -73,5 +77,12 @@ class _CadastroCargoState extends BaseStateInclusao<CadastroCargo> {
         ),
       ),
     ];
+  }
+
+  String? onValidarNomeCargo(value) {
+    if (value.toString().trim().isEmpty) {
+      return "Nome do Cargo Inválido";
+    }
+    return null;
   }
 }

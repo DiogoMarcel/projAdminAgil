@@ -1,6 +1,6 @@
 package entities
 
 type Pesquisa struct {
-	Id_Pesquisa int64  `json:"id_pesquisa,string,omitempty"`
+	Id_Pesquisa string `json:"id_pesquisa"`
 	Titulo      string `json:"titulo"`
 }

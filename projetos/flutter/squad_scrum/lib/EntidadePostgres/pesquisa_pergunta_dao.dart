@@ -5,7 +5,7 @@ class PesquisaPerguntaDAO {
   double valorInicial;
   String tipoResposta;
   int tamanhoTotal;
-  int idPesquisa;
+  List<int> idPesquisa;
   bool obrigatoria;
 
   PesquisaPerguntaDAO(
@@ -26,7 +26,7 @@ class PesquisaPerguntaDAO {
       valorInicial: double.parse(json['valorinicial'].toString()),
       tipoResposta: json['tiporesposta'],
       tamanhoTotal: json['tamanhototal'],
-      idPesquisa: json['idpesquisa'],
+      idPesquisa: [json['idpesquisa'][0]],
       obrigatoria: json['obrigatoria'],
     );
   }

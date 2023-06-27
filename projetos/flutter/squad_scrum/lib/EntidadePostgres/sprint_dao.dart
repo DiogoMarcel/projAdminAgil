@@ -1,11 +1,11 @@
-import 'package:squad_scrum/EntidadePostgres/sprint_pesquisa_dao.dart';
+import 'package:squad_scrum/EntidadePostgres/pesquisa_dao.dart';
 
 class SprintDAO {
   int? idSprint;
   DateTime dataInicio;
   DateTime dataFinal;
   String nome;
-  SprintPesquisaDAO? pesquisaDAO;
+  PesquisaDAO? pesquisaDAO;
 
   SprintDAO(
       {this.idSprint,
@@ -20,12 +20,17 @@ class SprintDAO {
       dataInicio: DateTime.parse(json['datainicio']),
       dataFinal: DateTime.parse(json['datafinal']),
       nome: json['nome'],
-      pesquisaDAO: SprintPesquisaDAO(
-        idSprint: json['sprintpesquisa']['idsprint'],
-        idPesquisa: json['sprintpesquisa']['idpesquisa'],
-        idSprintPesquisa: int.parse(json['sprintpesquisa']['id_sprintpesquisa']),
+      pesquisaDAO: PesquisaDAO(
+        idPesquisa: _getIdPesquisaFromJson(json),
+        titulo: json['pesquisa']['titulo'] ?? "",
       ),
     );
+  }
+
+  static int? _getIdPesquisaFromJson(value) {
+    if (value['pesquisa']['id_pesquisa'] != null) {
+      return int.parse(value['pesquisa']['id_pesquisa']);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -34,6 +39,10 @@ class SprintDAO {
       'datainicio': dataInicio.toUtc().toIso8601String(),
       'datafinal': dataFinal.toUtc().toIso8601String(),
       'nome': nome,
+      'pesquisa': {
+        'id_pesquisa': pesquisaDAO!.idPesquisa.toString(),
+        'titulo': pesquisaDAO!.titulo,
+      },
     };
   }
 }

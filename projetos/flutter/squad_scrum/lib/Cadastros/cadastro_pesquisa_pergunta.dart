@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:squad_scrum/BaseWidget/base_state_inclusao.dart';
@@ -22,16 +24,17 @@ class CadastroPesquisaPergunta extends StatefulWidget {
       _CadastroPesquisaPerguntaState();
 }
 
-class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaPergunta> {
+class _CadastroPesquisaPerguntaState
+    extends BaseStateInclusao<CadastroPesquisaPergunta> {
   TextEditingController controllerCodigo = TextEditingController();
   TextEditingController controllerPergunta = TextEditingController();
   TextEditingController controllerValorInicial = TextEditingController();
   TextEditingController controllerValorFinal = TextEditingController();
-  TextEditingController controllerTipoResposta = TextEditingController();
   TextEditingController controllerTamanhoTotal = TextEditingController();
-  TextEditingController controllerObrigatoria = TextEditingController();
-  TextEditingController controllerPesquisa = TextEditingController();
 
+  String? valueTipoResposta;
+  bool? valueObrigatorio;
+  List<int>? valuePesquisa;
   List<PesquisaDAO> listaPesquisa = [];
   List<DropdownMenuItem> items = [];
 
@@ -41,10 +44,13 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
     super.objetoPostgres = "Pesquisa Pergunta";
     super.tipoCrud = widget.tipoCrud;
     if (widget.tipoCrud == TipoCrud.alterar) {
-      // controllerCodigo.text = widget.sprintAlterar!.idSprint.toString();
-      // controllerNome.text = widget.sprintAlterar!.nome;
-      // dataInicio = widget.sprintAlterar!.dataInicio;
-      // dataFinal = widget.sprintAlterar!.dataFinal;
+      controllerCodigo.text = widget.pesquisaPerguntaAlterar!.idPesquisaPergunta.toString();
+      controllerPergunta.text = widget.pesquisaPerguntaAlterar!.pergunta;
+      controllerValorInicial.text = widget.pesquisaPerguntaAlterar!.valorInicial.toString();
+      controllerValorFinal.text = widget.pesquisaPerguntaAlterar!.valorFinal.toString();
+      controllerTamanhoTotal.text = widget.pesquisaPerguntaAlterar!.tamanhoTotal.toString();
+      valueTipoResposta = widget.pesquisaPerguntaAlterar!.tipoResposta;
+      valueObrigatorio = widget.pesquisaPerguntaAlterar!.obrigatoria;
     }
     carregarItemsPesquisa();
   }
@@ -76,7 +82,7 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
       ),
       TextFormField(
         autofocus: true,
-        controller: controllerPergunta,
+        controller: controllerValorInicial,
         decoration: const InputDecoration(
           labelText: "Informe o valor inicial para a resposta",
           border: OutlineInputBorder(),
@@ -87,7 +93,7 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
       ),
       TextFormField(
         autofocus: true,
-        controller: controllerPergunta,
+        controller: controllerValorFinal,
         decoration: const InputDecoration(
           labelText: "Informe o valor final para a resposta",
           border: OutlineInputBorder(),
@@ -96,12 +102,28 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
       const SizedBox(
         height: 15,
       ),
-      TextFormField(
-        autofocus: true,
-        controller: controllerPergunta,
-        decoration: const InputDecoration(
-          labelText: "Decimal/String/Bool Informe o tipo da resposta",
-          border: OutlineInputBorder(),
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          border: Border.all(
+            color: Colors.grey,
+          ),
+        ),
+        child: SearchChoices.single(
+          padding: const EdgeInsets.only(left: 10),
+          hint: const Text("Tipo Resposta"),
+          underline: Container(
+            height: 0,
+          ),
+          isExpanded: true,
+          items: const [
+            DropdownMenuItem(value: 'd', child: Text("Decimal")),
+            DropdownMenuItem(value: 's', child: Text("String")),
+            DropdownMenuItem(value: 'b', child: Text("Boolean")),
+          ],
+          onChanged: (value) {
+            valueTipoResposta = value;
+          },
         ),
       ),
       const SizedBox(
@@ -109,7 +131,7 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
       ),
       TextFormField(
         autofocus: true,
-        controller: controllerPergunta,
+        controller: controllerTamanhoTotal,
         decoration: const InputDecoration(
           labelText: "Informe o tamanho total",
           border: OutlineInputBorder(),
@@ -118,12 +140,29 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
       const SizedBox(
         height: 15,
       ),
-      TextFormField(
-        autofocus: true,
-        controller: controllerPergunta,
-        decoration: const InputDecoration(
-          labelText: "Sim/Não Obrigatoria",
-          border: OutlineInputBorder(),
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          border: Border.all(
+            color: Colors.grey,
+          ),
+        ),
+        child: SearchChoices.single(
+          padding: const EdgeInsets.only(left: 10),
+          value: valueObrigatorio,
+          underline: Container(
+            height: 0,
+          ),
+          hint: const Text("Obrigatório"),
+          isExpanded: true,
+          items: const [
+            DropdownMenuItem(value: true, child: Text('Sim')),
+            DropdownMenuItem(value: false, child: Text('Não')),
+          ],
+          onChanged: (value) {
+            valueObrigatorio = value;
+            setState(() {});
+          },
         ),
       ),
       const SizedBox(
@@ -131,17 +170,23 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
       ),
       Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey,),
+          borderRadius: BorderRadius.circular(3),
+          border: Border.all(
+            color: Colors.grey,
+          ),
         ),
         child: SearchChoices.multiple(
+          padding: const EdgeInsets.only(left: 10),
           underline: Container(
             height: 0,
           ),
           hint: "<Multi Seleção Pesquisa>",
           isExpanded: true,
           items: items,
-          //value: e.idPesquisa,
-          onChanged: () {},
+          onChanged: (value) {
+            valuePesquisa = value;
+          },
+          selectedItems: valuePesquisa ?? [],
         ),
       ),
     ];
@@ -163,9 +208,45 @@ class _CadastroPesquisaPerguntaState extends BaseStateInclusao<CadastroPesquisaP
         ),
       );
     }
+    if (widget.tipoCrud == TipoCrud.alterar){
+      valuePesquisa = [listaPesquisa.indexWhere((element){
+        return element.idPesquisa == widget.pesquisaPerguntaAlterar!.idPesquisa[0];
+      })];
+    }
     setState(() {});
   }
 
   @override
-  void onGravar() {}
+  Future<void> onGravar() async {
+    var pesquisaPergunta = PesquisaPerguntaDAO(
+      idPesquisaPergunta: int.tryParse(controllerCodigo.text),
+      pergunta: controllerPergunta.text,
+      valorInicial: double.parse(controllerValorInicial.text),
+      valorFinal: double.parse(controllerValorFinal.text),
+      tamanhoTotal: int.parse(controllerTamanhoTotal.text),
+      tipoResposta: valueTipoResposta!,
+      obrigatoria: valueObrigatorio!,
+      idPesquisa: getListaPesquisaPost(),
+    );
+
+    if (widget.tipoCrud == TipoCrud.inserir) {
+      await util_http.post(
+          path: rotaPesquisaPergunta,
+          jsonDAO: jsonEncode(pesquisaPergunta.toJson()),
+          context: context);
+    } else {
+      await util_http.patch(
+          path: rotaPesquisaPergunta,
+          jsonDAO: jsonEncode(pesquisaPergunta.toJson()),
+          context: context);
+    }
+  }
+
+  List<int> getListaPesquisaPost(){
+    List<int> listaPesquisaPost = [];
+    for (var element in valuePesquisa!) {
+      listaPesquisaPost.add(listaPesquisa.elementAt(element).idPesquisa!);
+    }
+    return listaPesquisaPost;
+  }
 }

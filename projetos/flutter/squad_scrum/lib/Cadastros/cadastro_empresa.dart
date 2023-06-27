@@ -21,14 +21,21 @@ class _CadastroEmpresaState extends BaseStateInclusao<CadastroEmpresa> {
   TextEditingController controllerNome = TextEditingController();
 
   @override
-  void onGravar() async {
-    var equipe = EmpresaDAO(idEmpresa: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
+  Future<void> onGravar() async {
+    var equipe = EmpresaDAO(
+        idEmpresa: int.tryParse(controllerCodigo.text),
+        nome: controllerNome.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
-      await util_http.post(path: rotaEmpresa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.post(
+          path: rotaEmpresa,
+          jsonDAO: jsonEncode(equipe.toJson()),
+          context: context);
     } else {
-      await util_http.patch(path: rotaEmpresa, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      await util_http.patch(
+          path: rotaEmpresa,
+          jsonDAO: jsonEncode(equipe.toJson()),
+          context: context);
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -49,7 +56,7 @@ class _CadastroEmpresaState extends BaseStateInclusao<CadastroEmpresa> {
         enabled: false,
         controller: controllerCodigo,
         decoration: const InputDecoration(
-          labelText: "Código Empresa",
+          labelText: "Código",
           border: OutlineInputBorder(),
         ),
       ),
@@ -57,6 +64,7 @@ class _CadastroEmpresaState extends BaseStateInclusao<CadastroEmpresa> {
         height: 15,
       ),
       TextFormField(
+        validator: onValidarNomeEmpresa,
         autofocus: true,
         controller: controllerNome,
         decoration: const InputDecoration(
@@ -65,5 +73,12 @@ class _CadastroEmpresaState extends BaseStateInclusao<CadastroEmpresa> {
         ),
       ),
     ];
+  }
+
+  String? onValidarNomeEmpresa(value) {
+    if (value.toString().trim().isEmpty) {
+      return "Nome da Empresa Inválida";
+    }
+    return null;
   }
 }

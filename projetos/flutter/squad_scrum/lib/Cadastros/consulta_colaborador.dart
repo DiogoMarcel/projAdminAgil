@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Cadastros/cadastro_colaborador.dart';
 import 'package:squad_scrum/Consts/consts.dart';
@@ -22,31 +21,27 @@ class _ConsultaColaboradorState extends State<ConsultaColaborador> {
 
   List<DataColumn> listaDataColumn() {
     return [
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Id",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Usuário",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Nome",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -91,60 +86,6 @@ class _ConsultaColaboradorState extends State<ConsultaColaborador> {
     );
   }
 
-  List<DataRow> listaDataRow() {
-    return listaColaborador
-        .map(
-          (e) => DataRow2(
-            color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.08);
-                }
-                if (listaColaborador.indexOf(e).isEven) {
-                  return Colors.grey.withOpacity(0.3);
-                }
-                return null;
-              },
-            ),
-            cells: [
-              DataCell(Text(e.idColaborador.toString())),
-              DataCell(Text(e.usuario)),
-              DataCell(Text(e.nome)),
-              DataCell(
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        onButtonAlterar(context, listaColaborador.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        onButtonDeletar(listaColaborador.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
-        .toList();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -154,10 +95,18 @@ class _ConsultaColaboradorState extends State<ConsultaColaborador> {
   @override
   Widget build(BuildContext context) {
     return BaseConsulta(
-      tituloTela: "Consulta Colaborador",
-      onButtonInserir: onButtonInserir,
       listaDataColumn: listaDataColumn(),
-      listaDataRow: listaDataRow(),
+      listaDados: listaColaborador,
+      processarColunas: (value){
+        return [
+          DataCell(Text(value.idColaborador.toString())),
+          DataCell(Text(value.usuario)),
+          DataCell(Text(value.nome)),
+        ];
+      },
+      onButtonInserir: onButtonInserir,
+      onAlterar: onButtonAlterar,
+      onDeletar: onButtonDeletar,
       sortAscending: sortAscending,
       sortColumnIndex: sortColumnIndex,
     );
@@ -175,7 +124,7 @@ class _ConsultaColaboradorState extends State<ConsultaColaborador> {
     });
   }
 
-  void onButtonAlterar(BuildContext context, int index) {
+  void onButtonAlterar(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return CadastroColaborador(

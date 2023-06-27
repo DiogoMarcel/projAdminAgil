@@ -21,14 +21,13 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroFuncao> {
   TextEditingController controllerDescricao = TextEditingController();
 
   @override
-  void onGravar() async {
+  Future<void> onGravar() async {
     var equipe = FuncaoDAO(idFuncao: int.tryParse(controllerCodigo.text), descricao: controllerDescricao.text);
     if (widget.tipoCrud == TipoCrud.inserir) {
       await util_http.post(path: rotaFuncao, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     } else {
       await util_http.patch(path: rotaFuncao, jsonDAO: jsonEncode(equipe.toJson()), context: context);
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -49,7 +48,7 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroFuncao> {
         enabled: false,
         controller: controllerCodigo,
         decoration: const InputDecoration(
-          labelText: "Código Funcao",
+          labelText: "Código",
           border: OutlineInputBorder(),
         ),
       ),
@@ -57,6 +56,7 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroFuncao> {
         height: 15,
       ),
       TextFormField(
+        validator: onValidarNomeFuncao,
         autofocus: true,
         controller: controllerDescricao,
         decoration: const InputDecoration(
@@ -65,5 +65,12 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroFuncao> {
         ),
       ),
     ];
+  }
+
+  String? onValidarNomeFuncao(value) {
+    if (value.toString().trim().isEmpty) {
+      return "Nome da Função Inválida";
+    }
+    return null;
   }
 }

@@ -9,3 +9,4 @@ const rotaColaborador = "/colaborador";
 const rotaPesquisa = "/pesquisa";
 const rotaSprint = "/sprint";
 const rotaSprintPesquisa = "/sprintPesquisa";
+const rotaPesquisaPergunta = "/pesquisaPergunta";

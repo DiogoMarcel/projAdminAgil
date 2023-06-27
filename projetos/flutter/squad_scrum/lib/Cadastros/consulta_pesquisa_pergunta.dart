@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:search_choices/search_choices.dart';
 import 'package:squad_scrum/Cadastros/cadastro_pesquisa_pergunta.dart';
 import 'package:squad_scrum/EntidadePostgres/pesquisa_dao.dart';
 import 'package:squad_scrum/EntidadePostgres/pesquisa_pergunta_dao.dart';
@@ -78,9 +77,6 @@ class _ConsultaPesquisaPerguntaState extends State<ConsultaPesquisaPergunta> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-      ),
-      const DataColumn(
-        label: Text(""),
       ),
     ];
   }
@@ -170,64 +166,6 @@ class _ConsultaPesquisaPerguntaState extends State<ConsultaPesquisaPergunta> {
     );
   }
 
-  List<DataRow> listaDataRow() {
-    return listaPesquisaPergunta
-        .map(
-          (e) => DataRow(
-              color: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withOpacity(0.08);
-                  }
-                  if (listaPesquisaPergunta.indexOf(e).isEven) {
-                    return Colors.grey.withOpacity(0.3);
-                  }
-                  return null;
-                },
-              ),
-              cells: [
-                DataCell(Text(e.idPesquisaPergunta.toString())),
-                DataCell(Text(e.pergunta)),
-                DataCell(Text(e.valorInicial.toString())),
-                DataCell(Text(e.valorFinal.toString())),
-                DataCell(Text(e.tipoResposta)),
-                DataCell(Text(e.tamanhoTotal.toString())),
-                DataCell(Text(e.obrigatoria ? 'Sim' : 'Não')),
-                DataCell(
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          onButtonAlterar(
-                              context, listaPesquisaPergunta.indexOf(e));
-                        },
-                        icon: const Icon(
-                          Icons.edit,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          onButtonDeletar(listaPesquisaPergunta.indexOf(e));
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
-        )
-        .toList();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -238,12 +176,24 @@ class _ConsultaPesquisaPerguntaState extends State<ConsultaPesquisaPergunta> {
   @override
   Widget build(BuildContext context) {
     return BaseConsulta(
-      sortColumnIndex: sortColumnIndex,
-      sortAscending: sortAscending,
       listaDataColumn: listaDataColumn(),
-      listaDataRow: listaDataRow(),
+      listaDados: listaPesquisaPergunta,
+      processarColunas: (value){
+        return [
+          DataCell(Text(value.idPesquisaPergunta.toString())),
+          DataCell(Text(value.pergunta)),
+          DataCell(Text(value.valorInicial.toString())),
+          DataCell(Text(value.valorFinal.toString())),
+          DataCell(Text(value.tipoResposta)),
+          DataCell(Text(value.tamanhoTotal.toString())),
+          DataCell(Text(value.obrigatoria ? 'Sim' : 'Não')),
+        ];
+      },
       onButtonInserir: onButtonInserir,
-      tituloTela: "Consulta Pesquisa Pergunta",
+      onAlterar: onButtonAlterar,
+      onDeletar: onButtonDeletar,
+      sortAscending: sortAscending,
+      sortColumnIndex: sortColumnIndex,
     );
   }
 
@@ -259,7 +209,7 @@ class _ConsultaPesquisaPerguntaState extends State<ConsultaPesquisaPergunta> {
     });
   }
 
-  void onButtonAlterar(BuildContext context, int index) {
+  void onButtonAlterar(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return CadastroPesquisaPergunta(

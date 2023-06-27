@@ -43,11 +43,6 @@ var RegisterStoreRoutes = func(router *mux.Router) {
 	router.HandleFunc("/sprint", controllers.SprintDeletar).Methods(http.MethodDelete)
 	router.HandleFunc("/sprint", controllers.SprintPegarTodos).Methods(http.MethodGet)
 
-	router.HandleFunc("/sprintPesquisa", controllers.SprintPesquisaInserir).Methods(http.MethodPost)
-	router.HandleFunc("/sprintPesquisa", controllers.SprintPesquisaAlterar).Methods(http.MethodPatch)
-	router.HandleFunc("/sprintPesquisa", controllers.SprintPesquisaDeletar).Methods(http.MethodDelete)
-	router.HandleFunc("/sprintPesquisa", controllers.SprintPesquisaPegarTodos).Methods(http.MethodGet)
-
 	router.HandleFunc("/pesquisaPergunta", controllers.PesquisaPerguntaInserir).Methods(http.MethodPost)
 	router.HandleFunc("/pesquisaPergunta", controllers.PesquisaPerguntaAlterar).Methods(http.MethodPatch)
 	router.HandleFunc("/pesquisaPergunta", controllers.PesquisaPerguntaDeletar).Methods(http.MethodDelete)

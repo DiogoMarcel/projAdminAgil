@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:search_choices/search_choices.dart';
 import 'package:squad_scrum/Cadastros/cadastro_sprint.dart';
 import 'package:squad_scrum/Consts/consts.dart';
 import 'package:squad_scrum/EntidadePostgres/pesquisa_dao.dart';
@@ -21,55 +19,45 @@ class ConsultaSprint extends StatefulWidget {
 
 class _ConsultaSprintState extends State<ConsultaSprint> {
   List<SprintDAO> listaSprint = [];
-  List<PesquisaDAO> listaPesquisa = [];
-  List<DropdownMenuItem> items = [];
   bool sortAscending = false;
   int? sortColumnIndex;
 
   List<DataColumn> listaDataColumn() {
     return [
-      DataColumn2(
+      DataColumn(
+        numeric: true,
         label: const Text(
           "Código",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Nome",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.M,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Data Inicial",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.M,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Data Final",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.M,
       ),
-      const DataColumn2(
+      const DataColumn(
         label: Text(
           "Pesquisa",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        size: ColumnSize.L,
-      ),
-      const DataColumn2(
-        label: Text(""),
-        size: ColumnSize.M,
       ),
     ];
   }
@@ -123,138 +111,39 @@ class _ConsultaSprintState extends State<ConsultaSprint> {
     });
   }
 
-  List<DataRow> listaDataRow() {
-    return listaSprint
-        .map(
-          (e) => DataRow2(
-            color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.08);
-                }
-                if (listaSprint.indexOf(e).isEven) {
-                  return Colors.grey.withOpacity(0.3);
-                }
-                return null;
-              },
-            ),
-            cells: [
-              DataCell(Text(e.idSprint.toString())),
-              DataCell(Text(e.nome)),
-              DataCell(Text(DateFormat("dd/MM/yyyy").format(e.dataInicio))),
-              DataCell(Text(DateFormat("dd/MM/yyyy").format(e.dataFinal))),
-              DataCell(
-                Tooltip(
-                  message: getMensagemTooltip(e.pesquisaDAO!),
-                  child: SearchChoices.single(
-                    hint: " ",
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                    underline: Container(
-                      height: 0,
-                    ),
-                    searchInputDecoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    isExpanded: true,
-                    padding: const EdgeInsets.all(0),
-                    items: items,
-                    value: e.pesquisaDAO!.idPesquisa,
-                    onChanged: (value) async {
-                      if(value == null){
-                        e.pesquisaDAO!.idPesquisa = null;
-                        await util_http.delete(
-                          path: rotaSprintPesquisa,
-                          jsonDAO: jsonEncode(e.pesquisaDAO!.toJson()),
-                          context: context,
-                        );
-                        e.pesquisaDAO!.idSprintPesquisa = 0;
-                        e.pesquisaDAO!.idSprint = 0;
-                      } else {
-                        e.pesquisaDAO!.idPesquisa = int.parse(value.toString().split('-')[0]);
-                        e.pesquisaDAO!.idSprint = e.idSprint!;
-
-                        var response = await util_http.post(
-                          path: rotaSprintPesquisa,
-                          jsonDAO: jsonEncode(e.pesquisaDAO!.toJson()),
-                          context: context,
-                        );
-                        e.pesquisaDAO!.idSprintPesquisa = response["insertId"];
-                      }
-                      setState(() {});
-                    },
-                  ),
-                ),
-              ),
-              DataCell(
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        onButtonAlterar(context, listaSprint.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        onButtonDeletar(listaSprint.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ).toList();
-  }
-
-  String getMensagemTooltip(SprintPesquisaDAO sprintPesquisaDAO){
-    var listafiltrada = listaPesquisa.where((element) {
-      return element.idPesquisa == sprintPesquisaDAO.idPesquisa;
-    }).toList();
-
-    if(listafiltrada.isNotEmpty){
-      return listafiltrada[0].titulo;
-    } else {
-      return "";
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    carregarItemsPesquisa();
     carregarTodosRegistros();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseConsulta(
-      tituloTela: "Consulta Sprint",
-      onButtonInserir: onButtonInserir,
       listaDataColumn: listaDataColumn(),
-      listaDataRow: listaDataRow(),
+      listaDados: listaSprint,
+      processarColunas: (value){
+        return [
+          DataCell(Text(value.idSprint.toString())),
+          DataCell(Text(value.nome)),
+          DataCell(Text(DateFormat("dd-MM-yyyy").format(value.dataInicio))),
+          DataCell(Text(DateFormat("dd-MM-yyyy").format(value.dataFinal))),
+          DataCell(Text(getDescricaoColunaPesquisa(value))),
+        ];
+      },
+      onButtonInserir: onButtonInserir,
+      onAlterar: onButtonAlterar,
+      onDeletar: onButtonDeletar,
       sortAscending: sortAscending,
       sortColumnIndex: sortColumnIndex,
     );
+  }
+  
+  String getDescricaoColunaPesquisa(value){
+    if(value.pesquisaDAO.idPesquisa == null){
+      return "";
+    }
+    return "${value.pesquisaDAO.idPesquisa} - ${value.pesquisaDAO.titulo}";
   }
 
   void onButtonInserir() {
@@ -269,7 +158,7 @@ class _ConsultaSprintState extends State<ConsultaSprint> {
     });
   }
 
-  void onButtonAlterar(BuildContext context, int index) {
+  void onButtonAlterar(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return CadastroSprint(
@@ -289,27 +178,6 @@ class _ConsultaSprintState extends State<ConsultaSprint> {
       context: context,
     );
     listaSprint.removeAt(index);
-    setState(() {});
-  }
-
-  Future<void> carregarItemsPesquisa() async {
-    listaPesquisa.clear();
-    var json = await util_http.get(path: rotaPesquisa, context: context);
-    listaPesquisa = List<PesquisaDAO>.from(json.map((json) => PesquisaDAO.fromJson(json)));
-
-    listaPesquisa.forEach(
-          (element) {
-        items.add(
-          DropdownMenuItem(
-            value: element.idPesquisa,
-            child: Text(
-              "${element.idPesquisa} - ${element.titulo}",
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        );
-      },
-    );
     setState(() {});
   }
 

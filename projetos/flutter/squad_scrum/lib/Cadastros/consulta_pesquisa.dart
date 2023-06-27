@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:squad_scrum/Cadastros/cadastro_pesquisa.dart';
 import 'package:squad_scrum/Consts/consts.dart';
@@ -22,23 +21,20 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
 
   List<DataColumn> listaDataColumn() {
     return [
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Id",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.S,
       ),
-      DataColumn2(
+      DataColumn(
         label: const Text(
           "Título",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onSort: onSort,
-        size: ColumnSize.M,
       ),
-      const DataColumn2(label: Text(""), size: ColumnSize.S),
     ];
   }
 
@@ -71,56 +67,6 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
     });
   }
 
-  List<DataRow> listaDataRow() {
-    return listaPesquisa
-        .map(
-          (e) => DataRow2(
-            color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Theme.of(context).colorScheme.primary.withOpacity(0.08);
-                }
-                if (listaPesquisa.indexOf(e).isEven) {
-                  return Colors.grey.withOpacity(0.3);
-                }
-                return null;
-              },
-            ),
-            cells: [
-              DataCell(Text(e.idPesquisa.toString())),
-              DataCell(Text(e.titulo)),
-              DataCell(
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        onButtonAlterar(context, listaPesquisa.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        onButtonDeletar(listaPesquisa.indexOf(e));
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
-        .toList();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -130,10 +76,17 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
   @override
   Widget build(BuildContext context) {
     return BaseConsulta(
-      tituloTela: "Consulta Pesquisa",
-      onButtonInserir: onButtonInserir,
       listaDataColumn: listaDataColumn(),
-      listaDataRow: listaDataRow(),
+      listaDados: listaPesquisa,
+      processarColunas: (value){
+        return [
+          DataCell(Text(value.idPesquisa.toString())),
+          DataCell(Text(value.titulo)),
+        ];
+      },
+      onButtonInserir: onButtonInserir,
+      onAlterar: onButtonAlterar,
+      onDeletar: onButtonDeletar,
       sortAscending: sortAscending,
       sortColumnIndex: sortColumnIndex,
     );
@@ -151,7 +104,7 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
     });
   }
 
-  void onButtonAlterar(BuildContext context, int index) {
+  void onButtonAlterar(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return CadastroPesquisa(
@@ -177,8 +130,7 @@ class _ConsultaPesquisaState extends State<ConsultaPesquisa> {
   Future<void> carregarTodosRegistros() async {
     listaPesquisa.clear();
     var json = await util_http.get(path: rotaPesquisa, context: context);
-    listaPesquisa =
-        List<PesquisaDAO>.from(json.map((json) => PesquisaDAO.fromJson(json)));
+    listaPesquisa = List<PesquisaDAO>.from(json.map((json) => PesquisaDAO.fromJson(json)));
     setState(() {});
   }
 }

@@ -5,8 +5,8 @@ import 'package:squad_scrum/Cadastros/consulta_empresa.dart';
 import 'package:squad_scrum/Cadastros/consulta_equipe.dart';
 import 'package:squad_scrum/Cadastros/consulta_funcao.dart';
 import 'package:squad_scrum/Cadastros/consulta_pesquisa.dart';
+import 'package:squad_scrum/Cadastros/consulta_pesquisa_pergunta.dart';
 import 'package:squad_scrum/Cadastros/consulta_sprint.dart';
-import 'package:squad_scrum/Telas/configuracao_nota_felicidade.dart';
 
 class MenuPrincipal extends StatefulWidget {
   const MenuPrincipal({Key? key}) : super(key: key);
@@ -16,20 +16,36 @@ class MenuPrincipal extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MenuPrincipal> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  int indexConsulta = 7;
+  List<Widget> listaConsultas = [
+    Container(),
+    const ConsultaEquipe(),
+    const ConsultaCargo(),
+    const ConsultaEmpresa(),
+    const ConsultaFuncao(),
+    const ConsultaColaborador(),
+    const ConsultaPesquisa(),
+    const ConsultaSprint(),
+    const ConsultaPesquisaPergunta(),
+  ];
+
+  List<String> listaNomesMenu = [
+    "",
+    "Equipe",
+    "Cargo",
+    "Empresa",
+    "Função",
+    "Colaborador",
+    "Pesquisa",
+    "Sprint",
+    "Pesquisa Pergunta",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          PopupMenuButton(
-              onSelected: (context) {},
-              itemBuilder: (context) {
-                return <PopupMenuEntry>[
-                  const PopupMenuItem(child: Text('Configurações'),),
-                ];
-              }),
-        ],
-      ),
+      key: scaffoldKey,
       drawer: Drawer(
         child: Column(
           children: [
@@ -42,10 +58,6 @@ class _MainMenuState extends State<MenuPrincipal> {
                   onTap: () {},
                 ),
                 ListTile(
-                  title: const Text('Pesquisa Felicidade'),
-                  onTap: pesquisaFelicidade,
-                ),
-                ListTile(
                   title: const Text('Cerimonia'),
                   onTap: () {},
                 ),
@@ -56,103 +68,83 @@ class _MainMenuState extends State<MenuPrincipal> {
               childrenPadding: const EdgeInsets.only(left: 40),
               children: [
                 ListTile(
-                  title: const Text('Equipe'),
-                  onTap: consultaEquipe,
+                  title: Text(listaNomesMenu[1]),
+                  onTap: () {
+                    setIndexConsultaETitulo(1);
+                  },
                 ),
                 ListTile(
-                  title: const Text('Cargo'),
-                  onTap: consultaCargo,
+                  title: Text(listaNomesMenu[2]),
+                  onTap: () {
+                    setIndexConsultaETitulo(2);
+                  },
                 ),
                 ListTile(
-                  title: const Text('Empresa'),
-                  onTap: consultaEmpresa,
+                  title: Text(listaNomesMenu[3]),
+                  onTap: () {
+                    setIndexConsultaETitulo(3);
+                  },
                 ),
                 ListTile(
-                  title: const Text('Função'),
-                  onTap: consultaFuncao,
+                  title: Text(listaNomesMenu[4]),
+                  onTap: () {
+                    setIndexConsultaETitulo(4);
+                  },
                 ),
                 ListTile(
-                  title: const Text('Colaborador'),
-                  onTap: consultaColaborador,
+                  title: Text(listaNomesMenu[5]),
+                  onTap: () {
+                    setIndexConsultaETitulo(5);
+                  },
                 ),
                 ListTile(
-                  title: const Text('Pesquisa'),
-                  onTap: consultaPesquisa,
+                  title: Text(listaNomesMenu[6]),
+                  onTap: () {
+                    setIndexConsultaETitulo(6);
+                  },
                 ),
                 ListTile(
-                  title: const Text('Sprint'),
-                  onTap: consultaSprint,
+                  title: Text(listaNomesMenu[7]),
+                  onTap: () {
+                    setIndexConsultaETitulo(7);
+                  },
+                ),
+                ListTile(
+                  title: Text(listaNomesMenu[8]),
+                  onTap: () {
+                    setIndexConsultaETitulo(8);
+                  },
                 ),
               ],
             ),
           ],
         ),
       ),
-      body: const Center(child: Text('Vamo Detonar Diogo')),
+      appBar: AppBar(
+        actions: [
+          PopupMenuButton(
+            onSelected: (context) {},
+            itemBuilder: (context) {
+              return <PopupMenuEntry>[
+                const PopupMenuItem(
+                  child: Text('Configurações'),
+                ),
+              ];
+            },
+          ),
+        ],
+        title: indexConsulta > 0
+            ? Text("Consulta ${listaNomesMenu[indexConsulta]}")
+            : null,
+      ),
+      body: listaConsultas[indexConsulta],
     );
   }
 
-  void pesquisaFelicidade(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConfiguracaoNotaFelicidade();
-      }),
-    );
-  }
-
-  void consultaEquipe(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConsultaEquipe();
-      }),
-    );
-  }
-
-  void consultaCargo(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConsultaCargo();
-      }),
-    );
-  }
-
-  void consultaEmpresa(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConsultaEmpresa();
-      }),
-    );
-  }
-
-  void consultaFuncao(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConsultaFuncao();
-      }),
-    );
-  }
-
-  void consultaColaborador(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConsultaColaborador();
-      }),
-    );
-  }
-
-  void consultaPesquisa(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConsultaPesquisa();
-      }),
-    );
-  }
-
-  void consultaSprint(){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context){
-        return const ConsultaSprint();
-      }),
-    );
+  void setIndexConsultaETitulo(int index) {
+    setState(() {
+      indexConsulta = index;
+      scaffoldKey.currentState!.openEndDrawer();
+    });
   }
 }

@@ -1,15 +1,26 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:squad_scrum/Telas/menu_principal.dart';
 
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
+}
+
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
+      scrollBehavior: MyCustomScrollBehavior(),
       debugShowCheckedModeBanner: false,
-      home: MenuPrincipal(),
+      home: const SafeArea(
+        child: MenuPrincipal(),
+      ),
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      supportedLocales: [Locale('pt', 'BR')],
+      supportedLocales: const [Locale('pt', 'BR')],
     ),
   );
 }
-

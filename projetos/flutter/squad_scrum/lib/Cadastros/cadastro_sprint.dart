@@ -1,12 +1,14 @@
 import 'dart:convert';
-import 'package:date_field/date_field.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:search_choices/search_choices.dart';
 import 'package:squad_scrum/BaseWidget/base_state_inclusao.dart';
 import 'package:squad_scrum/Consts/consts.dart';
-import 'package:intl/intl.dart';
+import 'package:squad_scrum/EntidadePostgres/pesquisa_dao.dart';
 import 'package:squad_scrum/EntidadePostgres/sprint_dao.dart';
 import 'package:squad_scrum/Enumeradores/enumeradores.dart';
+import 'package:squad_scrum/Widgets/date_time_textfield.dart';
 import 'package:squad_scrum/util/util_http.dart' as util_http;
 
 class CadastroSprint extends StatefulWidget {
@@ -22,18 +24,44 @@ class CadastroSprint extends StatefulWidget {
 }
 
 class _InclusaoEquipeState extends BaseStateInclusao<CadastroSprint> {
+  List<PesquisaDAO> listaPesquisa = [];
+  List<DropdownMenuItem> items = [];
   TextEditingController controllerCodigo = TextEditingController();
-  TextEditingController controllerNome = TextEditingController();
-  late DateTime dataInicio;
-  late DateTime dataFinal;
+  TextEditingController controllerVersaoSprint = TextEditingController();
+  TextEditingController controllerDataInicial = TextEditingController();
+  TextEditingController controllerDataFinal = TextEditingController();
+  TextEditingController controllerPesquisa = TextEditingController();
+
+  Future<void> carregarItemsPesquisa() async {
+    listaPesquisa.clear();
+    var json = await util_http.get(path: rotaPesquisa, context: context);
+    listaPesquisa = List<PesquisaDAO>.from(json.map((json) => PesquisaDAO.fromJson(json)));
+
+    for (var element in listaPesquisa) {
+      items.add(
+        DropdownMenuItem(
+          value: element.idPesquisa,
+          child: Text(
+            "${element.idPesquisa} - ${element.titulo}",
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      );
+    }
+    setState(() {});
+  }
 
   @override
-  void onGravar() async {
+  Future<void> onGravar() async {
     var sprint = SprintDAO(
       idSprint: int.tryParse(controllerCodigo.text),
-      dataInicio: dataInicio,
-      dataFinal: dataFinal,
-      nome: controllerNome.text,
+      dataInicio: DateFormat("dd-MM-yyyy").parse(controllerDataInicial.text),
+      dataFinal: DateFormat("dd-MM-yyyy").parse(controllerDataFinal.text),
+      nome: controllerVersaoSprint.text,
+      pesquisaDAO: PesquisaDAO(
+        idPesquisa: int.parse(controllerPesquisa.text),
+        titulo: "",
+      ),
     );
     if (widget.tipoCrud == TipoCrud.inserir) {
       await util_http.post(
@@ -46,7 +74,6 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroSprint> {
           jsonDAO: jsonEncode(sprint.toJson()),
           context: context);
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -54,11 +81,13 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroSprint> {
     super.initState();
     super.objetoPostgres = "Sprint";
     super.tipoCrud = widget.tipoCrud;
+    carregarItemsPesquisa();
     if (widget.tipoCrud == TipoCrud.alterar) {
       controllerCodigo.text = widget.sprintAlterar!.idSprint.toString();
-      controllerNome.text = widget.sprintAlterar!.nome;
-      dataInicio = widget.sprintAlterar!.dataInicio;
-      dataFinal = widget.sprintAlterar!.dataFinal;
+      controllerVersaoSprint.text = widget.sprintAlterar!.nome;
+      controllerDataInicial.text = DateFormat("dd-MM-yyyy").format(widget.sprintAlterar!.dataInicio);
+      controllerDataFinal.text = DateFormat("dd-MM-yyyy").format(widget.sprintAlterar!.dataFinal);
+      controllerPesquisa.text = widget.sprintAlterar!.pesquisaDAO!.idPesquisa.toString();
     }
   }
 
@@ -78,7 +107,8 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroSprint> {
       ),
       TextFormField(
         autofocus: true,
-        controller: controllerNome,
+        controller: controllerVersaoSprint,
+        validator: onValidarVersaoSprint,
         decoration: const InputDecoration(
           labelText: "Informe a versão da Sprint",
           border: OutlineInputBorder(),
@@ -92,33 +122,56 @@ class _InclusaoEquipeState extends BaseStateInclusao<CadastroSprint> {
       const SizedBox(
         height: 15,
       ),
-      DateTimeFormField(
-        initialValue: widget.tipoCrud == TipoCrud.alterar ? dataInicio : null,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: "Informe a Data Inicial",
-        ),
-        mode: DateTimeFieldPickerMode.date,
-        dateFormat: DateFormat("dd-MM-yyyy"),
-        onDateSelected: (date){
-          dataInicio = date;
-        },
+      DateTimeTextField(
+        controller: controllerDataInicial,
+        hintText: "Data Inicial",
       ),
       const SizedBox(
         height: 15,
       ),
-      DateTimeFormField(
-        initialValue: widget.tipoCrud == TipoCrud.alterar ? dataFinal : null,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: "Informe a Data Final",
+      DateTimeTextField(
+        controller: controllerDataFinal,
+        hintText: "Data Final",
+      ),
+      const SizedBox(
+        height: 15,
+      ),
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          border: Border.all(
+            color: Colors.grey,
+          ),
         ),
-        mode: DateTimeFieldPickerMode.date,
-        dateFormat: DateFormat("dd-MM-yyyy"),
-        onDateSelected: (date){
-          dataFinal = date;
-        },
+        child: SearchChoices.single(
+          validator: onValidarPesquisa,
+          padding: const EdgeInsets.only(left: 10),
+          underline: Container(
+            height: 0,
+          ),
+          hint: "Pesquisa",
+          isExpanded: true,
+          items: items,
+          value: tipoCrud == TipoCrud.inserir ? null : int.parse(controllerPesquisa.text),
+          onChanged: (value) {
+            controllerPesquisa.text = value.toString();
+          },
+        ),
       ),
     ];
+  }
+
+  String? onValidarVersaoSprint(value){
+    if(value.toString().isEmpty){
+      return "Versão da Sprint Obrigatório";
+    }
+    return null;
+  }
+
+  String? onValidarPesquisa(value) {
+    if (value == null) {
+      return "Pesquisa Obrigatória";
+    }
+    return null;
   }
 }

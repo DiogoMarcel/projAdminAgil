@@ -21,14 +21,15 @@ class _CadastroEquipeState extends BaseStateInclusao<CadastroEquipe> {
   TextEditingController controllerNome = TextEditingController();
 
   @override
-  void onGravar() async {
-    var equipe = EquipeDAO(idEquipe: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
-    if (widget.tipoCrud == TipoCrud.inserir) {
-      await util_http.post(path: rotaEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
-    } else {
-      await util_http.patch(path: rotaEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+  Future<void> onGravar() async {
+    if(formKey.currentState!.validate()){
+      var equipe = EquipeDAO(idEquipe: int.tryParse(controllerCodigo.text), nome: controllerNome.text);
+      if (widget.tipoCrud == TipoCrud.inserir) {
+        await util_http.post(path: rotaEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      } else {
+        await util_http.patch(path: rotaEquipe, jsonDAO: jsonEncode(equipe.toJson()), context: context);
+      }
     }
-    Navigator.of(context).pop();
   }
 
   @override
@@ -49,7 +50,7 @@ class _CadastroEquipeState extends BaseStateInclusao<CadastroEquipe> {
         enabled: false,
         controller: controllerCodigo,
         decoration: const InputDecoration(
-          labelText: "Código Equipe",
+          labelText: "Código",
           border: OutlineInputBorder(),
         ),
       ),
@@ -57,6 +58,7 @@ class _CadastroEquipeState extends BaseStateInclusao<CadastroEquipe> {
         height: 15,
       ),
       TextFormField(
+        validator: onValidarNomeEquipe,
         autofocus: true,
         controller: controllerNome,
         decoration: const InputDecoration(
@@ -65,5 +67,12 @@ class _CadastroEquipeState extends BaseStateInclusao<CadastroEquipe> {
         ),
       ),
     ];
+  }
+
+  String? onValidarNomeEquipe(value) {
+    if (value.toString().trim().isEmpty) {
+      return "Nome da Equipe Inválida";
+    }
+    return null;
   }
 }
